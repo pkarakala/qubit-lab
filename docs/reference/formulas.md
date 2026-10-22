@@ -19,7 +19,7 @@ Valid when: Exact for coherent states.
 `cat.wigner_coherent`
 
 ```latex
-W_{|\alpha\rangle}(x, p) = \frac{2 e^{- 2 p^{2} - 2 \left(- \alpha + x\right)^{2}}}{\pi}
+W_{|\alpha\rangle}(x, p) = \frac{2}{\pi} e^{- 2 p^{2} - 2 \left(x - \alpha\right)^{2}}
 ```
 
 Valid when: Exact. Convention beta = x + ip, hbar = 1/2.
@@ -31,7 +31,7 @@ Valid when: Exact. Convention beta = x + ip, hbar = 1/2.
 `cat.wigner_even_cat`
 
 ```latex
-W_{|\mathcal{C}^+_\alpha\rangle}(x, p) = \frac{\frac{4 e^{- 2 p^{2} - 2 x^{2}} \cos{\left(4 \alpha p \right)}}{\pi} + \frac{2 e^{- 2 p^{2} - 2 \left(- \alpha + x\right)^{2}}}{\pi} + \frac{2 e^{- 2 p^{2} - 2 \left(\alpha + x\right)^{2}}}{\pi}}{2 + 2 e^{- 2 \alpha^{2}}}
+W_{|\mathcal{C}^+_\alpha\rangle}(x, p) = \frac{e^{- 2 p^{2} - 2 \left(x - \alpha\right)^{2}} + e^{- 2 p^{2} - 2 \left(x + \alpha\right)^{2}} + 2 e^{- 2 p^{2} - 2 x^{2}} \cos{\left(4 p \alpha \right)}}{\pi \left(1 + e^{- 2 \alpha^{2}}\right)}
 ```
 
 Valid when: Exact for real alpha. The cosine fringes near the origin carry the parity.
@@ -43,7 +43,7 @@ Valid when: Exact for real alpha. The cosine fringes near the origin carry the p
 `cat.wigner_odd_cat`
 
 ```latex
-W_{|\mathcal{C}^-_\alpha\rangle}(x, p) = \frac{- \frac{4 e^{- 2 p^{2} - 2 x^{2}} \cos{\left(4 \alpha p \right)}}{\pi} + \frac{2 e^{- 2 p^{2} - 2 \left(- \alpha + x\right)^{2}}}{\pi} + \frac{2 e^{- 2 p^{2} - 2 \left(\alpha + x\right)^{2}}}{\pi}}{2 - 2 e^{- 2 \alpha^{2}}}
+W_{|\mathcal{C}^-_\alpha\rangle}(x, p) = \frac{e^{- 2 p^{2} - 2 \left(x - \alpha\right)^{2}} + e^{- 2 p^{2} - 2 \left(x + \alpha\right)^{2}} - 2 e^{- 2 p^{2} - 2 x^{2}} \cos{\left(4 p \alpha \right)}}{\pi \left(1 - e^{- 2 \alpha^{2}}\right)}
 ```
 
 Valid when: Exact for real alpha.
@@ -91,7 +91,7 @@ Valid when: Semiclassical. kappa_1 << kappa_2 |alpha|^2.
 `cat.parity_decay_rate`
 
 ```latex
-\Gamma_{P} = 2 \alpha^{2} \kappa_{1}
+\Gamma_{P} = 2 \kappa_{1} \alpha^{2}
 ```
 
 Valid when: Two-photon dissipation dominates; |alpha|^2 > ~1.
@@ -103,7 +103,7 @@ Valid when: Two-photon dissipation dominates; |alpha|^2 > ~1.
 `cat.phase_flip_rate`
 
 ```latex
-\Gamma_Z = \alpha^{2} \kappa_{1}
+\Gamma_Z = \kappa_{1} \alpha^{2}
 ```
 
 Valid when: Same as parity decay. <X> = 1 - 2 p_Z decays at 2 Gamma_Z.
@@ -129,7 +129,7 @@ Valid when: Asymptotic, |alpha|^2 >~ 4. Prefactor depends on the noise model.
 `cat.bit_flip_rate_dephasing`
 
 ```latex
-\Gamma_X^{(\phi)} = \frac{\alpha^{2} \kappa_{\phi}}{2 \sinh{\left(2 \alpha^{2} \right)}}
+\Gamma_X^{(\phi)} = \frac{\kappa_{\phi} \alpha^{2}}{2 \sinh{\left(2 \alpha^{2} \right)}}
 ```
 
 Valid when: kappa_phi << kappa_2. Falls as e^{-2|alpha|^2}, like the loss-induced rate.
@@ -154,7 +154,7 @@ Valid when: H = -K a+^2 a^2 + epsilon_2 (a+^2 + a^2); |+-alpha> are degenerate e
 `transmon.plasma_frequency`
 
 ```latex
-\hbar\omega_p = 2 \sqrt{2} \sqrt{E_{C}} \sqrt{E_{J}}
+\hbar\omega_p = \sqrt{8 E_{J} E_{C}}
 ```
 
 Valid when: Small-phase expansion of the cosine.
@@ -166,7 +166,7 @@ Valid when: Small-phase expansion of the cosine.
 `transmon.level_energy`
 
 ```latex
-E_m = 2 \sqrt{2} \sqrt{E_{C}} \sqrt{E_{J}} \left(m + \frac{1}{2}\right) - \frac{E_{C} \left(6 m^{2} + 6 m + 3\right)}{12} - E_{J}
+E_m = - E_{J} + \sqrt{8 E_{J} E_{C}} \left(\frac{1}{2} + m\right) - \frac{E_{C}}{12} \left(3 + 6 m + 6 m^{2}\right)
 ```
 
 Valid when: E_J / E_C >> 1, low levels m.
@@ -178,7 +178,7 @@ Valid when: E_J / E_C >> 1, low levels m.
 `transmon.qubit_frequency`
 
 ```latex
-E_{01} = 2 \sqrt{2} \sqrt{E_{C}} \sqrt{E_{J}} - E_{C}
+E_{01} = \sqrt{8 E_{J} E_{C}} - E_{C}
 ```
 
 Valid when: E_J / E_C >> 1.
@@ -202,7 +202,7 @@ Valid when: E_J / E_C >> 1. Sets how fast a gate can be without leaking to level
 `transmon.charge_dispersion`
 
 ```latex
-\epsilon_m = \frac{\left(-1\right)^{m} \sqrt{2} \cdot 2^{4 m + 5} E_{C} \left(\frac{E_{J}}{2 E_{C}}\right)^{\frac{m}{2} + \frac{3}{4}} e^{- \frac{2 \sqrt{2} \sqrt{E_{J}}}{\sqrt{E_{C}}}}}{\sqrt{\pi} \Gamma\left(m + 1\right)}
+\epsilon_m = \left(-1\right)^{m} E_{C} \frac{2^{5 + 4 m}}{m!} \frac{\sqrt{2}}{\sqrt{\pi}} \left(\frac{E_{J}}{2 E_{C}}\right)^{\frac{3}{4} + \frac{m}{2}} e^{- \sqrt{\frac{8 E_{J}}{E_{C}}}}
 ```
 
 Valid when: Asymptotic in E_J / E_C. Why transmons shrug off charge noise.

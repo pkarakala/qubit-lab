@@ -25,9 +25,18 @@ K, epsilon_2 = sp.symbols("K epsilon_2", positive=True)
 GERRY = Source("gerry2005", Kind.TEXTBOOK, "Ch. 3 (coherent states), Ch. 7 (cat states)")
 
 
-def _gauss(x0: sp.Expr) -> sp.Expr:
-    """Wigner function of the coherent state |x0> (x0 real)."""
-    return 2 / sp.pi * sp.exp(-2 * ((x - x0) ** 2 + p**2))
+def _blob(x0: sp.Expr) -> sp.Expr:
+    """exp(-2|beta - x0|^2), kept unevaluated so the LaTeX reads like the textbook."""
+    return sp.exp(-2 * ((x - x0) ** 2 + p**2), evaluate=False)
+
+
+def _cat_wigner(sign: int) -> sp.Expr:
+    """Cat Wigner function: two blobs plus +-2 e^{-2|beta|^2} cos(4 alpha p) fringes, normalized."""
+    norm = sp.Pow(sp.pi * (1 + sign * sp.exp(-2 * alpha**2)), -1, evaluate=False)
+    fringes = sp.Mul(2 * sign, sp.exp(-2 * (x**2 + p**2)), sp.cos(4 * alpha * p), evaluate=False)
+    return sp.Mul(
+        norm, sp.Add(_blob(alpha), _blob(-alpha), fringes, evaluate=False), evaluate=False
+    )
 
 
 coherent_overlap = Formula(
@@ -44,19 +53,17 @@ wigner_coherent = Formula(
     key="cat.wigner_coherent",
     title="Wigner function of a coherent state",
     lhs=r"W_{|\alpha\rangle}(x, p)",
-    expr=_gauss(alpha),
+    expr=sp.Mul(2 / sp.pi, _blob(alpha), evaluate=False),
     args=(x, p, alpha),
     sources=(GERRY,),
     valid_when="Exact. Convention beta = x + ip, hbar = 1/2.",
 )
 
-_interference = 2 / sp.pi * sp.exp(-2 * (x**2 + p**2)) * sp.cos(4 * alpha * p)
-
 wigner_even_cat = Formula(
     key="cat.wigner_even_cat",
     title="Wigner function of the even cat |C+>",
     lhs=r"W_{|\mathcal{C}^+_\alpha\rangle}(x, p)",
-    expr=(_gauss(alpha) + _gauss(-alpha) + 2 * _interference) / (2 * (1 + sp.exp(-2 * alpha**2))),
+    expr=_cat_wigner(+1),
     args=(x, p, alpha),
     sources=(GERRY,),
     valid_when="Exact for real alpha. The cosine fringes near the origin carry the parity.",
@@ -66,7 +73,7 @@ wigner_odd_cat = Formula(
     key="cat.wigner_odd_cat",
     title="Wigner function of the odd cat |C->",
     lhs=r"W_{|\mathcal{C}^-_\alpha\rangle}(x, p)",
-    expr=(_gauss(alpha) + _gauss(-alpha) - 2 * _interference) / (2 * (1 - sp.exp(-2 * alpha**2))),
+    expr=_cat_wigner(-1),
     args=(x, p, alpha),
     sources=(GERRY,),
     valid_when="Exact for real alpha.",

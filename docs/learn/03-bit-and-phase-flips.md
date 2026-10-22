@@ -2,7 +2,7 @@
 
 A qubit can fail two ways. A cat qubit trades one for the other on purpose.
 
-**Bit-flip (|+α⟩ ↔ |−α⟩).** Noise must carry the state across phase space. Each extra photon makes that harder. In theory the rate drops by e² ≈ 7.4 per photon. Our simulation of the ideal model gives 7.4 for |α|² from 5 to 7. Alice & Bob's 2020 experiment saw 4.2 per photon, then a ceiling at 1 ms. The 2024 device reached over 10 s at |α|² = 11.3.
+**Bit-flip (|+α⟩ ↔ |−α⟩).** Noise must carry the state across phase space. Each extra photon makes that harder. In theory the rate drops by e² ≈ 7.4 per photon. Our simulation of the ideal model gives 7.4 for |α|² from 5 to 7. The 2020 experiment by Lescanne et al. saw 4.2 per photon, then a ceiling at 1 ms. The 2024 device reached over 10 s at |α|² = 11.3.
 
 **Phase-flip (even cat ↔ odd cat).** Losing one photon flips parity, and parity is the qubit's phase. Bigger cats have more photons to lose, so the rate grows linearly: Γ_Z = κ₁|α|². Simulation agrees to 0.2%.
 

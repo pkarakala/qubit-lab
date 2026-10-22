@@ -32,7 +32,7 @@ def wigner() -> list[CheckResult]:
                     CheckResult(
                         key=f"cat.wigner.{kind}.{label}",
                         formula=formula.key,
-                        regime=f"|alpha|^2 = {alpha_sq:g}, W at ({xp:.2f}, {pp:.2f})",
+                        regime=f"|α|² = {alpha_sq:g}, W at ({xp:.2f}, {pp:.2f})",
                         theory=float(formula(x=xp, p=pp, alpha=alpha)),
                         sim=float(np.asarray(w).ravel()[0]),
                         rel_tol=1e-6,
@@ -56,7 +56,7 @@ def photon_number() -> list[CheckResult]:
                 CheckResult(
                     key=f"cat.photon_number.{kind}.{alpha_sq:g}",
                     formula=formula.key,
-                    regime=f"|alpha|^2 = {alpha_sq:g}",
+                    regime=f"|α|² = {alpha_sq:g}",
                     theory=float(formula(alpha=math.sqrt(alpha_sq))),
                     sim=float(dq.expect(dq.number(n), state).real),
                     rel_tol=1e-6,
@@ -68,7 +68,7 @@ def photon_number() -> list[CheckResult]:
 
 @check("cat.stabilized_photon_number", slow=True)
 def stabilized_photon_number() -> list[CheckResult]:
-    # (|alpha|^2, kappa_1/kappa_2, expected). Valid while kappa_1 << kappa_2 |alpha|^2.
+    # (|α|², κ₁/κ₂, expected). Valid while kappa_1 << kappa_2 |α|².
     regimes = ((4.0, 0.01, A), (4.0, 0.1, A), (2.0, 0.2, A), (1.0, 0.5, D))
     out = []
     for alpha_sq, k1, expected in regimes:
@@ -78,7 +78,7 @@ def stabilized_photon_number() -> list[CheckResult]:
             CheckResult(
                 key=f"cat.stabilized_photon_number.{alpha_sq:g}.{k1:g}",
                 formula=th.stabilized_photon_number.key,
-                regime=f"|alpha|^2 = {alpha_sq:g}, kappa_1/kappa_2 = {k1:g}",
+                regime=f"|α|² = {alpha_sq:g}, κ₁/κ₂ = {k1:g}",
                 theory=float(
                     th.stabilized_photon_number(alpha=math.sqrt(alpha_sq), kappa_1=k1, kappa_2=1.0)
                 ),
@@ -92,7 +92,7 @@ def stabilized_photon_number() -> list[CheckResult]:
 
 @check("cat.parity_decay", slow=True)
 def parity_decay() -> list[CheckResult]:
-    # Needs a well-formed cat: valid for |alpha|^2 >~ 1, fails for small cats.
+    # Needs a well-formed cat: valid for |α|² >~ 1, fails for small cats.
     regimes = ((2.0, A), (4.0, A), (8.0, A), (0.3, D))
     k1 = 0.01
     out = []
@@ -102,7 +102,7 @@ def parity_decay() -> list[CheckResult]:
             CheckResult(
                 key=f"cat.parity_decay.{alpha_sq:g}",
                 formula=th.parity_decay_rate.key,
-                regime=f"|alpha|^2 = {alpha_sq:g}, kappa_1/kappa_2 = {k1:g}",
+                regime=f"|α|² = {alpha_sq:g}, κ₁/κ₂ = {k1:g}",
                 theory=float(th.parity_decay_rate(kappa_1=k1, alpha=math.sqrt(alpha_sq))),
                 sim=rates.x_decay,
                 rel_tol=0.01,
@@ -125,7 +125,7 @@ def bit_flip_suppression() -> list[CheckResult]:
             CheckResult(
                 key=f"cat.bit_flip_suppression.{alpha_sq:g}",
                 formula=th.bit_flip_suppression.key,
-                regime=f"|alpha|^2 = {alpha_sq:g} -> {alpha_sq + 1:g}, kappa_1/kappa_2 = {k1:g}",
+                regime=f"|α|² = {alpha_sq:g} -> {alpha_sq + 1:g}, κ₁/κ₂ = {k1:g}",
                 theory=float(th.bit_flip_suppression(Delta_n=1.0)),
                 sim=hi.z_decay / lo.z_decay,
                 rel_tol=0.10,
@@ -146,7 +146,7 @@ def bit_flip_dephasing() -> list[CheckResult]:
             CheckResult(
                 key=f"cat.bit_flip_dephasing.{alpha_sq:g}",
                 formula=th.bit_flip_rate_dephasing.key,
-                regime=f"|alpha|^2 = {alpha_sq:g}, kappa_phi/kappa_2 = {k_phi:g}, kappa_1 = 0",
+                regime=f"|α|² = {alpha_sq:g}, κ_φ/κ₂ = {k_phi:g}, κ₁ = 0",
                 theory=float(
                     th.bit_flip_rate_dephasing(kappa_phi=k_phi, alpha=math.sqrt(alpha_sq))
                 ),

@@ -19,7 +19,7 @@ from catlab.provenance import Source
 FORMULAS: dict[str, Formula] = {}
 
 # SymPy maps a few functions to the math module, which JAX cannot trace.
-_JAX_EXTRAS = {"gamma": jsp.gamma}
+_JAX_EXTRAS = {"gamma": jsp.gamma, "factorial": lambda n: jsp.gamma(n + 1)}
 
 
 @dataclass(eq=False)
@@ -45,7 +45,7 @@ class Formula:
 
     @property
     def latex(self) -> str:
-        return f"{self.lhs} = {sp.latex(self.expr)}"
+        return f"{self.lhs} = {sp.latex(self.expr, order='none')}"
 
     @property
     def arg_names(self) -> tuple[str, ...]:

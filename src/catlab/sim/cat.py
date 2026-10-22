@@ -3,6 +3,7 @@
 Two stabilization schemes, same noise:
 - "dissipative": kappa_2 D[a^2 - alpha^2]   (Alice & Bob's scheme), rates in units of kappa_2.
 - "kerr":        H = -K a+^2 a^2 + K alpha^2 (a+^2 + a^2), rates in units of K.
+- "none":        no stabilization, for comparison. Rates in the same units as above.
 
 Noise on top: single-photon loss kappa_1 with thermal occupation n_th, and pure dephasing
 kappa_phi. Conventions match `catlab.theory.cat`.
@@ -24,7 +25,7 @@ from numpy.typing import NDArray
 dq.set_precision("double")
 dq.set_progress_meter(False)
 
-Scheme = Literal["dissipative", "kerr"]
+Scheme = Literal["dissipative", "kerr", "none"]
 Initial = Literal["vacuum", "coherent_plus", "coherent_minus", "even_cat", "odd_cat"]
 
 
@@ -62,9 +63,11 @@ def operators(params: CatParams) -> tuple[dq.QArray, list[dq.QArray]]:
     if params.scheme == "dissipative":
         H = dq.zeros(n)
         jumps.append(a2 - params.alpha_sq * eye)
-    else:
+    elif params.scheme == "kerr":
         ad2 = a2.dag()
         H = -(ad2 @ a2) + params.alpha_sq * (ad2 + a2)
+    else:
+        H = dq.zeros(n)
     if params.kappa_1 > 0:
         jumps.append(math.sqrt(params.kappa_1 * (1 + params.n_th)) * a)
         if params.n_th > 0:

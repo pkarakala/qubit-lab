@@ -34,7 +34,7 @@ class CatRequest(BaseModel):
     kappa_1: float = Field(0.0, ge=0.0, le=1.0, description="single-photon loss / kappa_2")
     n_th: float = Field(0.0, ge=0.0, le=0.5)
     kappa_phi: float = Field(0.0, ge=0.0, le=1.0, description="dephasing / kappa_2")
-    scheme: Literal["dissipative", "kerr"] = "dissipative"
+    scheme: Literal["dissipative", "kerr", "none"] = "dissipative"
 
     def params(self) -> cat_sim.CatParams:
         return cat_sim.CatParams(
@@ -85,6 +85,10 @@ def _evolve(body: dict[str, Any]) -> dict[str, Any]:
         theory["parity_decay_rate"] = float(
             cat_th.parity_decay_rate(kappa_1=req.kappa_1, alpha=alpha)
         )
+        if req.initial in ("even_cat", "odd_cat"):
+            sign = 1.0 if req.initial == "even_cat" else -1.0
+            rate = theory["parity_decay_rate"]
+            theory["parity_curve"] = _round(sign * np.exp(-rate * ev.times))
     return {
         "sim": {
             "n_fock": p.n_fock,
@@ -223,3 +227,33 @@ def transmon_bands(
 @app.get("/api/checks")
 def checks() -> list[dict[str, Any]]:
     return _checks()
+
+
+@disk_cached
+def _transmon_surface(
+    E_C: float, ratios: list[float], n_levels: int, n_points: int
+) -> dict[str, Any]:
+    energies, ripples = [], []
+    for r in ratios:
+        b = tr_sim.bands(tr_sim.TransmonParams(E_J=r * E_C, E_C=E_C), n_points, n_levels)
+        e01 = float(np.mean(b.transition(0, 1)))
+        energies.append(b.energies / e01)  # in units of the mean E_01
+        ripples.append(
+            (b.energies - b.energies.mean(axis=0)) / E_C
+        )  # wiggle with n_g, units of E_C
+    ng = np.linspace(-1.0, 1.0, n_points)
+    return {
+        "sim": {
+            "ratios": ratios,
+            "n_g": _round(ng),
+            "energies_over_e01": _round(energies, 6),
+            "ripple_over_ec": _round(ripples, 6),
+        }
+    }
+
+
+@app.get("/api/transmon/surface")
+def transmon_surface(E_C: float = 1.0, n_levels: int = 3, n_points: int = 61) -> dict[str, Any]:
+    """Bands over (n_g, E_J/E_C) on a log grid of E_J/E_C from 1 to 100, scaled by E_01."""
+    ratios = [float(r) for r in np.round(np.logspace(0, 2, 41), 4)]
+    return _transmon_surface(E_C, ratios, n_levels, n_points)
