@@ -45,3 +45,21 @@ def test_qubit_t1_run_has_theory_curve() -> None:
 def test_qubit_rejects_t2_above_twice_t1() -> None:
     body = {"experiment": "t1", "t1_ns": 10.0, "t2_ns": 30.0}
     assert client.post("/api/qubit/run", json=body).status_code == 422
+
+
+def test_compare_cat_is_biased_and_transmon_is_not() -> None:
+    data = client.get("/api/compare", params={"t_ns": 25.0}).json()
+    by = {d["key"]: d for d in data["devices"]}
+    # Hand calc: bias -> T_bit / T_phase for t << T. reglade2024: 313 us / 2.7 us = 116.
+    assert by["reglade2024.2.5"]["theory"]["bias"] == pytest.approx(313 / 2.7, rel=0.01)
+    # willow2025: 68 us / 89 us = 0.76. Transmon bias is order 1.
+    assert by["willow2025"]["theory"]["bias"] == pytest.approx(68 / 89, rel=0.01)
+    assert by["reglade2024.2.5"]["sim"] is None
+    # 1 - F = 1/2 - e^{-t/T2}/3 - e^{-t/T1}/6 ~ t/(3 T2) + t/(6 T1) = 1.55e-4 for Willow at 25 ns.
+    willow = by["willow2025"]
+    assert willow["theory"]["idle_error"] == pytest.approx(1.55e-4, rel=0.01)
+    assert willow["sim"]["idle_error"] == pytest.approx(willow["theory"]["idle_error"], rel=1e-3)
+
+
+def test_compare_rejects_long_idle() -> None:
+    assert client.get("/api/compare", params={"t_ns": 1e6}).status_code == 422

@@ -44,6 +44,16 @@ test('qubit control: DRAG cuts leakage on a fast pi pulse', async ({ page }) => 
   await page.screenshot({ path: `${IMG}/qubit_control.png` })
 })
 
+test('cat vs transmon shows the noise bias at measured numbers', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('tab', { name: 'Cat vs transmon' }).click()
+  await expect(page.locator('.chart-main .js-plotly-plot')).toBeVisible({ timeout: 300_000 })
+  await expect(page.getByTestId('compare-facts')).toContainText('Google Quantum AI')
+  await expect(page.locator('[data-formula="qubit.flip_probability"]')).toBeVisible()
+  await expect(page.locator('.hud-corner')).toHaveCount(0, { timeout: 300_000 })
+  await page.screenshot({ path: `${IMG}/cat_vs_transmon.png` })
+})
+
 test('checks page reports no surprises', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('tab', { name: 'Checks' }).click()

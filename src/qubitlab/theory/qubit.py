@@ -16,8 +16,8 @@ import sympy as sp
 from qubitlab.provenance import Kind, Source
 from qubitlab.theory.registry import Formula
 
-t, Omega, Delta, T_1, T_2, T_phi, sigma, alpha = sp.symbols(
-    "t Omega Delta T_1 T_2 T_phi sigma alpha", real=True
+t, Omega, Delta, T_1, T_2, T_phi, sigma, alpha, T = sp.symbols(
+    "t Omega Delta T_1 T_2 T_phi sigma alpha T", real=True
 )
 Omega_dot = sp.Symbol("Omegadot_x", real=True)  # prints as \dot{\Omega}_x
 
@@ -120,6 +120,27 @@ idle_fidelity = Formula(
     valid_when="Two levels, Markovian noise. Sets the error per idle gate.",
 )
 
+flip_probability = Formula(
+    key="qubit.flip_probability",
+    title="Chance of a flip after time t, from the decay time of the flipped observable",
+    lhs=r"p(t)",
+    expr=(1 - sp.exp(-t / T)) / 2,
+    args=(t, T),
+    sources=(
+        hand(
+            "Step 7: Pauli twirl. Bit-flip: T = T1 (transmon) or T_X (cat). "
+            "Phase-flip: T = T2 or T_Z."
+        ),
+        Source(
+            "reglade2024",
+            Kind.PEER_REVIEWED,
+            "Fig. 3 caption",
+            "T_X and T_Z are exponential decay times of <Z_alpha> and <X_alpha>.",
+        ),
+    ),
+    valid_when="Exponential (Markovian) decay. Bit-flip counts X and Y errors, phase-flip Z and Y.",
+)
+
 ALL = (
     rabi_population,
     t1_decay,
@@ -128,4 +149,5 @@ ALL = (
     echo,
     drag_quadrature,
     idle_fidelity,
+    flip_probability,
 )

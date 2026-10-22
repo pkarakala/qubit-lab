@@ -250,3 +250,20 @@ def average_idle_fidelity(q: TransmonQubit, t_ns: float) -> float:
         rho = dq.mesolve(H, _jumps(q), dq.todm(psi), jnp.asarray([0.0, t_ns])).states[-1]
         total += float(dq.fidelity(psi, rho))
     return total / len(states)
+
+
+def flip_probabilities(q: TransmonQubit, t_ns: float) -> tuple[float, float]:
+    """Bit-flip and phase-flip probabilities after idling for t, at zero mean detuning.
+
+    From the Pauli transfer matrix: R_Z = (<Z>|0> - <Z>|1>)/2 and R_X = (<X>|+> - <X>|->)/2,
+    then p_bit = (1 - R_Z)/2 and p_phase = (1 - R_X)/2. Averaged over quasi-static noise.
+    """
+    b0, b1 = dq.basis(q.levels, 0), dq.basis(q.levels, 1)
+    tsave = np.array([0.0, t_ns])
+
+    def final(psi: dq.QArray, row: int) -> float:
+        return float(_solve(q, 0.0, dq.todm(psi), tsave, None)[row, -1])
+
+    r_z = (final(b0, 2) - final(b1, 2)) / 2
+    r_x = (final(dq.unit(b0 + b1), 0) - final(dq.unit(b0 - b1), 0)) / 2
+    return (1 - r_z) / 2, (1 - r_x) / 2

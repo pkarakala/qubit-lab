@@ -234,6 +234,19 @@ Valid when: Two levels, Markovian noise. Sets the error per idle gate.
 - [nielsen2002](https://doi.org/10.1016/S0375-9601(02)01272-0), Eq. (3) (peer_reviewed). F_avg = (d F_e + 1)/(d + 1).
 - qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 6: entanglement fidelity of the T1/T2 channel, d = 2.
 
+## Chance of a flip after time t, from the decay time of the flipped observable
+
+`qubit.flip_probability`
+
+```latex
+p(t) = \frac{1}{2} - \frac{e^{- \frac{t}{T}}}{2}
+```
+
+Valid when: Exponential (Markovian) decay. Bit-flip counts X and Y errors, phase-flip Z and Y.
+
+- qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 7: Pauli twirl. Bit-flip: T = T1 (transmon) or T_X (cat). Phase-flip: T = T2 or T_Z.
+- [reglade2024](https://doi.org/10.1038/s41586-024-07294-3), Fig. 3 caption (peer_reviewed). T_X and T_Z are exponential decay times of <Z_alpha> and <X_alpha>.
+
 ## Josephson plasma energy
 
 `transmon.plasma_frequency`

@@ -24,7 +24,7 @@ export function FlipRates() {
   const [draft, setDraft] = useState<CatParams>({ alpha_sq: 4, kappa_1: 0.1, kappa_phi: 0, n_th: 0, scheme: 'dissipative' })
   const params = useDebounced(draft, 500)
   const q = useRates(params, SIZES)
-  const facts = useFacts().data ?? []
+  const facts = (useFacts().data ?? []).filter((f) => f.qubit === 'cat')
   const refs = useReferences().data
   const c = SERIES[theme]
   const rows = q.data?.rows ?? []

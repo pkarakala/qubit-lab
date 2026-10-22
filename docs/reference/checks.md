@@ -6,20 +6,20 @@ Expected is the verdict predicted from the formula's validity range before runni
 
 | Check | Regime | Theory | Simulation | Rel. error | Tolerance | Verdict | Expected |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `cat.wigner.even_cat.origin` | \|α\|² = 1, W at (0.00, 0.00) | 0.63662 | 0.63662 | 0 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.even_cat.origin` | \|α\|² = 1, W at (0.00, 0.00) | 0.63662 | 0.63662 | 1.7e-16 | 1e-06 | AGREE | AGREE |
 | `cat.wigner.even_cat.blob` | \|α\|² = 1, W at (1.00, 0.00) | 0.356347 | 0.356347 | 1.6e-16 | 1e-06 | AGREE | AGREE |
-| `cat.wigner.odd_cat.origin` | \|α\|² = 1, W at (0.00, 0.00) | -0.63662 | -0.63662 | 3.5e-16 | 1e-06 | AGREE | AGREE |
-| `cat.wigner.odd_cat.blob` | \|α\|² = 1, W at (1.00, 0.00) | 0.268612 | 0.268612 | 4.1e-16 | 1e-06 | AGREE | AGREE |
-| `cat.wigner.even_cat.origin` | \|α\|² = 4, W at (0.00, 0.00) | 0.63662 | 0.63662 | 5.2e-16 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.odd_cat.origin` | \|α\|² = 1, W at (0.00, 0.00) | -0.63662 | -0.63662 | 1.7e-16 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.odd_cat.blob` | \|α\|² = 1, W at (1.00, 0.00) | 0.268612 | 0.268612 | 0 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.even_cat.origin` | \|α\|² = 4, W at (0.00, 0.00) | 0.63662 | 0.63662 | 1.7e-16 | 1e-06 | AGREE | AGREE |
 | `cat.wigner.even_cat.blob` | \|α\|² = 4, W at (2.00, 0.00) | 0.318417 | 0.318417 | 1.8e-13 | 1e-06 | AGREE | AGREE |
-| `cat.wigner.odd_cat.origin` | \|α\|² = 4, W at (0.00, 0.00) | -0.63662 | -0.63662 | 0 | 1e-06 | AGREE | AGREE |
-| `cat.wigner.odd_cat.blob` | \|α\|² = 4, W at (2.00, 0.00) | 0.318203 | 0.318203 | 5.8e-15 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.odd_cat.origin` | \|α\|² = 4, W at (0.00, 0.00) | -0.63662 | -0.63662 | 8.7e-16 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.odd_cat.blob` | \|α\|² = 4, W at (2.00, 0.00) | 0.318203 | 0.318203 | 6.3e-15 | 1e-06 | AGREE | AGREE |
 | `cat.photon_number.even_cat.0.5` | \|α\|² = 0.5 | 0.231059 | 0.231059 | 4.8e-16 | 1e-06 | AGREE | AGREE |
-| `cat.photon_number.odd_cat.0.5` | \|α\|² = 0.5 | 1.08198 | 1.08198 | 4.1e-16 | 1e-06 | AGREE | AGREE |
-| `cat.photon_number.even_cat.1` | \|α\|² = 1 | 0.761594 | 0.761594 | 4.4e-16 | 1e-06 | AGREE | AGREE |
-| `cat.photon_number.odd_cat.1` | \|α\|² = 1 | 1.31304 | 1.31304 | 0 | 1e-06 | AGREE | AGREE |
-| `cat.photon_number.even_cat.4` | \|α\|² = 4 | 3.99732 | 3.99732 | 1.1e-16 | 1e-06 | AGREE | AGREE |
-| `cat.photon_number.odd_cat.4` | \|α\|² = 4 | 4.00268 | 4.00268 | 8.9e-16 | 1e-06 | AGREE | AGREE |
+| `cat.photon_number.odd_cat.0.5` | \|α\|² = 0.5 | 1.08198 | 1.08198 | 0 | 1e-06 | AGREE | AGREE |
+| `cat.photon_number.even_cat.1` | \|α\|² = 1 | 0.761594 | 0.761594 | 0 | 1e-06 | AGREE | AGREE |
+| `cat.photon_number.odd_cat.1` | \|α\|² = 1 | 1.31304 | 1.31304 | 1.7e-16 | 1e-06 | AGREE | AGREE |
+| `cat.photon_number.even_cat.4` | \|α\|² = 4 | 3.99732 | 3.99732 | 6.7e-16 | 1e-06 | AGREE | AGREE |
+| `cat.photon_number.odd_cat.4` | \|α\|² = 4 | 4.00268 | 4.00268 | 6.7e-16 | 1e-06 | AGREE | AGREE |
 | `cat.stabilized_photon_number.4.0.01` | \|α\|² = 4, κ₁/κ₂ = 0.01 | 3.995 | 3.99464 | 9.1e-05 | 0.02 | AGREE | AGREE |
 | `cat.stabilized_photon_number.4.0.1` | \|α\|² = 4, κ₁/κ₂ = 0.1 | 3.95 | 3.9463 | 0.00094 | 0.02 | AGREE | AGREE |
 | `cat.stabilized_photon_number.2.0.2` | \|α\|² = 2, κ₁/κ₂ = 0.2 | 1.9 | 1.87915 | 0.011 | 0.02 | AGREE | AGREE |
@@ -28,8 +28,8 @@ Expected is the verdict predicted from the formula's validity range before runni
 | `cat.parity_decay.4` | \|α\|² = 4, κ₁/κ₂ = 0.01 | 0.08 | 0.0798926 | 0.0013 | 0.01 | AGREE | AGREE |
 | `cat.parity_decay.8` | \|α\|² = 8, κ₁/κ₂ = 0.01 | 0.16 | 0.159897 | 0.00065 | 0.01 | AGREE | AGREE |
 | `cat.parity_decay.0.3` | \|α\|² = 0.3, κ₁/κ₂ = 0.01 | 0.006 | 0.011154 | 0.86 | 0.01 | DIVERGE | DIVERGE |
-| `cat.bit_flip_suppression.5` | \|α\|² = 5 -> 6, κ₁/κ₂ = 0.1 | 0.135335 | 0.134488 | 0.0063 | 0.1 | AGREE | AGREE |
-| `cat.bit_flip_suppression.6` | \|α\|² = 6 -> 7, κ₁/κ₂ = 0.1 | 0.135335 | 0.135448 | 0.00083 | 0.1 | AGREE | AGREE |
+| `cat.bit_flip_suppression.5` | \|α\|² = 5 -> 6, κ₁/κ₂ = 0.1 | 0.135335 | 0.134486 | 0.0063 | 0.1 | AGREE | AGREE |
+| `cat.bit_flip_suppression.6` | \|α\|² = 6 -> 7, κ₁/κ₂ = 0.1 | 0.135335 | 0.135477 | 0.001 | 0.1 | AGREE | AGREE |
 | `cat.bit_flip_suppression.1` | \|α\|² = 1 -> 2, κ₁/κ₂ = 0.1 | 0.135335 | 0.0767483 | 0.43 | 0.1 | DIVERGE | DIVERGE |
 | `cat.bit_flip_dephasing.1` | \|α\|² = 1, κ_φ/κ₂ = 0.01, κ₁ = 0 | 0.0013786 | 0.00139016 | 0.0084 | 0.1 | AGREE | AGREE |
 | `cat.bit_flip_dephasing.2` | \|α\|² = 2, κ_φ/κ₂ = 0.01, κ₁ = 0 | 0.000366436 | 0.000376462 | 0.027 | 0.1 | AGREE | AGREE |
@@ -49,6 +49,10 @@ Expected is the verdict predicted from the formula's validity range before runni
 | `qubit.echo.0.005` | σ = 5 MHz (Ramsey would be gone by 32 ns) | 0.513417 | 0.513415 | 4.3e-06 | 0.01 | AGREE | AGREE |
 | `qubit.idle_fidelity.150.20` | T1 = 100 ns, T2 = 150 ns, t = 20 ns | 0.92818 | 0.92818 | 4.3e-11 | 0.001 | AGREE | AGREE |
 | `qubit.idle_fidelity.50.100` | T1 = 100 ns, T2 = 50 ns, t = 100 ns | 0.606425 | 0.606425 | 4.2e-07 | 0.001 | AGREE | AGREE |
+| `qubit.flip_probability.bit.0` | bit-flip, T = T1, T1 = 100 ns, T2 = 150 ns, σ = 0 MHz, t = 20 ns | 0.0906346 | 0.0906346 | 1.1e-09 | 0.001 | AGREE | AGREE |
+| `qubit.flip_probability.phase.0` | phase-flip, T = T2, T1 = 100 ns, T2 = 150 ns, σ = 0 MHz, t = 20 ns | 0.0624133 | 0.0624133 | 1.3e-10 | 0.001 | AGREE | AGREE |
+| `qubit.flip_probability.bit.0.002` | bit-flip, T = T1, T1 = 20000 ns, T2 = 20000 ns, σ = 2 MHz, t = 100 ns | 0.00249376 | 0.00249376 | 4.5e-14 | 0.001 | AGREE | AGREE |
+| `qubit.flip_probability.phase.0.002` | phase-flip, T = T2, T1 = 20000 ns, T2 = 20000 ns, σ = 2 MHz, t = 100 ns | 0.00249376 | 0.274112 | 1.1e+02 | 0.001 | DIVERGE | DIVERGE |
 | `transmon.qubit_frequency.100` | E_J/E_C = 100 | 27.2843 | 27.2451 | 0.0014 | 0.01 | AGREE | AGREE |
 | `transmon.qubit_frequency.50` | E_J/E_C = 50 | 19 | 18.9419 | 0.0031 | 0.01 | AGREE | AGREE |
 | `transmon.qubit_frequency.20` | E_J/E_C = 20 | 11.6491 | 11.5461 | 0.0088 | 0.01 | AGREE | AGREE |

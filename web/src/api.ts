@@ -127,6 +127,22 @@ export interface Fact {
   cite: string
   kind: string
   locator: string
+  qubit: 'cat' | 'transmon'
+}
+
+export interface CompareDevice {
+  key: string
+  label: string
+  qubit: 'cat' | 'transmon'
+  t_bit: string // fact key
+  t_phase: string // fact key
+  theory: { p_bit: number; p_phase: number; bias: number; idle_error: number | null }
+  sim: { p_bit: number; p_phase: number; idle_error: number } | null
+}
+
+export interface Compare {
+  t_ns: number
+  devices: CompareDevice[]
 }
 
 export type BibEntry = Record<string, string>
@@ -182,6 +198,14 @@ export const useQubit = (p: QubitParams) =>
   useQuery({
     queryKey: ['qubit', p],
     queryFn: () => post<QubitRun>('/api/qubit/run', p),
+    placeholderData: keepPreviousData,
+    ...forever,
+  })
+
+export const useCompare = (t_ns: number) =>
+  useQuery({
+    queryKey: ['compare', t_ns],
+    queryFn: () => get<Compare>(`/api/compare?t_ns=${t_ns}`),
     placeholderData: keepPreviousData,
     ...forever,
   })
