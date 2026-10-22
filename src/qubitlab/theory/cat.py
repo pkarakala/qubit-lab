@@ -170,6 +170,12 @@ bit_flip_suppression = Formula(
             "Fig. 3",
             "Measured: x4.2 per added photon (not e^2 = 7.4), saturating at 1 ms.",
         ),
+        Source(
+            "reglade2024",
+            Kind.PEER_REVIEWED,
+            "Fig. 4b caption",
+            "A later device measured the same x4.2 per added photon.",
+        ),
     ),
     valid_when="Asymptotic, |alpha|^2 >~ 4. Prefactor depends on the noise model.",
 )
