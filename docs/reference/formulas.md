@@ -149,6 +149,67 @@ Valid when: H = -K a+^2 a^2 + epsilon_2 (a+^2 + a^2); |+-alpha> are degenerate e
 - [grimm2020](https://doi.org/10.1038/s41586-020-2587-z), Eq. (1) (peer_reviewed). The Kerr-cat Hamiltonian.
 - qubitlab_hand_calcs, docs/hand_calcs/kerr_cat_amplitude.py (derived). Classical fixed points of Eq. (1).
 
+## Errors needed to fool a distance-d code
+
+`qec.error_exponent`
+
+```latex
+d_e = \frac{d + 1}{2}
+```
+
+Valid when: Odd d, p well below threshold. Sets the slope of log P_L against log p.
+
+- [fowler2012](https://doi.org/10.1103/PhysRevA.86.032324), Eq. (10) (peer_reviewed). Odd d. For the surface code.
+- qubitlab_hand_calcs, docs/hand_calcs/repetition_code.py (derived). Step 1: the same count for the repetition code.
+
+## Surface code logical error rate
+
+`qec.surface_code_logical_error`
+
+```latex
+P_L = 0.03 \left(\frac{p}{p_{th}}\right)^{\frac{d + 1}{2}}
+```
+
+Valid when: p below threshold, Fowler's noise model. The prefactor is model dependent.
+
+- [fowler2012](https://doi.org/10.1103/PhysRevA.86.032324), Eq. (11); p_th = 0.57% in Sec. VII (peer_reviewed). Empirical fit to Fowler's own noise model. Whether P_L is per round is unverified.
+
+## Physical qubits for one surface code logical qubit
+
+`qec.surface_code_qubits`
+
+```latex
+n_q = \left(2 d - 1\right)^{2}
+```
+
+Valid when: Rotated-boundary-free planar layout as drawn by Fowler.
+
+- [fowler2012](https://doi.org/10.1103/PhysRevA.86.032324), Sec. VII.A, text after Eq. (12) (peer_reviewed). Data plus measurement qubits.
+
+## Physical qubits for one repetition code logical qubit
+
+`qec.repetition_code_qubits`
+
+```latex
+n_q = 2 d - 1
+```
+
+Valid when: Line of qubits, one ancilla between each pair of neighbors.
+
+- qubitlab_hand_calcs, docs/hand_calcs/repetition_code.py (derived). Header: d data qubits and d - 1 ancillas.
+
+## Logical errors a repetition code cannot correct
+
+`qec.repetition_bit_flip_floor`
+
+```latex
+P_{L,\mathrm{bit}} = d p_{bit}
+```
+
+Valid when: d * p_bit << 1. Grows with d, so a bigger code can make things worse.
+
+- qubitlab_hand_calcs, docs/hand_calcs/repetition_code.py (derived). Step 2: a flip on any data qubit is a logical flip.
+
 ## Rabi oscillation: population of |1> under a constant drive
 
 `qubit.rabi_population`

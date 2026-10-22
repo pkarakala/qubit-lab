@@ -47,6 +47,14 @@ def test_qubit_rejects_t2_above_twice_t1() -> None:
     assert client.post("/api/qubit/run", json=body).status_code == 422
 
 
+def test_cat_repetition_code_has_an_optimal_size() -> None:
+    body = {"p_phase": 0.01, "p_bit": 1e-4, "shots": 20000}
+    rows = client.post("/api/qec/cat", json=body).json()["rows"]
+    assert [r["qubits"] for r in rows[:3]] == [1, 5, 9]
+    floors = [r["theory"]["bit_flip_floor"] for r in rows]
+    assert floors == sorted(floors)  # the uncorrected part only grows with d
+
+
 def test_compare_cat_is_biased_and_transmon_is_not() -> None:
     data = client.get("/api/compare", params={"t_ns": 25.0}).json()
     by = {d["key"]: d for d in data["devices"]}
