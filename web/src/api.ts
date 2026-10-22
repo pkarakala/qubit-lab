@@ -259,3 +259,35 @@ export const useCompare = (t_ns: number) =>
     placeholderData: keepPreviousData,
     ...forever,
   })
+
+export interface PulseParams {
+  alpha_ghz: number
+  duration_ns: number
+  omega_max_ghz: number
+  t1_ns: number
+  t2_ns: number
+  steps: number
+}
+
+export interface PulseScore {
+  omega_x: number[]
+  omega_y: number[]
+  error: number
+  leakage: number
+  error_with_noise: number
+  times: number[]
+  bloch: number[][]
+  populations: number[][]
+}
+
+export interface PulseRun {
+  sim: { edges: number[]; drag: PulseScore; optimized: PulseScore & { history: number[] } }
+}
+
+export const usePulse = (p: PulseParams) =>
+  useQuery({
+    queryKey: ['pulse', p],
+    queryFn: () => post<PulseRun>('/api/pulse/optimize', p),
+    placeholderData: keepPreviousData,
+    ...forever,
+  })

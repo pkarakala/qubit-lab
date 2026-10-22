@@ -10,5 +10,6 @@ Short pages, one idea each. Read in order. Each takes about two minutes.
 6. [Controlling a transmon](06-qubit-control.md)
 7. [Error correction](07-error-correction.md)
 8. [Noise bias in numbers](08-noise-bias.md)
+9. [Letting the simulation design the pulse](09-pulse-optimizer.md)
 
 Every equation here is in [docs/reference/formulas.md](../reference/formulas.md) with its paper and equation number. Every claim that the simulation agrees is in [docs/reference/checks.md](../reference/checks.md).
