@@ -22,3 +22,13 @@ def test_every_check_points_at_a_real_formula() -> None:
     assert REGISTRY
     for result in run_all(include_slow=False):
         assert result.formula in FORMULAS, result.key
+
+
+def test_facts_and_devices_are_sourced() -> None:
+    from qubitlab.facts import DEVICES, FACT, FACTS
+
+    keys = set(bib_entries())
+    assert {f.cite for f in FACTS} <= keys
+    for d in DEVICES:
+        assert FACT[d.t_bit].qubit == FACT[d.t_phase].qubit == d.qubit
+        assert FACT[d.t_bit].unit == FACT[d.t_phase].unit == "s"

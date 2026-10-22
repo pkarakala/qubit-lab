@@ -3,7 +3,7 @@
 import { create } from 'zustand'
 import type { EvolveParams, QubitParams } from './api'
 
-export type View = 'phase' | 'rates' | 'transmon' | 'qubit' | 'qec' | 'checks'
+export type View = 'phase' | 'rates' | 'transmon' | 'qubit' | 'qec' | 'compare' | 'checks'
 export type Theme = 'light' | 'dark'
 
 export interface Preset {

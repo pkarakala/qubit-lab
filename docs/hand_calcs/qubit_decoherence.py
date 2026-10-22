@@ -17,8 +17,18 @@ Model, the same one `qubitlab.sim.transmon_dynamics` solves with more levels kep
    by g = exp(-t/T1). Entanglement fidelity F_e = (1 + 2c + g)/4, and Nielsen's formula
    (nielsen2002, Eq. (3)) F_avg = (d F_e + 1)/(d + 1) with d = 2 gives
        F_avg = 1/2 + c/3 + g/6.
+7. Flip probabilities. Twirling any qubit channel over the Paulis leaves a Pauli channel with
+   probabilities p_I, p_X, p_Y, p_Z and keeps the diagonal of its Pauli transfer matrix,
+   R_P = Tr(P Lambda(P)) / 2. A Pauli Q multiplies <P> by -1 if it anticommutes with P, so
+       R_Z = 1 - 2 (p_X + p_Y),   R_X = 1 - 2 (p_Z + p_Y).
+   A bit-flip is any error that flips Z (X or Y), a phase-flip any error that flips X (Z or Y):
+       p_bit = (1 - R_Z) / 2,   p_phase = (1 - R_X) / 2.
+   If <P> decays as exp(-t/T), then R_P = exp(-t/T) and p = (1 - exp(-t/T)) / 2.
+   Transmon: R_Z = g (T1), R_X = c (T2). Cat: R_Z = exp(-t/T_X), R_X = exp(-t/T_Z), the
+   definitions of T_X and T_Z in reglade2024 (Fig. 3 caption). Then
+       p_phase / p_bit -> T_bit / T_phase for t << T, the noise bias.
 
-Run this file to redo steps 1, 3, 4 and 6 with SymPy.
+Run this file to redo steps 1, 3, 4, 6 and 7 with SymPy.
 """
 
 import sympy as sp
@@ -56,3 +66,20 @@ print("<cos> =", sp.simplify(avg))  # exp(-2 pi^2 sigma^2 t^2)
 # 6. Average fidelity from entanglement fidelity.
 c, g = sp.symbols("c g", positive=True)
 print("F_avg =", sp.expand((2 * (1 + 2 * c + g) / 4 + 1) / 3))
+
+# 7. Pauli channel: <P> scales by R_P. Check p_bit and p_phase from R_Z and R_X.
+pI, pX, pY, pZ = sp.symbols("p_I p_X p_Y p_Z", nonnegative=True)
+X = sp.Matrix([[0, 1], [1, 0]])
+Y = sp.Matrix([[0, -sp.I], [sp.I, 0]])
+Z = sp.Matrix([[1, 0], [0, -1]])
+I2 = sp.eye(2)
+
+
+def pauli_channel(r: sp.Matrix) -> sp.Matrix:
+    return pI * r + pX * X * r * X + pY * Y * r * Y + pZ * Z * r * Z
+
+
+R_Z = sp.expand((Z * pauli_channel(Z)).trace() / 2).subs(pI, 1 - pX - pY - pZ)
+R_X = sp.expand((X * pauli_channel(X)).trace() / 2).subs(pI, 1 - pX - pY - pZ)
+print("p_bit - (pX + pY) =", sp.simplify((1 - R_Z) / 2 - (pX + pY)))  # 0
+print("p_phase - (pZ + pY) =", sp.simplify((1 - R_X) / 2 - (pZ + pY)))  # 0

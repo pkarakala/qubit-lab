@@ -20,14 +20,15 @@ Rules for coding agents (and people) working in this repo. Humans start at [READ
 4. **Expected test values come from hand calcs or papers,** never from running the code.
 5. **Conventions are fixed:** beta = x + ip, hbar = 1/2 Wigner convention, alpha real and positive, rates in units of kappa_2 (or K), transmon energies in units of E_C or GHz. Alice & Bob's basis: |0>, |1> ~ |+alpha>, |-alpha>. Some papers swap bit and phase flip; note it in the `Source.note`.
 6. **Human docs stay short.** A `docs/learn/` page is at most 350 words and ends with a `Sources:` line. `tests/test_docs.py` enforces both. Long material goes in `docs/reference/`, which is generated.
-7. **Keep diffs small and on one topic.** Write plainly: short sentences, no filler, no em dashes.
+7. **Reuse before you write.** Before adding a helper, check Dynamiqs, scqubits, JAX, NumPy, SciPy, SymPy and this repo (`sim/`, `theory/`) for one that already exists, and import it. Write our own only when nothing fits, and say why in its docstring.
+8. **Keep diffs small and on one topic.** Write plainly: short sentences, no filler, no em dashes.
 
 ## Map
 
 ```
 src/qubitlab/provenance.py      Source, Kind, bib parser
 src/qubitlab/theory/            cat.py, transmon.py, qubit.py (control and decoherence), qec.py (codes), registry.py
-src/qubitlab/sim/               cat.py (Lindblad, Wigner, Liouvillian rates), transmon.py (charge basis),
+src/qubitlab/sim/               cat.py (Lindblad, Wigner, Liouvillian rates), transmon.py (scqubits spectrum),
                                 transmon_dynamics.py (pulses, T1/T2, Ramsey, echo; 4 levels),
                                 qec.py (Stim + PyMatching memory experiments)
 src/qubitlab/checks/            base.py, cat_checks.py, transmon_checks.py, qubit_checks.py, qec_checks.py

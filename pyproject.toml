@@ -57,7 +57,7 @@ addopts = "-p no:cacheprovider"
 markers = ["slow: Liouvillian spectra and long solves"]
 
 [[tool.mypy.overrides]]
-# No type stubs: Stim and PyMatching are compiled extensions.
-module = ["stim", "pymatching"]
+# No type stubs: scqubits does not declare its public names; Stim and PyMatching are compiled extensions.
+module = ["scqubits", "scqubits.*", "stim", "pymatching"]
 follow_imports = "skip"
 ignore_missing_imports = true

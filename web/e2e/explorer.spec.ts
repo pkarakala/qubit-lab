@@ -26,7 +26,7 @@ test('flip rates show the bias and the e^2 law', async ({ page }) => {
 
 test('transmon compares Koch et al. with the exact spectrum', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('tab', { name: 'Transmon' }).click()
+  await page.getByRole('tab', { name: 'Transmon', exact: true }).click()
   await expect(page.getByTestId('band-canvas').locator('canvas')).toBeVisible({ timeout: 120_000 })
   await expect(page.locator('[data-formula="transmon.qubit_frequency"]')).toContainText('5.7 GHz', { timeout: 120_000 })
   await page.waitForTimeout(1500)
@@ -52,6 +52,16 @@ test('error correction: space-time decoding and the cat code', async ({ page }) 
   await expect(page.locator('.dock .js-plotly-plot')).toBeVisible({ timeout: 300_000 })
   await page.waitForTimeout(1500)
   await page.screenshot({ path: `${IMG}/error_correction.png` })
+})
+
+test('cat vs transmon shows the noise bias at measured numbers', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('tab', { name: 'Cat vs transmon' }).click()
+  await expect(page.locator('.chart-main .js-plotly-plot')).toBeVisible({ timeout: 300_000 })
+  await expect(page.getByTestId('compare-facts')).toContainText('Google Quantum AI')
+  await expect(page.locator('[data-formula="qubit.flip_probability"]')).toBeVisible()
+  await expect(page.locator('.hud-corner')).toHaveCount(0, { timeout: 300_000 })
+  await page.screenshot({ path: `${IMG}/cat_vs_transmon.png` })
 })
 
 test('checks page reports no surprises', async ({ page }) => {
