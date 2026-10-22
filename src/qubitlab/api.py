@@ -12,7 +12,7 @@ from pydantic import BaseModel, Field
 
 from qubitlab import __version__
 from qubitlab.cache import disk_cached
-from qubitlab.facts import FACTS
+from qubitlab.facts import DEVICES, FACT, FACTS
 from qubitlab.provenance import bib_entries
 from qubitlab.sim import cat as cat_sim
 from qubitlab.sim import transmon as tr_sim
@@ -335,3 +335,52 @@ def qubit_run(req: QubitRequest) -> dict[str, Any]:
         return _qubit(req.model_dump())
     except ValueError as e:
         raise HTTPException(422, str(e)) from e
+
+
+@disk_cached
+def _compare(t_ns: float) -> dict[str, Any]:
+    rows = []
+    for d in DEVICES:
+        t_bit = FACT[d.t_bit].value * 1e9  # facts are in seconds
+        t_phase = FACT[d.t_phase].value * 1e9
+        p_bit = float(qb_th.flip_probability(t=t_ns, T=t_bit))
+        p_phase = float(qb_th.flip_probability(t=t_ns, T=t_phase))
+        theory: dict[str, float | None] = {
+            "p_bit": p_bit,
+            "p_phase": p_phase,
+            "bias": p_phase / p_bit,
+            "idle_error": None,
+        }
+        sim: dict[str, float] | None = None
+        if d.qubit == "transmon":
+            theory["idle_error"] = 1 - float(qb_th.idle_fidelity(t=t_ns, T_1=t_bit, T_2=t_phase))
+            q = qb_sim.TransmonQubit(t1_ns=t_bit, t2_ns=t_phase)
+            s_bit, s_phase = qb_sim.flip_probabilities(q, t_ns)
+            sim = {
+                "p_bit": s_bit,
+                "p_phase": s_phase,
+                "idle_error": 1 - qb_sim.average_idle_fidelity(q, t_ns),
+            }
+        rows.append(
+            {
+                "key": d.key,
+                "label": d.label,
+                "qubit": d.qubit,
+                "t_bit": d.t_bit,
+                "t_phase": d.t_phase,
+                "theory": theory,
+                "sim": sim,
+            }
+        )
+    return {"t_ns": t_ns, "devices": rows}
+
+
+@app.get("/api/compare")
+def compare(t_ns: float = 25.0) -> dict[str, Any]:
+    """Bit- and phase-flip chance per idle step of length t for measured cats and transmons.
+
+    The default t is the Willow single-qubit gate time (willow2025, Supplement Sec. I).
+    """
+    if not 1.0 <= t_ns <= 1e5:
+        raise HTTPException(422, "t_ns must be between 1 ns and 100 us")
+    return _compare(t_ns)
