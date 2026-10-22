@@ -31,3 +31,11 @@ cd web && npm run typecheck && npm run test:unit
 ```
 
 If you used an AI assistant, point it at [AGENTS.md](AGENTS.md) and say so in the PR.
+
+## Release (maintainer)
+
+1. Set the version: `uv version 0.2.0`, commit, merge to main.
+2. Tag and push: `git tag v0.2.0 && git push origin v0.2.0`.
+3. The release workflow builds the explorer into the wheel, smoke-tests `qubitlab serve`, publishes to PyPI and makes a GitHub release.
+
+PyPI needs a one-time trusted publisher for this repo (workflow `release.yml`, environment `pypi`).

@@ -1,0 +1,26 @@
+name: Wrong physics
+description: An equation, number, citation or check that is wrong. The most useful report.
+labels: [physics]
+body:
+  - type: input
+    id: where
+    attributes:
+      label: Where
+      description: Explorer view, docs/learn page, formula key or file.
+      placeholder: "cat.phase_flip_rate, or the Flip rates view"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What is wrong, and what it should be
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: Paper and equation, figure or section that shows the right version.
+      placeholder: "Guillaud and Mirrahimi 2019, Eq. (3)"
+    validations:
+      required: true
