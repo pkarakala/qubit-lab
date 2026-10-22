@@ -209,3 +209,31 @@ export const useCompare = (t_ns: number) =>
     placeholderData: keepPreviousData,
     ...forever,
   })
+
+export interface PlaygroundSpec {
+  hamiltonian: string
+  jumps: { op: string; rate: string }[]
+  params: Record<string, number>
+  dim: number
+  initial: Initial
+  alpha_sq: number
+  t_final: number
+  n_frames: number
+  grid: number
+  extent: number
+}
+
+export interface PlaygroundRun {
+  sim: Evolution['sim'] & { edge_population: number[] }
+  python: string
+}
+
+export const usePlayground = (spec: PlaygroundSpec | null) =>
+  useQuery({
+    queryKey: ['playground', spec],
+    queryFn: () => post<PlaygroundRun>('/api/playground', spec),
+    enabled: spec !== null,
+    placeholderData: keepPreviousData,
+    retry: false,
+    ...forever,
+  })

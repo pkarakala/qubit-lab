@@ -107,6 +107,7 @@ class Evolution:
     purity: NDArray[np.float64]
     xvec: NDArray[np.float64]
     wigner: NDArray[np.float64]  # [frame, i_x, i_p]
+    edge_population: NDArray[np.float64]  # weight in the top two Fock states: truncation warning
 
 
 def evolve(
@@ -121,13 +122,28 @@ def evolve(
     n = params.n_fock
     H, jumps = operators(params)
     rho0 = dq.todm(initial_state(initial, params.alpha_sq, n))
+    ext = extent if extent is not None else max(3.0, math.sqrt(params.alpha_sq) + 2.5)
+    return evolve_operators(H, jumps, rho0, t_final, n_frames, grid, ext)
+
+
+def evolve_operators(
+    H: dq.QArray,
+    jumps: list[dq.QArray],
+    rho0: dq.QArray,
+    t_final: float,
+    n_frames: int,
+    grid: int,
+    extent: float,
+) -> Evolution:
+    """Solve the Lindblad equation for any H and jumps on one mode: Wigner frames, observables."""
+    n = rho0.shape[-1]
     tsave = jnp.linspace(0.0, t_final, n_frames)
-    exp_ops = [dq.number(n), dq.parity(n), sign_x(n)]
+    edge = dq.proj(dq.basis(n, n - 1)) + dq.proj(dq.basis(n, n - 2))
+    exp_ops = [dq.number(n), dq.parity(n), sign_x(n), edge]
     result = dq.mesolve(H, jumps, rho0, tsave, exp_ops=exp_ops)
     states = result.states
     purity = np.asarray(dq.purity(states)).real
-    ext = extent if extent is not None else max(3.0, math.sqrt(params.alpha_sq) + 2.5)
-    xvec, _, w = dq.wigner(states, xmax=ext, ymax=ext, npixels=grid)
+    xvec, _, w = dq.wigner(states, xmax=extent, ymax=extent, npixels=grid)
     expects = np.asarray(result.expects).real
     return Evolution(
         times=np.asarray(tsave),
@@ -137,6 +153,7 @@ def evolve(
         purity=purity,
         xvec=np.asarray(xvec),
         wigner=np.asarray(w),
+        edge_population=expects[3],
     )
 
 

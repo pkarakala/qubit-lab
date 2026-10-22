@@ -562,3 +562,56 @@ tr.is-surprise {
 
 .leak-bar { width: 140px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; margin: 4px 0; }
 .leak-bar > div { height: 100%; background: var(--sim); transition: width 60ms linear; }
+
+/* ---------- playground ---------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.field input,
+.field textarea,
+.row input {
+  width: 100%;
+  padding: 5px 7px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--raised);
+  color: var(--ink);
+  font: 12px var(--mono);
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.row .btn {
+  flex: none;
+  padding: 0 8px;
+}
+
+.code {
+  max-height: 340px;
+  overflow: auto;
+  margin: 6px 0;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--raised);
+  font: 11px/1.4 var(--mono);
+  white-space: pre;
+}
+
+.warn {
+  color: var(--pos);
+}

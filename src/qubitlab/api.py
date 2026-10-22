@@ -15,6 +15,7 @@ from qubitlab.cache import disk_cached
 from qubitlab.facts import DEVICES, FACT, FACTS
 from qubitlab.provenance import bib_entries
 from qubitlab.sim import cat as cat_sim
+from qubitlab.sim import custom as custom_sim
 from qubitlab.sim import transmon as tr_sim
 from qubitlab.sim import transmon_dynamics as qb_sim
 from qubitlab.theory import FORMULAS
@@ -384,3 +385,61 @@ def compare(t_ns: float = 25.0) -> dict[str, Any]:
     if not 1.0 <= t_ns <= 1e5:
         raise HTTPException(422, "t_ns must be between 1 ns and 100 us")
     return _compare(t_ns)
+
+
+class JumpIn(BaseModel):
+    op: str = Field(max_length=custom_sim.MAX_CHARS)
+    rate: str = Field("1", max_length=custom_sim.MAX_CHARS)
+
+
+class PlaygroundRequest(BaseModel):
+    hamiltonian: str = Field("0", max_length=custom_sim.MAX_CHARS)
+    jumps: list[JumpIn] = Field(default_factory=list, max_length=6)
+    params: dict[str, float] = Field(default_factory=dict, max_length=12)
+    dim: int = Field(30, ge=4, le=60, description="Fock states kept")
+    initial: Literal["vacuum", "coherent_plus", "coherent_minus", "even_cat", "odd_cat"] = "vacuum"
+    alpha_sq: float = Field(4.0, ge=0.0, le=12.0, description="|alpha|^2 of the initial state")
+    t_final: float = Field(3.0, gt=0.0, le=100.0)
+    n_frames: int = Field(31, ge=2, le=81)
+    grid: int = Field(61, ge=21, le=101)
+    extent: float = Field(4.0, ge=1.0, le=8.0, description="half-width of the Wigner window")
+
+    def model(self) -> custom_sim.Model:
+        jumps = tuple(custom_sim.Jump(j.op, j.rate) for j in self.jumps)
+        return custom_sim.Model(self.hamiltonian, jumps, self.params, self.dim)
+
+
+@disk_cached
+def _playground(body: dict[str, Any]) -> dict[str, Any]:
+    req = PlaygroundRequest(**body)
+    model = req.model()
+    ev = custom_sim.evolve(
+        model, req.initial, req.alpha_sq, req.t_final, req.n_frames, req.grid, req.extent
+    )
+    script = custom_sim.python_script(model, req.initial, req.alpha_sq, req.t_final, req.n_frames)
+    return {
+        "sim": {
+            "n_fock": req.dim,
+            "times": _round(ev.times),
+            "photon_number": _round(ev.photon_number),
+            "parity": _round(ev.parity),
+            "sign_x": _round(ev.sign_x),
+            "purity": _round(ev.purity),
+            "xvec": _round(ev.xvec),
+            "wigner": _round(ev.wigner, 4),
+            "edge_population": _round(ev.edge_population),
+        },
+        "python": script,
+    }
+
+
+@app.post("/api/playground")
+def playground(req: PlaygroundRequest) -> dict[str, Any]:
+    """Any one-mode Lindblad model the user types, solved with Dynamiqs. No theory layer."""
+    try:
+        return _playground(req.model_dump())
+    except custom_sim.ModelError as e:
+        raise HTTPException(422, str(e)) from e
+    except RuntimeError as e:  # Dynamiqs hit its step limit
+        msg = "the solver gave up: the model is too fast or too stiff for this duration"
+        raise HTTPException(422, msg) from e

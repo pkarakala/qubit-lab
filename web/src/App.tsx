@@ -5,6 +5,7 @@ import { CatVsTransmon } from './views/CatVsTransmon'
 import { Checks } from './views/Checks'
 import { FlipRates } from './views/FlipRates'
 import { PhaseSpace } from './views/PhaseSpace'
+import { Playground } from './views/Playground'
 import { Qubit } from './views/Qubit'
 import { Transmon } from './views/Transmon'
 import { type View, useExplorer } from './store'
@@ -15,6 +16,7 @@ const VIEWS: { id: View; label: string; hint: string }[] = [
   { id: 'transmon', label: 'Transmon', hint: 'The other superconducting qubit' },
   { id: 'qubit', label: 'Qubit control', hint: 'Pulses and noise on a transmon' },
   { id: 'compare', label: 'Cat vs transmon', hint: 'Measured error rates and noise bias' },
+  { id: 'playground', label: 'Playground', hint: 'Type your own Hamiltonian and losses' },
   { id: 'checks', label: 'Checks', hint: 'Theory vs simulation' },
 ]
 
@@ -32,7 +34,7 @@ export default function App() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement) return
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
       const i = Number(e.key) - 1
       const v = VIEWS[i]
       if (v) setView(v.id)
@@ -80,6 +82,7 @@ export default function App() {
       {view === 'transmon' ? <Transmon /> : null}
       {view === 'qubit' ? <Qubit /> : null}
       {view === 'compare' ? <CatVsTransmon /> : null}
+      {view === 'playground' ? <Playground /> : null}
       {view === 'checks' ? <Checks /> : null}
       <footer className="footer small muted">
         Independent learning project. Every equation is cited; numbers from companies are labeled as claims. Not
