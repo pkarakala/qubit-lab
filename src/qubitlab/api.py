@@ -3,12 +3,21 @@
 from __future__ import annotations
 
 import math
+import os
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from typing import Any, Literal
 
+import anyio
 import numpy as np
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+from slowapi.util import get_remote_address
 
 from qubitlab import __version__
 from qubitlab.cache import disk_cached
@@ -26,13 +35,34 @@ from qubitlab.theory import qec as qec_th
 from qubitlab.theory import qubit as qb_th
 from qubitlab.theory import transmon as tr_th
 
-app = FastAPI(title="qubitlab", version=__version__)
+# Public hosting knobs, all off by default (see docs/deploy.md):
+# QUBITLAB_SOLVES   most simulations running at once; the rest wait their turn.
+# QUBITLAB_RATE     requests per client, e.g. "30/minute".
+# QUBITLAB_STATIC   the built explorer (web/dist), served from the same process.
+SOLVES = int(os.environ.get("QUBITLAB_SOLVES", "0"))
+RATE = os.environ.get("QUBITLAB_RATE")
+STATIC = os.environ.get("QUBITLAB_STATIC")
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    if SOLVES:
+        # Sync endpoints run in AnyIO's thread pool, so its size caps concurrent solves.
+        anyio.to_thread.current_default_thread_limiter().total_tokens = SOLVES
+    yield
+
+
+app = FastAPI(title="qubitlab", version=__version__, lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
+if RATE:
+    app.state.limiter = Limiter(key_func=get_remote_address, default_limits=[RATE])
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore[arg-type]
+    app.add_middleware(SlowAPIMiddleware)
 
 
 class CatRequest(BaseModel):
@@ -615,3 +645,8 @@ def playground(req: PlaygroundRequest) -> dict[str, Any]:
     except RuntimeError as e:  # Dynamiqs hit its step limit
         msg = "the solver gave up: the model is too fast or too stiff for this duration"
         raise HTTPException(422, msg) from e
+
+
+# Mounted last, so every /api route above takes precedence.
+if STATIC:
+    app.mount("/", StaticFiles(directory=STATIC, html=True), name="explorer")
