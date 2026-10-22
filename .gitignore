@@ -8,3 +8,5 @@ web/test-results/
 web/playwright-report/
 .DS_Store
 web/*.tmp.mjs
+src/qubitlab/explorer/
+/dist/
