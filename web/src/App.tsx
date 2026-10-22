@@ -1,6 +1,6 @@
 // The explorer shell: top bar with the views, then the active view.
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { CatVsTransmon } from './views/CatVsTransmon'
 import { Checks } from './views/Checks'
 import { ErrorCorrection } from './views/ErrorCorrection'
@@ -10,6 +10,7 @@ import { Playground } from './views/Playground'
 import { PulseOptimizer } from './views/PulseOptimizer'
 import { Qubit } from './views/Qubit'
 import { Transmon } from './views/Transmon'
+import { toLink } from './lib/share'
 import { type View, useExplorer } from './store'
 
 const VIEWS: { id: View; label: string; hint: string }[] = [
@@ -32,9 +33,24 @@ export default function App() {
   const theme = useExplorer((s) => s.theme)
   const toggleTheme = useExplorer((s) => s.toggleTheme)
 
+  const [copied, setCopied] = useState(false)
+
   useEffect(() => {
     document.documentElement.dataset.theme = theme
   }, [theme])
+
+  // A link from an older or edited URL can name a view that does not exist.
+  useEffect(() => {
+    if (!VIEWS.some((v) => v.id === view)) setView('phase')
+  }, [view, setView])
+
+  const copyLink = () => {
+    toLink('view', view)
+    void navigator.clipboard?.writeText(window.location.href).then(() => {
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 1500)
+    })
+  }
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -74,6 +90,9 @@ export default function App() {
           ))}
         </nav>
         <div className="topbar-spacer" />
+        <button className="btn" onClick={copyLink} title="Copy a link to this view with its current inputs" data-testid="share-link">
+          {copied ? 'Copied' : 'Share'}
+        </button>
         <a className="btn" href={`${REPO}/tree/main/docs/learn`} target="_blank" rel="noreferrer">
           Learn
         </a>

@@ -14,6 +14,7 @@ import { CONFIG, Plot, SERIES, layout } from "../components/Plot";
 import { ErrorBanner, FormulaCard, Slider, shortCite } from "../components/ui";
 import { fmt } from "../lib/colormap";
 import { useExplorer } from "../store";
+import { useShared } from "../lib/share";
 
 const SIZES = [1, 2, 3, 4, 5, 6, 7];
 const WILLOW_GATE_NS = 25; // willow2025, Supplement Sec. I; also a fact in qubitlab.facts
@@ -33,8 +34,8 @@ const bias = (d: CompareDevice | undefined) => d?.theory.bias ?? null;
 export function CatVsTransmon() {
   const theme = useExplorer((s) => s.theme);
   const c = SERIES[theme];
-  const [logT, setLogT] = useState(Math.log10(WILLOW_GATE_NS));
-  const [kappa1, setKappa1] = useState(0.01);
+  const [logT, setLogT] = useShared("compare.log_t", Math.log10(WILLOW_GATE_NS));
+  const [kappa1, setKappa1] = useShared("compare.kappa_1", 0.01);
   const tNs = Math.round(10 ** useDebounced(logT, 300) * 10) / 10;
   const cmp = useCompare(tNs);
   const rates = useRates(

@@ -7,6 +7,7 @@ import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
 import { ErrorBanner, FormulaCard, Slider, shortCite } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
+import { useShared } from '../lib/share'
 
 const SIZES = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7]
 
@@ -21,7 +22,7 @@ function useDebounced<T>(value: T, ms: number): T {
 
 export function FlipRates() {
   const theme = useExplorer((s) => s.theme)
-  const [draft, setDraft] = useState<CatParams>({ alpha_sq: 4, kappa_1: 0.1, kappa_phi: 0, n_th: 0, scheme: 'dissipative' })
+  const [draft, setDraft] = useShared<CatParams>('rates', { alpha_sq: 4, kappa_1: 0.1, kappa_phi: 0, n_th: 0, scheme: 'dissipative' })
   const params = useDebounced(draft, 500)
   const q = useRates(params, SIZES)
   const facts = (useFacts().data ?? []).filter((f) => f.qubit === 'cat')

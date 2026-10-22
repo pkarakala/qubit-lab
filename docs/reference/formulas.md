@@ -123,6 +123,7 @@ Valid when: Asymptotic, |alpha|^2 >~ 4. Prefactor depends on the noise model.
 
 - [guillaud2019](https://doi.org/10.1103/PhysRevX.9.041053), Sec. II, unnumbered (peer_reviewed). Bit-flips are exponentially suppressed with 2|alpha|^2.
 - [lescanne2020](https://doi.org/10.1038/s41567-020-0824-x), Fig. 3 (peer_reviewed). Measured: x4.2 per added photon (not e^2 = 7.4), saturating at 1 ms.
+- [reglade2024](https://doi.org/10.1038/s41586-024-07294-3), Fig. 4b caption (peer_reviewed). A later device measured the same x4.2 per added photon.
 
 ## Bit-flip rate caused by pure dephasing
 

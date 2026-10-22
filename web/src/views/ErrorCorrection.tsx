@@ -1,24 +1,24 @@
 // Error correction: the surface code that transmons need, against the repetition code that a
 // biased cat qubit can get away with. Simulation: Stim + PyMatching. Theory: Fowler et al.
 
-import { useState } from 'react'
 import { useCatCode, useQecCurves, useQecShot } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
 import { ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { SpaceTimeScene } from '../three/SpaceTime'
+import { useShared } from '../lib/share'
 
 const DISTANCES = [3, 5, 7]
 
 export function ErrorCorrection() {
   const theme = useExplorer((s) => s.theme)
   const c = SERIES[theme]
-  const [d, setD] = useState(5)
-  const [p, setP] = useState(0.005)
-  const [seed, setSeed] = useState(1)
-  const [pPhase, setPPhase] = useState(0.005)
-  const [bias, setBias] = useState(1e4) // p_phase / p_bit
+  const [d, setD] = useShared('qec.d', 5)
+  const [p, setP] = useShared('qec.p', 0.005)
+  const [seed, setSeed] = useShared('qec.seed', 1)
+  const [pPhase, setPPhase] = useShared('qec.p_phase', 0.005)
+  const [bias, setBias] = useShared('qec.bias', 1e4) // p_phase / p_bit
   const curves = useQecCurves()
   const shot = useQecShot(d, p, seed)
   const cat = useCatCode(pPhase, pPhase / bias)

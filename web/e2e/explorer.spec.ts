@@ -88,6 +88,18 @@ test('pulse optimizer beats DRAG on a 6 ns gate', async ({ page }) => {
   await page.screenshot({ path: `${IMG}/pulse_optimizer.png` })
 })
 
+test('a shared link restores the view and its inputs', async ({ page, context }) => {
+  await page.goto('/')
+  await page.getByRole('tab', { name: 'Qubit control' }).click()
+  await page.getByTestId('qubit-preset-drag').click()
+  const link = page.url()
+  expect(link).toContain('#')
+  const other = await context.newPage()
+  await other.goto(link)
+  await expect(other.getByRole('tab', { name: 'Qubit control' })).toHaveAttribute('aria-selected', 'true')
+  await expect(other.locator('[data-formula="qubit.drag_quadrature"]')).toBeVisible({ timeout: 120_000 })
+})
+
 test('checks page reports no surprises', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('tab', { name: 'Checks' }).click()
