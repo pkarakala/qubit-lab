@@ -16,7 +16,7 @@ result; `qubitlab.checks` compares these numbers to the theory.
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 from typing import Literal
 
 import dynamiqs as dq
@@ -203,9 +203,9 @@ def run(
 
 def _x_pi(levels: int) -> dq.QArray:
     """Ideal pi rotation about X in the 0-1 subspace, identity elsewhere."""
-    m = np.eye(levels, dtype=complex)
-    m[:2, :2] = [[0, -1j], [-1j, 0]]
-    return dq.asqarray(jnp.asarray(m))
+    p01 = dq.proj(dq.basis(levels, 0)) + dq.proj(dq.basis(levels, 1))
+    s01 = dq.basis(levels, 0) @ dq.basis(levels, 1).dag()
+    return dq.eye(levels) - p01 - 1j * (s01 + s01.dag())
 
 
 def _echo(
@@ -234,10 +234,6 @@ def _echo(
     return Trajectory(t, total[:3].T, total[3:].T, zeros, zeros)
 
 
-def with_params(q: TransmonQubit, **changes: float) -> TransmonQubit:
-    return replace(q, **changes)  # type: ignore[arg-type]
-
-
 def average_idle_fidelity(q: TransmonQubit, t_ns: float) -> float:
     """Mean of <psi|rho(t)|psi> over the six Bloch-axis states, idling at zero detuning.
 
@@ -252,5 +248,5 @@ def average_idle_fidelity(q: TransmonQubit, t_ns: float) -> float:
     total = 0.0
     for psi in states:
         rho = dq.mesolve(H, _jumps(q), dq.todm(psi), jnp.asarray([0.0, t_ns])).states[-1]
-        total += float(dq.expect(dq.proj(psi), rho).real)
+        total += float(dq.fidelity(psi, rho))
     return total / len(states)
