@@ -59,7 +59,7 @@ export interface Evolution {
 
 export interface RateRow {
   alpha_sq: number
-  sim: { bit_flip_rate: number | null; phase_flip_rate: number; n_fock: number }
+  sim: { bit_flip_rate: number | null; phase_flip_rate: number | null; n_fock: number }
   theory: { phase_flip_rate: number | null; bit_flip_rate_dephasing: number | null }
 }
 

@@ -58,6 +58,10 @@ class EvolveRequest(CatRequest):
 
 
 class RatesRequest(CatRequest):
+    # The Liouvillian block method reads the flip rates off the slowest modes. That is only
+    # right when the two cats are the slowest manifold, i.e. under two-photon dissipation. With
+    # a Kerr cat or no stabilization, faster-looking intra-well modes would be mislabeled.
+    scheme: Literal["dissipative"] = "dissipative"
     alpha_sq_values: list[float] = Field(
         default_factory=lambda: [0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0],
         max_length=20,
@@ -134,7 +138,7 @@ def _rates(body: dict[str, Any]) -> dict[str, Any]:
                 "alpha_sq": n,
                 "sim": {
                     "bit_flip_rate": r.bit_flip_rate if r.z_decay_resolved else None,
-                    "phase_flip_rate": r.phase_flip_rate,
+                    "phase_flip_rate": r.phase_flip_rate if r.x_decay_resolved else None,
                     "n_fock": r.n_fock,
                 },
                 "theory": theory,

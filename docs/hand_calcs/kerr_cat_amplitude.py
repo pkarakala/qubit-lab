@@ -6,6 +6,8 @@ Classical limit: a -> a complex number b. The energy is
     E(b) = -K |b|^4 + epsilon_2 (b*^2 + b^2).
 For real b = x: E(x) = -K x^4 + 2 epsilon_2 x^2, and dE/dx = 0 gives x = 0 or x^2 = epsilon_2 / K.
 The two extrema x = +- sqrt(epsilon_2 / K) are the two cat states (degenerate, by symmetry).
+They are maxima of E, so with this sign of H the cats are the highest-energy states; they are
+the ground states of -H, the sign many papers use.
 """
 
 import sympy as sp

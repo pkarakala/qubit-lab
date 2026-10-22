@@ -72,7 +72,10 @@ ramsey = Formula(
     ),
     args=(t, T_2, sigma, Delta),
     sources=(hand("Step 4: Gaussian average of the fringe over a static detuning."),),
-    valid_when="Noise slower than one shot; sigma is its spread in frequency.",
+    valid_when=(
+        "Noise slower than one shot; sigma is its spread. T2 is the white-noise part; "
+        "the decay a Ramsey experiment measures is T2*."
+    ),
 )
 
 echo = Formula(

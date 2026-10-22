@@ -159,6 +159,10 @@ class Rates:
         return self.z_decay > RATE_FLOOR
 
     @property
+    def x_decay_resolved(self) -> bool:
+        return self.x_decay > RATE_FLOOR
+
+    @property
     def bit_flip_rate(self) -> float:
         return self.z_decay / 2
 

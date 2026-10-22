@@ -47,6 +47,11 @@ def test_qubit_rejects_t2_above_twice_t1() -> None:
     assert client.post("/api/qubit/run", json=body).status_code == 422
 
 
+def test_flip_rates_only_for_two_photon_dissipation() -> None:
+    # The Liouvillian block method mislabels modes for a Kerr cat or no stabilization.
+    assert client.post("/api/cat/rates", json={"scheme": "kerr"}).status_code == 422
+
+
 def test_cat_repetition_code_has_an_optimal_size() -> None:
     body = {"p_phase": 0.01, "p_bit": 1e-4, "shots": 20000}
     rows = client.post("/api/qec/cat", json=body).json()["rows"]

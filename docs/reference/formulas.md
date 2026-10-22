@@ -149,6 +149,18 @@ Valid when: H = -K a+^2 a^2 + epsilon_2 (a+^2 + a^2); |+-alpha> are degenerate e
 - [grimm2020](https://doi.org/10.1038/s41586-020-2587-z), Eq. (1) (peer_reviewed). The Kerr-cat Hamiltonian.
 - qubitlab_hand_calcs, docs/hand_calcs/kerr_cat_amplitude.py (derived). Classical fixed points of Eq. (1).
 
+## Parity decay, any cat size
+
+`cat.parity_decay_rate_exact`
+
+```latex
+\Gamma_{P} = 2 \kappa_{1} \alpha^{2} \coth{\left(2 \alpha^{2} \right)}
+```
+
+Valid when: Two-photon dissipation dominates, so the state stays in the two-cat space.
+
+- qubitlab_hand_calcs, docs/hand_calcs/cat_parity_decay.py (derived). Two-state jump picture: |C+> -> |C-> at kappa_1 n_+, back at kappa_1 n_-.
+
 ## Errors needed to fool a distance-d code
 
 `qec.error_exponent`
@@ -254,7 +266,7 @@ Valid when: Markovian (white) noise. So T2 can never exceed 2 T1.
 \langle X\rangle(t) = e^{- \frac{t}{T_{2}}} e^{- 2 \pi^{2} \sigma^{2} t^{2}} \cos{\left(2 \pi \Delta t \right)}
 ```
 
-Valid when: Noise slower than one shot; sigma is its spread in frequency.
+Valid when: Noise slower than one shot; sigma is its spread. T2 is the white-noise part; the decay a Ramsey experiment measures is T2*.
 
 - qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 4: Gaussian average of the fringe over a static detuning.
 
