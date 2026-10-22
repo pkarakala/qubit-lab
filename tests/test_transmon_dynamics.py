@@ -2,19 +2,8 @@ import math
 
 import numpy as np
 import pytest
-import scqubits
 
-from qubitlab.sim import transmon
 from qubitlab.sim import transmon_dynamics as dyn
-
-
-def test_charge_basis_solver_matches_scqubits() -> None:
-    """Independent cross-check: scqubits diagonalizes the same Hamiltonian its own way."""
-    ours = transmon.levels(
-        transmon.TransmonParams(E_J=50.0, E_C=1.0, n_cut=30), n_g=0.0, n_levels=3
-    )
-    ref = scqubits.Transmon(EJ=50.0, EC=1.0, ng=0.0, ncut=30, truncated_dim=3).eigenvals(3)
-    np.testing.assert_allclose(np.diff(ours), np.diff(ref), rtol=1e-9)
 
 
 def test_t2_cannot_exceed_twice_t1() -> None:

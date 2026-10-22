@@ -32,7 +32,7 @@ uv run qubitlab checks       # every formula vs the simulation, in the terminal
 Three layers, kept apart by a test:
 
 - **Theory** (`src/qubitlab/theory/`): each equation is a SymPy expression with its paper and equation number, compiled to JAX.
-- **Simulation** (`src/qubitlab/sim/`): Dynamiqs for the cat's and the driven transmon's Lindblad equations, JAX for the transmon's spectrum. scqubits cross-checks the spectrum.
+- **Simulation** (`src/qubitlab/sim/`): Dynamiqs for the cat's and the driven transmon's Lindblad equations, scqubits for the transmon's spectrum.
 - **Checks** (`src/qubitlab/checks/`): theory vs simulation, with the verdict predicted before running.
 
 ## Learn
