@@ -1,7 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from catlab.api import app
+from qubitlab.api import app
 
 client = TestClient(app)
 

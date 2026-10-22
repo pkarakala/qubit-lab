@@ -1,6 +1,6 @@
 """Where every equation and number comes from.
 
-Each formula in `catlab.theory` carries one or more `Source` objects. A test checks that
+Each formula in `qubitlab.theory` carries one or more `Source` objects. A test checks that
 every `Source.key` exists in `references.bib`, so nothing in the theory layer is unsourced.
 """
 

@@ -1,4 +1,4 @@
-"""Command line: `catlab checks` prints theory vs simulation; `catlab serve` runs the API."""
+"""Command line: `qubitlab checks` prints theory vs simulation; `qubitlab serve` runs the API."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import argparse
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(prog="catlab")
+    parser = argparse.ArgumentParser(prog="qubitlab")
     sub = parser.add_subparsers(dest="cmd", required=True)
     c = sub.add_parser("checks", help="compare every formula with the simulation")
     c.add_argument("--fast", action="store_true", help="skip Liouvillian spectra")
@@ -15,7 +15,7 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.cmd == "checks":
-        from catlab.checks import run_all
+        from qubitlab.checks import run_all
 
         results = run_all(include_slow=not args.fast)
         for r in results:
@@ -27,4 +27,4 @@ def main() -> None:
 
     import uvicorn
 
-    uvicorn.run("catlab.api:app", port=args.port)
+    uvicorn.run("qubitlab.api:app", port=args.port)

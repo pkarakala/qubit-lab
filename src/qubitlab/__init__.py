@@ -1,4 +1,4 @@
-"""catlab: cat qubit and transmon physics, theory vs simulation."""
+"""qubitlab: cat qubit and transmon physics, theory vs simulation."""
 
 import jax
 

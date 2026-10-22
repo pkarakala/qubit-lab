@@ -14,7 +14,7 @@ const VIEWS: { id: View; label: string; hint: string }[] = [
   { id: 'checks', label: 'Checks', hint: 'Theory vs simulation' },
 ]
 
-const REPO = 'https://github.com/pkarakala/catlab'
+const REPO = 'https://github.com/pkarakala/qubitlab'
 
 export default function App() {
   const view = useExplorer((s) => s.view)
@@ -46,7 +46,7 @@ export default function App() {
     <div className="app">
       <header className="topbar">
         <div className="brand">
-          <span className="brand-name">CATLAB</span>
+          <span className="brand-name">QUBIT LAB</span>
           <span className="brand-sub">cat qubits and transmons, theory vs simulation</span>
         </div>
         <nav className="tabs" role="tablist">

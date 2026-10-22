@@ -1,6 +1,6 @@
-from catlab.checks.base import REGISTRY, run_all
-from catlab.provenance import bib_entries
-from catlab.theory import FORMULAS
+from qubitlab.checks.base import REGISTRY, run_all
+from qubitlab.provenance import bib_entries
+from qubitlab.theory import FORMULAS
 
 
 def test_every_formula_source_is_in_the_bib() -> None:

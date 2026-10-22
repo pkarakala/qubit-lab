@@ -11,9 +11,9 @@ import math
 import dynamiqs as dq
 import numpy as np
 
-from catlab.checks.base import CheckResult, Verdict, check
-from catlab.sim import cat as sim
-from catlab.theory import cat as th
+from qubitlab.checks.base import CheckResult, Verdict, check
+from qubitlab.sim import cat as sim
+from qubitlab.theory import cat as th
 
 A, D = Verdict.AGREE, Verdict.DIVERGE
 

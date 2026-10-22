@@ -1,5 +1,5 @@
 [project]
-name = "catlab"
+name = "qubitlab"
 version = "0.1.0"
 description = "Cat qubit and transmon physics, from closed-form theory to Dynamiqs simulation, with a 3D explorer"
 readme = "README.md"
@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [project.scripts]
-catlab = "catlab.cli:main"
+qubitlab = "qubitlab.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.11.32,<0.12.0"]
@@ -43,7 +43,7 @@ select = ["E", "F", "I", "B", "UP"]
 [tool.mypy]
 strict = true
 plugins = ["pydantic.mypy"]
-files = ["src/catlab"]
+files = ["src/qubitlab"]
 
 [[tool.mypy.overrides]]
 module = ["dynamiqs.*", "sympy.*", "jax.*"]

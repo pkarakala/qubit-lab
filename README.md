@@ -1,8 +1,8 @@
-# catlab
+# Qubit Lab
 
 Cat qubits and transmons, from closed-form theory to Dynamiqs simulation, in a 3D explorer.
 
-A learning project. Alice & Bob build cat qubits; Qolab builds transmon-family qubits. Both are superconducting circuits, but they bet on different physics. catlab puts the equations from the papers next to a full simulation, so you can see where each formula holds and where it breaks.
+A learning project. Alice & Bob build cat qubits; Qolab builds transmon-family qubits. Both are superconducting circuits, but they bet on different physics. qubitlab puts the equations from the papers next to a full simulation, so you can see where each formula holds and where it breaks.
 
 ![A cat losing its fringes to photon loss, with the ideal cat from theory as a wireframe](docs/img/phase_space.png)
 
@@ -22,16 +22,16 @@ A learning project. Alice & Bob build cat qubits; Qolab builds transmon-family q
 uv sync --all-groups
 cd web && npm install && cd ..
 ./scripts/dev.sh           # API on :8000, explorer on :5173
-uv run catlab checks       # every formula vs the simulation, in the terminal
+uv run qubitlab checks       # every formula vs the simulation, in the terminal
 ```
 
 ## How it is built
 
 Three layers, kept apart by a test:
 
-- **Theory** (`src/catlab/theory/`): each equation is a SymPy expression with its paper and equation number, compiled to JAX.
-- **Simulation** (`src/catlab/sim/`): Dynamiqs for the cat's Lindblad equation, JAX for the transmon's spectrum.
-- **Checks** (`src/catlab/checks/`): theory vs simulation, with the verdict predicted before running.
+- **Theory** (`src/qubitlab/theory/`): each equation is a SymPy expression with its paper and equation number, compiled to JAX.
+- **Simulation** (`src/qubitlab/sim/`): Dynamiqs for the cat's Lindblad equation, JAX for the transmon's spectrum.
+- **Checks** (`src/qubitlab/checks/`): theory vs simulation, with the verdict predicted before running.
 
 ## Learn
 

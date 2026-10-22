@@ -4,7 +4,7 @@ In the charge basis |n>, cos(phi) = (|n><n+1| + |n+1><n|) / 2. Truncating at |n|
 exact to machine precision once n_cut is a few times (E_J / E_C)^(1/4). Uses JAX so the
 offset-charge sweep is one vectorized call.
 
-Nothing here uses a closed-form result. `catlab.checks` compares these numbers to Koch et al.
+Nothing here uses a closed-form result. `qubitlab.checks` compares these numbers to Koch et al.
 """
 
 from __future__ import annotations

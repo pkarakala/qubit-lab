@@ -1,6 +1,6 @@
 """Closed-form cat qubit formulas.
 
-Conventions (shared with `catlab.sim`):
+Conventions (shared with `qubitlab.sim`):
 - One bosonic mode with annihilation operator a. The cat amplitude alpha is real and positive.
 - Phase space point beta = x + i p, so x = Re(beta), p = Im(beta). This matches Dynamiqs'
   `dq.wigner` default (hbar = 1/2): a coherent state |alpha> peaks at x = alpha with height 2/pi.
@@ -13,8 +13,8 @@ from __future__ import annotations
 
 import sympy as sp
 
-from catlab.provenance import Kind, Source
-from catlab.theory.registry import Formula
+from qubitlab.provenance import Kind, Source
+from qubitlab.theory.registry import Formula
 
 alpha = sp.Symbol("alpha", positive=True)
 x, p = sp.symbols("x p", real=True)
@@ -107,7 +107,7 @@ stabilized_photon_number = Formula(
     args=(alpha, kappa_1, kappa_2),
     sources=(
         Source(
-            "catlab_hand_calcs",
+            "qubitlab_hand_calcs",
             Kind.DERIVED,
             "docs/hand_calcs/cat_steady_state.py",
             "Mean-field steady state of d<a>/dt, starting from lescanne2020 Eq. (1).",
@@ -200,7 +200,7 @@ kerr_cat_amplitude = Formula(
     sources=(
         Source("grimm2020", Kind.PEER_REVIEWED, "Eq. (1)", "The Kerr-cat Hamiltonian."),
         Source(
-            "catlab_hand_calcs",
+            "qubitlab_hand_calcs",
             Kind.DERIVED,
             "docs/hand_calcs/kerr_cat_amplitude.py",
             "Classical fixed points of Eq. (1).",

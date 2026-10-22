@@ -1,7 +1,7 @@
 import pytest
 
-from catlab.checks import run_all
-from catlab.checks.base import REGISTRY
+from qubitlab.checks import run_all
+from qubitlab.checks.base import REGISTRY
 
 
 def _all_as_expected(include_slow: bool) -> None:

@@ -10,9 +10,9 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from catlab import __version__
+from qubitlab import __version__
 
-CACHE_DIR = Path(os.environ.get("CATLAB_CACHE", Path.cwd() / ".cache" / "catlab"))
+CACHE_DIR = Path(os.environ.get("QUBITLAB_CACHE", Path.cwd() / ".cache" / "qubitlab"))
 
 
 def disk_cached[F: Callable[..., Any]](fn: F) -> F:

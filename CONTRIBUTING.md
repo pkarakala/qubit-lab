@@ -9,7 +9,7 @@ Open an issue. Say what is wrong, where you saw it (explorer, a `docs/learn/` pa
 ## Set up
 
 ```bash
-git clone https://github.com/pkarakala/catlab && cd catlab
+git clone https://github.com/pkarakala/qubitlab && cd qubitlab
 uv sync --all-groups
 cd web && npm install && cd ..
 ./scripts/dev.sh        # API on :8000, explorer on :5173
@@ -19,8 +19,8 @@ cd web && npm install && cd ..
 
 1. Read the paper. Note the equation number.
 2. Add the BibTeX entry to `references.bib` if it is new.
-3. Write the `Formula` in `src/catlab/theory/` with its `Source` and `valid_when`.
-4. Add a check in `src/catlab/checks/`: pick regimes where it should agree and one where it should not, and write the expected verdict first.
+3. Write the `Formula` in `src/qubitlab/theory/` with its `Source` and `valid_when`.
+4. Add a check in `src/qubitlab/checks/`: pick regimes where it should agree and one where it should not, and write the expected verdict first.
 5. Run `uv run python scripts/make_reference.py` and the tests.
 
 ## Before a pull request

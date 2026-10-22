@@ -6,9 +6,9 @@ Two stabilization schemes, same noise:
 - "none":        no stabilization, for comparison. Rates in the same units as above.
 
 Noise on top: single-photon loss kappa_1 with thermal occupation n_th, and pure dephasing
-kappa_phi. Conventions match `catlab.theory.cat`.
+kappa_phi. Conventions match `qubitlab.theory.cat`.
 
-Nothing here uses a closed-form result. `catlab.checks` compares these numbers to the theory.
+Nothing here uses a closed-form result. `qubitlab.checks` compares these numbers to the theory.
 """
 
 from __future__ import annotations

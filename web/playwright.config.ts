@@ -13,7 +13,7 @@ export default defineConfig({
     },
   },
   webServer: [
-    { command: 'cd .. && uv run uvicorn catlab.api:app --port 8000', url: 'http://127.0.0.1:8000/api/health', reuseExistingServer: true, timeout: 120_000 },
+    { command: 'cd .. && uv run uvicorn qubitlab.api:app --port 8000', url: 'http://127.0.0.1:8000/api/health', reuseExistingServer: true, timeout: 120_000 },
     { command: 'npm run dev', url: 'http://localhost:5173', reuseExistingServer: true },
   ],
 })

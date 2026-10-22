@@ -14,7 +14,7 @@ import jax
 import jax.scipy.special as jsp
 import sympy as sp
 
-from catlab.provenance import Source
+from qubitlab.provenance import Source
 
 FORMULAS: dict[str, Formula] = {}
 

@@ -10,17 +10,17 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from catlab import __version__
-from catlab.cache import disk_cached
-from catlab.facts import FACTS
-from catlab.provenance import bib_entries
-from catlab.sim import cat as cat_sim
-from catlab.sim import transmon as tr_sim
-from catlab.theory import FORMULAS
-from catlab.theory import cat as cat_th
-from catlab.theory import transmon as tr_th
+from qubitlab import __version__
+from qubitlab.cache import disk_cached
+from qubitlab.facts import FACTS
+from qubitlab.provenance import bib_entries
+from qubitlab.sim import cat as cat_sim
+from qubitlab.sim import transmon as tr_sim
+from qubitlab.theory import FORMULAS
+from qubitlab.theory import cat as cat_th
+from qubitlab.theory import transmon as tr_th
 
-app = FastAPI(title="catlab", version=__version__)
+app = FastAPI(title="qubitlab", version=__version__)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
@@ -147,7 +147,7 @@ def _rates(body: dict[str, Any]) -> dict[str, Any]:
 
 @disk_cached
 def _checks() -> list[dict[str, Any]]:
-    from catlab.checks import run_all
+    from qubitlab.checks import run_all
 
     return [r.describe() for r in run_all()]
 

@@ -6,9 +6,9 @@ regime and DIVERGE near the Cooper pair box regime, E_J / E_C ~ 1.
 
 from __future__ import annotations
 
-from catlab.checks.base import CheckResult, Verdict, check
-from catlab.sim import transmon as sim
-from catlab.theory import transmon as th
+from qubitlab.checks.base import CheckResult, Verdict, check
+from qubitlab.sim import transmon as sim
+from qubitlab.theory import transmon as th
 
 A, D = Verdict.AGREE, Verdict.DIVERGE
 E_C = 1.0  # energies in units of E_C

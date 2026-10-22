@@ -1,4 +1,4 @@
-// Typed client for the catlab API. Every response keeps `sim` (Dynamiqs) and `theory`
+// Typed client for the qubitlab API. Every response keeps `sim` (Dynamiqs) and `theory`
 // (closed-form SymPy formulas) apart, and the explorer never computes physics itself.
 
 import { keepPreviousData, useQuery } from '@tanstack/react-query'

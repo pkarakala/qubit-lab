@@ -1,6 +1,6 @@
 """Closed-form transmon formulas (Koch et al. 2007).
 
-Conventions (shared with `catlab.sim.transmon`):
+Conventions (shared with `qubitlab.sim.transmon`):
 - H = 4 E_C (n - n_g)^2 - E_J cos(phi), energies in any one unit (GHz in the explorer).
 - Levels m = 0, 1, 2, ... ; E_mn = E_n - E_m.
 - The formulas hold in the transmon regime E_J / E_C >~ 20.
@@ -10,8 +10,8 @@ from __future__ import annotations
 
 import sympy as sp
 
-from catlab.provenance import Kind, Source
-from catlab.theory.registry import Formula
+from qubitlab.provenance import Kind, Source
+from qubitlab.theory.registry import Formula
 
 E_J, E_C = sp.symbols("E_J E_C", positive=True)
 m = sp.Symbol("m", nonnegative=True, integer=True)

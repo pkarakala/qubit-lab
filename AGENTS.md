@@ -6,9 +6,9 @@ Rules for coding agents (and people) working in this repo. Humans start at [READ
 
 | Layer | Folder | Contains | Must not |
 | --- | --- | --- | --- |
-| Theory | `src/catlab/theory/` | SymPy expressions with sources, compiled to JAX | import Dynamiqs or `catlab.sim` |
-| Simulation | `src/catlab/sim/` | Dynamiqs and JAX solvers | import SymPy or `catlab.theory` |
-| Checks | `src/catlab/checks/` | Theory vs simulation, with a predicted verdict per regime | hide a disagreement |
+| Theory | `src/qubitlab/theory/` | SymPy expressions with sources, compiled to JAX | import Dynamiqs or `qubitlab.sim` |
+| Simulation | `src/qubitlab/sim/` | Dynamiqs and JAX solvers | import SymPy or `qubitlab.theory` |
+| Checks | `src/qubitlab/checks/` | Theory vs simulation, with a predicted verdict per regime | hide a disagreement |
 
 `tests/test_layers.py` enforces the import rules.
 
@@ -25,11 +25,11 @@ Rules for coding agents (and people) working in this repo. Humans start at [READ
 ## Map
 
 ```
-src/catlab/provenance.py      Source, Kind, bib parser
-src/catlab/theory/            cat.py, transmon.py, registry.py (Formula)
-src/catlab/sim/               cat.py (Lindblad, Wigner, Liouvillian rates), transmon.py (charge basis)
-src/catlab/checks/            base.py, cat_checks.py, transmon_checks.py
-src/catlab/api.py             FastAPI for the explorer
+src/qubitlab/provenance.py      Source, Kind, bib parser
+src/qubitlab/theory/            cat.py, transmon.py, registry.py (Formula)
+src/qubitlab/sim/               cat.py (Lindblad, Wigner, Liouvillian rates), transmon.py (charge basis)
+src/qubitlab/checks/            base.py, cat_checks.py, transmon_checks.py
+src/qubitlab/api.py             FastAPI for the explorer
 docs/learn/                   human layer, one screen per page
 docs/reference/               generated: formulas, checks (scripts/make_reference.py)
 docs/hand_calcs/              derivations behind DERIVED sources

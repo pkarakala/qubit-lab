@@ -1,8 +1,8 @@
 cff-version: 1.2.0
-message: "If you use catlab, please cite it as below."
-title: "catlab: cat qubits and transmons, theory vs simulation"
+message: "If you use qubitlab, please cite it as below."
+title: "qubitlab: cat qubits and transmons, theory vs simulation"
 authors:
   - family-names: Reddy
     given-names: Pranav
 license: Apache-2.0
-repository-code: "https://github.com/pkarakala/catlab"
+repository-code: "https://github.com/pkarakala/qubitlab"

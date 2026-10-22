@@ -3,7 +3,7 @@
 import re
 from pathlib import Path
 
-from catlab.provenance import bib_entries
+from qubitlab.provenance import bib_entries
 from scripts.make_reference import formulas_md
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,7 +20,7 @@ def test_learn_pages_are_short_and_sourced() -> None:
         assert len(text.split()) <= MAX_WORDS, f"{page.name} is over {MAX_WORDS} words"
         match = re.search(r"^Sources: (.+)$", text, flags=re.M)
         assert match, f"{page.name} has no Sources line"
-        cited = set(re.findall(r"\b([a-z]+\d{4}[a-z]*|catlab_hand_calcs)\b", match.group(1)))
+        cited = set(re.findall(r"\b([a-z]+\d{4}[a-z]*|qubitlab_hand_calcs)\b", match.group(1)))
         assert cited, f"{page.name} cites nothing"
         assert cited <= keys, f"{page.name} cites unknown keys {cited - keys}"
 

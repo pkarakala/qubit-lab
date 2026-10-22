@@ -3,7 +3,7 @@
 import ast
 from pathlib import Path
 
-SRC = Path(__file__).resolve().parents[1] / "src" / "catlab"
+SRC = Path(__file__).resolve().parents[1] / "src" / "qubitlab"
 
 
 def imports(path: Path) -> set[str]:
@@ -19,11 +19,11 @@ def imports(path: Path) -> set[str]:
 
 def test_theory_never_simulates() -> None:
     for path in (SRC / "theory").glob("*.py"):
-        bad = {n for n in imports(path) if n.startswith(("dynamiqs", "catlab.sim"))}
+        bad = {n for n in imports(path) if n.startswith(("dynamiqs", "qubitlab.sim"))}
         assert not bad, f"{path.name} imports {bad}"
 
 
 def test_sim_never_uses_closed_forms() -> None:
     for path in (SRC / "sim").glob("*.py"):
-        bad = {n for n in imports(path) if n.startswith(("catlab.theory", "sympy"))}
+        bad = {n for n in imports(path) if n.startswith(("qubitlab.theory", "sympy"))}
         assert not bad, f"{path.name} imports {bad}"

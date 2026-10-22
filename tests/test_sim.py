@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from catlab.sim import cat, transmon
+from qubitlab.sim import cat, transmon
 
 
 def test_evolve_shapes_and_trace() -> None:

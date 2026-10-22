@@ -13,7 +13,7 @@ class Verdict(StrEnum):
 @dataclass(frozen=True)
 class CheckResult:
     key: str
-    formula: str  # key into catlab.theory.FORMULAS
+    formula: str  # key into qubitlab.theory.FORMULAS
     regime: str  # the parameters, in words
     theory: float
     sim: float
@@ -68,7 +68,7 @@ def check(key: str, slow: bool = False) -> Callable[[Callable[[], list[CheckResu
 
 def run_all(include_slow: bool = True) -> list[CheckResult]:
     # Import for side effects: each module registers its checks.
-    from catlab.checks import cat_checks, transmon_checks  # noqa: F401
+    from qubitlab.checks import cat_checks, transmon_checks  # noqa: F401
 
     out: list[CheckResult] = []
     for c in REGISTRY:
