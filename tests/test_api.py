@@ -76,3 +76,13 @@ def test_compare_cat_is_biased_and_transmon_is_not() -> None:
 
 def test_compare_rejects_long_idle() -> None:
     assert client.get("/api/compare", params={"t_ns": 1e6}).status_code == 422
+
+
+def test_pulse_optimizer_beats_drag() -> None:
+    body = {"duration_ns": 6.0, "steps": 200}
+    sim = client.post("/api/pulse/optimize", json=body).json()["sim"]
+    assert sim["optimized"]["error"] < sim["drag"]["error"] / 100
+    assert len(sim["optimized"]["omega_x"]) == 24
+    # Idling for 6 ns with T1 = T2 = 50 us costs t/(3 T2) + t/(6 T1) = 6e-5. The pulse costs a
+    # little more: it briefly fills level 2, which decays and dephases faster.
+    assert 6e-5 < sim["optimized"]["error_with_noise"] < 1e-4

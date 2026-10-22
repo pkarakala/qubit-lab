@@ -22,7 +22,7 @@ from typing import Literal
 import dynamiqs as dq
 import jax.numpy as jnp
 import numpy as np
-from numpy.typing import NDArray
+from numpy.typing import ArrayLike, NDArray
 
 dq.set_precision("double")
 dq.set_progress_meter(False)
@@ -100,6 +100,17 @@ def _observables(levels: int) -> list[dq.QArray]:
     return [s01 + s01.dag(), -1j * s01 + 1j * s01.dag(), p[0] - p[1], *p]
 
 
+def driven_h(
+    q: TransmonQubit, delta_ghz: float, edges: ArrayLike, omega_x: ArrayLike, omega_y: ArrayLike
+) -> dq.TimeQArray:
+    """H with piecewise-constant drives: omega_x[k], omega_y[k] (GHz) on [edges[k], edges[k+1])."""
+    a, ad, _ = _ops(q)
+    edges = jnp.asarray(edges)
+    hx = dq.pwc(edges, TWO_PI * jnp.asarray(omega_x), (a + ad) / 2)
+    hy = dq.pwc(edges, TWO_PI * jnp.asarray(omega_y), 1j * (ad - a) / 2)
+    return _static_h(q, delta_ghz) + hx + hy
+
+
 def _solve(
     q: TransmonQubit,
     delta_ghz: float,
@@ -108,19 +119,13 @@ def _solve(
     drive: tuple[NDArray[np.float64], NDArray[np.float64]] | None,
 ) -> NDArray[np.float64]:
     """Expectations [obs, time], averaged over quasi-static detuning."""
-    a, ad, _ = _ops(q)
     deltas, weights = _detunings(q, delta_ghz)
     obs = _observables(q.levels)
     total = np.zeros((len(obs), len(tsave)))
     for d, w in zip(deltas, weights, strict=True):
         H: dq.QArray | dq.TimeQArray = _static_h(q, float(d))
         if drive is not None:
-            ox, oy = drive
-            values = jnp.asarray(TWO_PI * np.stack([ox, oy]))[:, :-1]
-            times = jnp.asarray(tsave)
-            hx = dq.pwc(times, values[0], (a + ad) / 2)
-            hy = dq.pwc(times, values[1], 1j * (ad - a) / 2)
-            H = H + hx + hy
+            H = driven_h(q, float(d), tsave, drive[0][:-1], drive[1][:-1])
         res = dq.mesolve(H, _jumps(q), rho0, jnp.asarray(tsave), exp_ops=obs, save_states=False)
         total += w * np.asarray(res.expects).real
     return total
@@ -201,6 +206,20 @@ def run(
     return _echo(q, delta_ghz, plus, np.linspace(0, t_max_ns, n_points))
 
 
+def run_pulse(
+    q: TransmonQubit,
+    edges: NDArray[np.float64],
+    omega_x: NDArray[np.float64],
+    omega_y: NDArray[np.float64],
+    per_slice: int = 4,
+) -> Trajectory:
+    """A piecewise-constant pulse from |0>, saved `per_slice` times within each slice."""
+    t = np.linspace(edges[0], edges[-1], per_slice * (len(edges) - 1) + 1)
+    k = np.minimum(np.searchsorted(edges, t, side="right") - 1, len(omega_x) - 1)
+    g0 = dq.todm(dq.basis(q.levels, 0))
+    return _trajectory(q, 0.0, g0, t, (omega_x[k], omega_y[k]))
+
+
 def _x_pi(levels: int) -> dq.QArray:
     """Ideal pi rotation about X in the 0-1 subspace, identity elsewhere."""
     p01 = dq.proj(dq.basis(levels, 0)) + dq.proj(dq.basis(levels, 1))
@@ -234,22 +253,36 @@ def _echo(
     return Trajectory(t, total[:3].T, total[3:].T, zeros, zeros)
 
 
-def average_idle_fidelity(q: TransmonQubit, t_ns: float) -> float:
-    """Mean of <psi|rho(t)|psi> over the six Bloch-axis states, idling at zero detuning.
+def average_gate_fidelity(
+    q: TransmonQubit,
+    H: dq.QArray | dq.TimeQArray,
+    t_ns: float,
+    target: NDArray[np.complex128] | None = None,
+) -> float:
+    """Mean of <U psi|rho(t)|U psi> over the six Bloch-axis states, with T1 and T2 on.
 
-    The six axis states form a 2-design, so this mean equals the average gate fidelity over all
-    pure qubit states. Population that leaks above level 1 counts as an error.
+    U is the 2x2 `target` on levels 0 and 1 (identity if None). The six axis states form a
+    2-design, so this mean equals the average gate fidelity over all pure qubit states.
+    Population that leaks above level 1 counts as an error.
     """
     b0, b1 = dq.basis(q.levels, 0), dq.basis(q.levels, 1)
     states = [b0, b1]
     for phase in (1, -1, 1j, -1j):
         states.append(dq.unit(b0 + phase * b1))
-    H = _static_h(q, 0.0)
+    u = np.eye(q.levels, dtype=complex)
+    if target is not None:
+        u[:2, :2] = target
+    U = dq.asqarray(jnp.asarray(u))
     total = 0.0
     for psi in states:
         rho = dq.mesolve(H, _jumps(q), dq.todm(psi), jnp.asarray([0.0, t_ns])).states[-1]
-        total += float(dq.fidelity(psi, rho))
+        total += float(dq.fidelity(U @ psi, rho))
     return total / len(states)
+
+
+def average_idle_fidelity(q: TransmonQubit, t_ns: float) -> float:
+    """Average gate fidelity of doing nothing for t_ns at zero detuning."""
+    return average_gate_fidelity(q, _static_h(q, 0.0), t_ns)
 
 
 def flip_probabilities(q: TransmonQubit, t_ns: float) -> tuple[float, float]:

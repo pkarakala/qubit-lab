@@ -15,6 +15,7 @@ from qubitlab.cache import disk_cached
 from qubitlab.facts import DEVICES, FACT, FACTS
 from qubitlab.provenance import bib_entries
 from qubitlab.sim import cat as cat_sim
+from qubitlab.sim import pulse_optimizer as po_sim
 from qubitlab.sim import qec as qec_sim
 from qubitlab.sim import transmon as tr_sim
 from qubitlab.sim import transmon_dynamics as qb_sim
@@ -339,6 +340,63 @@ def qubit_run(req: QubitRequest) -> dict[str, Any]:
     """One lab experiment on a transmon kept to 4 levels: Bloch path, populations, theory."""
     try:
         return _qubit(req.model_dump())
+    except ValueError as e:
+        raise HTTPException(422, str(e)) from e
+
+
+class PulseRequest(BaseModel):
+    alpha_ghz: float = Field(-0.2, ge=-1.0, le=-0.05, description="anharmonicity")
+    duration_ns: float = Field(6.0, ge=2.0, le=40.0, description="X gate length")
+    omega_max_ghz: float = Field(0.3, ge=0.05, le=1.0, description="largest drive allowed")
+    t1_ns: float = Field(50_000.0, ge=1.0, le=1e6)
+    t2_ns: float = Field(50_000.0, ge=1.0, le=2e6)
+    steps: int = Field(300, ge=10, le=1000)
+
+
+@disk_cached
+def _pulse(body: dict[str, Any]) -> dict[str, Any]:
+    req = PulseRequest(**body)
+    if req.t2_ns > 2 * req.t1_ns:
+        raise ValueError("T2 cannot exceed 2 T1")
+    q = qb_sim.TransmonQubit(alpha_ghz=req.alpha_ghz, t1_ns=req.t1_ns, t2_ns=req.t2_ns)
+    slices = round(4 * req.duration_ns)  # 0.25 ns per slice, a 4 GS/s waveform generator
+    edges, dx, dy = po_sim.drag_slices(q, req.duration_ns, slices)
+    opt = po_sim.optimize(
+        q, req.duration_ns, slices=slices, omega_max_ghz=req.omega_max_ghz, steps=req.steps
+    )
+
+    def score(ox: Any, oy: Any, error: float, leakage: float) -> dict[str, Any]:
+        H = qb_sim.driven_h(q, 0.0, edges, ox, oy)
+        noisy = 1 - qb_sim.average_gate_fidelity(q, H, req.duration_ns, po_sim.X_GATE)
+        traj = qb_sim.run_pulse(q, edges, ox, oy)
+        return {
+            "omega_x": _round(ox),
+            "omega_y": _round(oy),
+            "error": error,
+            "leakage": leakage,
+            "error_with_noise": noisy,
+            "times": _round(traj.times_ns),
+            "bloch": _round(traj.bloch),
+            "populations": _round(traj.populations),
+        }
+
+    return {
+        "sim": {
+            "edges": _round(edges),
+            "drag": score(dx, dy, *po_sim.gate_error(q, edges, dx, dy)),
+            "optimized": {
+                **score(opt.omega_x, opt.omega_y, opt.error, opt.leakage),
+                "history": opt.history.tolist(),
+            },
+        }
+    }
+
+
+@app.post("/api/pulse/optimize")
+def pulse_optimize(req: PulseRequest) -> dict[str, Any]:
+    """An X gate on a 4-level transmon: the DRAG pulse vs a pulse found by gradient descent."""
+    try:
+        return _pulse(req.model_dump())
     except ValueError as e:
         raise HTTPException(422, str(e)) from e
 

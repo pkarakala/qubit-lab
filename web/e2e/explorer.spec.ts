@@ -64,6 +64,15 @@ test('cat vs transmon shows the noise bias at measured numbers', async ({ page }
   await page.screenshot({ path: `${IMG}/cat_vs_transmon.png` })
 })
 
+test('pulse optimizer beats DRAG on a 6 ns gate', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('tab', { name: 'Pulse optimizer' }).click()
+  await expect(page.getByTestId('pulse-table')).toBeVisible({ timeout: 300_000 })
+  await expect(page.locator('.dock .js-plotly-plot')).toBeVisible()
+  await page.waitForTimeout(6000)
+  await page.screenshot({ path: `${IMG}/pulse_optimizer.png` })
+})
+
 test('checks page reports no surprises', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('tab', { name: 'Checks' }).click()
