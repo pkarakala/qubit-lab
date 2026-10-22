@@ -30,7 +30,7 @@ def wigner() -> list[CheckResult]:
                 _, _, w = dq.wigner(state, xvec=np.array([xp]), yvec=np.array([pp]))
                 out.append(
                     CheckResult(
-                        key=f"cat.wigner.{kind}.{label}",
+                        key=f"cat.wigner.{kind}.{label}.n{alpha_sq:g}",
                         formula=formula.key,
                         regime=f"|α|² = {alpha_sq:g}, W at ({xp:.2f}, {pp:.2f})",
                         theory=float(formula(x=xp, p=pp, alpha=alpha)),
