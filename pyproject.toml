@@ -53,3 +53,9 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 addopts = "-p no:cacheprovider"
 markers = ["slow: Liouvillian spectra and long solves"]
+
+[[tool.mypy.overrides]]
+# scqubits ships no type stubs and does not declare its public names.
+module = ["scqubits", "scqubits.*"]
+follow_imports = "skip"
+ignore_missing_imports = true
