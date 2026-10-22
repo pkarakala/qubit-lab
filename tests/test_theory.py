@@ -4,8 +4,7 @@ import math
 
 import pytest
 
-from catlab.theory import FORMULAS
-from catlab.theory import cat, transmon
+from catlab.theory import FORMULAS, cat, transmon
 
 
 def test_coherent_overlap() -> None:
