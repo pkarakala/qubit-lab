@@ -64,6 +64,21 @@ test('cat vs transmon shows the noise bias at measured numbers', async ({ page }
   await page.screenshot({ path: `${IMG}/cat_vs_transmon.png` })
 })
 
+test('playground runs a typed model and rejects unsafe input', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('tab', { name: 'Playground' }).click()
+  await expect(page.getByTestId('python-code')).toContainText('dq.mesolve', { timeout: 120_000 })
+  await page.getByTestId('playground-h').fill("__import__('os')")
+  await page.getByTestId('playground-run').click()
+  await expect(page.locator('.error-banner')).toContainText('not allowed', { timeout: 60_000 })
+  await page.getByTestId('playground-preset-revival').click()
+  await expect(page.getByTestId('python-code')).toContainText('dq.powm(ad, 2)', { timeout: 120_000 })
+  await expect(page.locator('.error-banner')).toHaveCount(0)
+  await page.locator('.transport input[type=range]').fill('20')
+  await page.waitForTimeout(1500)
+  await page.screenshot({ path: `${IMG}/playground.png` })
+})
+
 test('pulse optimizer beats DRAG on a 6 ns gate', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('tab', { name: 'Pulse optimizer' }).click()

@@ -1,6 +1,6 @@
 # Qubit Lab
 
-Cat qubits and transmons, from closed-form theory to Dynamiqs simulation, in a 3D explorer.
+Cat qubits and transmons, from closed-form theory to Dynamiqs simulation, in a 3D explorer. Write your own Hamiltonian in the Playground and copy it out as a Dynamiqs script.
 
 A learning project. Alice & Bob build cat qubits; Qolab builds transmon-family qubits. Both are superconducting circuits, but they bet on different physics. qubitlab puts the equations from the papers next to a full simulation, so you can see where each formula holds and where it breaks.
 
@@ -11,7 +11,7 @@ A learning project. Alice & Bob build cat qubits; Qolab builds transmon-family q
 | ![Flip rates](docs/img/flip_rates.png) | ![Transmon](docs/img/transmon.png) |
 | ![Qubit control: a DRAG pulse on the Bloch sphere](docs/img/qubit_control.png) | ![Cat vs transmon: noise bias at measured hardware numbers](docs/img/cat_vs_transmon.png) |
 | ![Error correction: one surface code run in space-time](docs/img/error_correction.png) | ![Pulse optimizer: GRAPE vs DRAG on a 6 ns gate](docs/img/pulse_optimizer.png) |
-| ![Checks](docs/img/checks.png) | |
+| ![Playground: a Kerr state written by hand, with its Dynamiqs script](docs/img/playground.png) | ![Checks](docs/img/checks.png) |
 
 ## Findings
 
@@ -42,7 +42,7 @@ Three layers, kept apart by a test:
 
 ## Learn
 
-Start with [docs/learn/](docs/learn/): nine one-screen pages. Every equation is listed with its source in [docs/reference/formulas.md](docs/reference/formulas.md), and every comparison in [docs/reference/checks.md](docs/reference/checks.md).
+Start with [docs/learn/](docs/learn/): ten one-screen pages. Every equation is listed with its source in [docs/reference/formulas.md](docs/reference/formulas.md), and every comparison in [docs/reference/checks.md](docs/reference/checks.md).
 
 ## Limits
 

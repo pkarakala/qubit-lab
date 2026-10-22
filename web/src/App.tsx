@@ -6,6 +6,7 @@ import { Checks } from './views/Checks'
 import { ErrorCorrection } from './views/ErrorCorrection'
 import { FlipRates } from './views/FlipRates'
 import { PhaseSpace } from './views/PhaseSpace'
+import { Playground } from './views/Playground'
 import { PulseOptimizer } from './views/PulseOptimizer'
 import { Qubit } from './views/Qubit'
 import { Transmon } from './views/Transmon'
@@ -19,6 +20,7 @@ const VIEWS: { id: View; label: string; hint: string }[] = [
   { id: 'pulse', label: 'Pulse optimizer', hint: 'Gradient descent through the simulation' },
   { id: 'qec', label: 'Error correction', hint: 'Surface code vs a repetition code of cats' },
   { id: 'compare', label: 'Cat vs transmon', hint: 'Measured error rates and noise bias' },
+  { id: 'playground', label: 'Playground', hint: 'Type your own Hamiltonian and losses' },
   { id: 'checks', label: 'Checks', hint: 'Theory vs simulation' },
 ]
 
@@ -36,7 +38,7 @@ export default function App() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement) return
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
       const i = Number(e.key) - 1
       const v = VIEWS[i]
       if (v) setView(v.id)
@@ -86,6 +88,7 @@ export default function App() {
       {view === 'pulse' ? <PulseOptimizer /> : null}
       {view === 'qec' ? <ErrorCorrection /> : null}
       {view === 'compare' ? <CatVsTransmon /> : null}
+      {view === 'playground' ? <Playground /> : null}
       {view === 'checks' ? <Checks /> : null}
       <footer className="footer small muted">
         Independent learning project. Every equation is cited; numbers from companies are labeled as claims. Not
