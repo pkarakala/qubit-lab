@@ -16,8 +16,10 @@ from qubitlab.facts import FACTS
 from qubitlab.provenance import bib_entries
 from qubitlab.sim import cat as cat_sim
 from qubitlab.sim import transmon as tr_sim
+from qubitlab.sim import transmon_dynamics as qb_sim
 from qubitlab.theory import FORMULAS
 from qubitlab.theory import cat as cat_th
+from qubitlab.theory import qubit as qb_th
 from qubitlab.theory import transmon as tr_th
 
 app = FastAPI(title="qubitlab", version=__version__)
@@ -257,3 +259,79 @@ def transmon_surface(E_C: float = 1.0, n_levels: int = 3, n_points: int = 61) ->
     """Bands over (n_g, E_J/E_C) on a log grid of E_J/E_C from 1 to 100, scaled by E_01."""
     ratios = [float(r) for r in np.round(np.logspace(0, 2, 41), 4)]
     return _transmon_surface(E_C, ratios, n_levels, n_points)
+
+
+class QubitRequest(BaseModel):
+    experiment: Literal["rabi", "pulse", "t1", "ramsey", "echo"] = "rabi"
+    alpha_ghz: float = Field(-0.3, ge=-1.0, le=-0.05, description="anharmonicity")
+    t1_ns: float = Field(20_000.0, ge=1.0, le=1e6)
+    t2_ns: float = Field(20_000.0, ge=1.0, le=2e6)
+    sigma_ghz: float = Field(0.0, ge=0.0, le=0.02, description="quasi-static noise spread")
+    delta_ghz: float = Field(0.0, ge=-0.1, le=0.1, description="qubit minus drive frequency")
+    omega_ghz: float = Field(0.02, ge=0.0, le=0.2, description="Rabi frequency")
+    duration_ns: float = Field(20.0, ge=2.0, le=200.0, description="pi pulse length")
+    drag: float = Field(0.0, ge=-2.0, le=3.0)
+    t_max_ns: float = Field(200.0, gt=0.0, le=1e6)
+    n_points: int = Field(121, ge=11, le=301)
+
+
+@disk_cached
+def _qubit(body: dict[str, Any]) -> dict[str, Any]:
+    req = QubitRequest(**body)
+    if req.t2_ns > 2 * req.t1_ns:
+        raise ValueError("T2 cannot exceed 2 T1")
+    q = qb_sim.TransmonQubit(
+        alpha_ghz=req.alpha_ghz, t1_ns=req.t1_ns, t2_ns=req.t2_ns, sigma_ghz=req.sigma_ghz
+    )
+    n_points = min(req.n_points, 41) if req.experiment == "echo" else req.n_points
+    traj = qb_sim.run(
+        req.experiment,
+        q,
+        delta_ghz=req.delta_ghz,
+        omega_ghz=req.omega_ghz,
+        duration_ns=req.duration_ns,
+        drag=req.drag,
+        t_max_ns=req.t_max_ns,
+        n_points=n_points,
+    )
+    t = traj.times_ns
+    curve: Any = None
+    label = ""
+    if req.experiment == "rabi":
+        curve = qb_th.rabi_population(Omega=req.omega_ghz, Delta=req.delta_ghz, t=t)
+        label = "P1, two-level Rabi formula (no decay)"
+    elif req.experiment == "t1":
+        curve = qb_th.t1_decay(t=t, T_1=req.t1_ns)
+        label = "P1 = exp(-t/T1)"
+    elif req.experiment == "ramsey":
+        curve = qb_th.ramsey(t=t, T_2=req.t2_ns, sigma=req.sigma_ghz, Delta=req.delta_ghz)
+        label = "<X>, Ramsey formula"
+    elif req.experiment == "echo":
+        curve = qb_th.echo(t=t, T_2=req.t2_ns)
+        label = "<X> = exp(-t/T2)"
+    return {
+        "sim": {
+            "times": _round(t),
+            "bloch": _round(traj.bloch),
+            "populations": _round(traj.populations),
+            "leakage": _round(traj.leakage),
+            "omega_x": _round(traj.omega_x),
+            "omega_y": _round(traj.omega_y),
+        },
+        "theory": {
+            "curve": _round(curve) if curve is not None else None,
+            "curve_label": label,
+            "idle_fidelity_at_end": float(
+                qb_th.idle_fidelity(t=float(t[-1]), T_1=req.t1_ns, T_2=req.t2_ns)
+            ),
+        },
+    }
+
+
+@app.post("/api/qubit/run")
+def qubit_run(req: QubitRequest) -> dict[str, Any]:
+    """One lab experiment on a transmon kept to 4 levels: Bloch path, populations, theory."""
+    try:
+        return _qubit(req.model_dump())
+    except ValueError as e:
+        raise HTTPException(422, str(e)) from e

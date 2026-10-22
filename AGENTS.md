@@ -26,9 +26,10 @@ Rules for coding agents (and people) working in this repo. Humans start at [READ
 
 ```
 src/qubitlab/provenance.py      Source, Kind, bib parser
-src/qubitlab/theory/            cat.py, transmon.py, registry.py (Formula)
-src/qubitlab/sim/               cat.py (Lindblad, Wigner, Liouvillian rates), transmon.py (charge basis)
-src/qubitlab/checks/            base.py, cat_checks.py, transmon_checks.py
+src/qubitlab/theory/            cat.py, transmon.py, qubit.py (control and decoherence), registry.py
+src/qubitlab/sim/               cat.py (Lindblad, Wigner, Liouvillian rates), transmon.py (charge basis),
+                                transmon_dynamics.py (pulses, T1/T2, Ramsey, echo; 4 levels)
+src/qubitlab/checks/            base.py, cat_checks.py, transmon_checks.py, qubit_checks.py
 src/qubitlab/api.py             FastAPI for the explorer
 docs/learn/                   human layer, one screen per page
 docs/reference/               generated: formulas, checks (scripts/make_reference.py)

@@ -6,6 +6,7 @@ import { Html, OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
+import { HtmlWarmup } from './HtmlWarmup'
 import { diverging } from '../lib/colormap'
 
 const HEIGHT = 2.4 // world units for W = 2/pi
@@ -130,6 +131,7 @@ export function WignerScene({
       gl={{ preserveDrawingBuffer: true, antialias: true }}
       data-testid="wigner-canvas"
     >
+      <HtmlWarmup />
       <color attach="background" args={[theme === 'dark' ? '#121214' : '#f6f5f2']} />
       <ambientLight intensity={0.75} />
       <directionalLight position={[4, 8, 5]} intensity={1.6} />

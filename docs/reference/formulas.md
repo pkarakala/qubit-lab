@@ -149,6 +149,91 @@ Valid when: H = -K a+^2 a^2 + epsilon_2 (a+^2 + a^2); |+-alpha> are degenerate e
 - [grimm2020](https://doi.org/10.1038/s41586-020-2587-z), Eq. (1) (peer_reviewed). The Kerr-cat Hamiltonian.
 - qubitlab_hand_calcs, docs/hand_calcs/kerr_cat_amplitude.py (derived). Classical fixed points of Eq. (1).
 
+## Rabi oscillation: population of |1> under a constant drive
+
+`qubit.rabi_population`
+
+```latex
+P_1(t) = \frac{\Omega^{2}}{\Delta^{2} + \Omega^{2}} \sin^{2}{\left(\pi t \sqrt{\Delta^{2} + \Omega^{2}} \right)}
+```
+
+Valid when: Drive much weaker than |alpha|, so level 2 stays empty.
+
+- qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 1: two-level Schrodinger equation in the drive frame.
+
+## Energy relaxation from |1>
+
+`qubit.t1_decay`
+
+```latex
+P_1(t) = e^{- \frac{t}{T_{1}}}
+```
+
+Valid when: Zero temperature, no drive.
+
+- qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 2: Lindblad equation with jump sqrt(1/T1) |0><1|.
+
+## Coherence time from relaxation and pure dephasing
+
+`qubit.t2`
+
+```latex
+\frac{1}{T_2} = \frac{1}{2 T_{1}} + \frac{1}{T_{\phi}}
+```
+
+Valid when: Markovian (white) noise. So T2 can never exceed 2 T1.
+
+- qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 3: decay of rho_01 under both jumps.
+
+## Ramsey fringe with quasi-static frequency noise
+
+`qubit.ramsey`
+
+```latex
+\langle X\rangle(t) = e^{- \frac{t}{T_{2}}} e^{- 2 \pi^{2} \sigma^{2} t^{2}} \cos{\left(2 \pi \Delta t \right)}
+```
+
+Valid when: Noise slower than one shot; sigma is its spread in frequency.
+
+- qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 4: Gaussian average of the fringe over a static detuning.
+
+## Hahn echo: a pi pulse at t/2 cancels static detuning
+
+`qubit.echo`
+
+```latex
+\langle X\rangle(t) = e^{- \frac{t}{T_{2}}}
+```
+
+Valid when: Noise static over one sequence; ideal, instantaneous pi pulse.
+
+- qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 5: the pi pulse reverses the phase from any static Delta.
+
+## DRAG: quadrature drive that cancels leakage to level 2
+
+`qubit.drag_quadrature`
+
+```latex
+\Omega_y(t) = - \frac{\dot{\Omega}_{x}}{2 \pi \alpha}
+```
+
+Valid when: First order in 1/(alpha * pulse length). Ignores the AC Stark shift.
+
+- [motzoi2009](https://doi.org/10.1103/PhysRevLett.103.110501), Eq. (9) (peer_reviewed). Paper writes E^y = -dE^x/dt / Delta with Delta = 2 pi alpha in angular units.
+
+## Average fidelity of doing nothing for time t
+
+`qubit.idle_fidelity`
+
+```latex
+\bar F(t) = \frac{1}{2} + \frac{e^{- \frac{t}{T_{2}}}}{3} + \frac{e^{- \frac{t}{T_{1}}}}{6}
+```
+
+Valid when: Two levels, Markovian noise. Sets the error per idle gate.
+
+- [nielsen2002](https://doi.org/10.1016/S0375-9601(02)01272-0), Eq. (3) (peer_reviewed). F_avg = (d F_e + 1)/(d + 1).
+- qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 6: entanglement fidelity of the T1/T2 channel, d = 2.
+
 ## Josephson plasma energy
 
 `transmon.plasma_frequency`

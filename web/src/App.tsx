@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { Checks } from './views/Checks'
 import { FlipRates } from './views/FlipRates'
 import { PhaseSpace } from './views/PhaseSpace'
+import { Qubit } from './views/Qubit'
 import { Transmon } from './views/Transmon'
 import { type View, useExplorer } from './store'
 
@@ -11,6 +12,7 @@ const VIEWS: { id: View; label: string; hint: string }[] = [
   { id: 'phase', label: 'Phase space', hint: 'One cat qubit, live' },
   { id: 'rates', label: 'Flip rates', hint: 'Bit-flips vs phase-flips' },
   { id: 'transmon', label: 'Transmon', hint: 'The other superconducting qubit' },
+  { id: 'qubit', label: 'Qubit control', hint: 'Pulses and noise on a transmon' },
   { id: 'checks', label: 'Checks', hint: 'Theory vs simulation' },
 ]
 
@@ -74,6 +76,7 @@ export default function App() {
       {view === 'phase' ? <PhaseSpace /> : null}
       {view === 'rates' ? <FlipRates /> : null}
       {view === 'transmon' ? <Transmon /> : null}
+      {view === 'qubit' ? <Qubit /> : null}
       {view === 'checks' ? <Checks /> : null}
       <footer className="footer small muted">
         Independent learning project. Every equation is cited; numbers from companies are labeled as claims. Not

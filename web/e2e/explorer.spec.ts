@@ -33,6 +33,17 @@ test('transmon compares Koch et al. with the exact spectrum', async ({ page }) =
   await page.screenshot({ path: `${IMG}/transmon.png` })
 })
 
+test('qubit control: DRAG cuts leakage on a fast pi pulse', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('tab', { name: 'Qubit control' }).click()
+  await expect(page.getByTestId('bloch-canvas').locator('canvas')).toBeVisible({ timeout: 120_000 })
+  await page.getByTestId('qubit-preset-drag').click()
+  await expect(page.locator('[data-formula="qubit.drag_quadrature"]')).toBeVisible({ timeout: 120_000 })
+  await page.waitForTimeout(8000)
+  await expect(page.locator('.hud')).toContainText('leaked')
+  await page.screenshot({ path: `${IMG}/qubit_control.png` })
+})
+
 test('checks page reports no surprises', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('tab', { name: 'Checks' }).click()
