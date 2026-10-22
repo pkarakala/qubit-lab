@@ -28,6 +28,10 @@ Expected is the verdict predicted from the formula's validity range before runni
 | `cat.parity_decay.4` | \|α\|² = 4, κ₁/κ₂ = 0.01 | 0.08 | 0.0798926 | 0.0013 | 0.01 | AGREE | AGREE |
 | `cat.parity_decay.8` | \|α\|² = 8, κ₁/κ₂ = 0.01 | 0.16 | 0.159897 | 0.00065 | 0.01 | AGREE | AGREE |
 | `cat.parity_decay.0.3` | \|α\|² = 0.3, κ₁/κ₂ = 0.01 | 0.006 | 0.011154 | 0.86 | 0.01 | DIVERGE | DIVERGE |
+| `cat.parity_decay_exact.0.3.0.01` | \|α\|² = 0.3, κ₁/κ₂ = 0.01 | 0.0111722 | 0.011154 | 0.0016 | 0.01 | AGREE | AGREE |
+| `cat.parity_decay_exact.1.0.01` | \|α\|² = 1, κ₁/κ₂ = 0.01 | 0.0207463 | 0.0206477 | 0.0048 | 0.01 | AGREE | AGREE |
+| `cat.parity_decay_exact.4.0.01` | \|α\|² = 4, κ₁/κ₂ = 0.01 | 0.08 | 0.0798926 | 0.0013 | 0.01 | AGREE | AGREE |
+| `cat.parity_decay_exact.1.0.5` | \|α\|² = 1, κ₁/κ₂ = 0.5 | 1.03731 | 0.771432 | 0.26 | 0.01 | DIVERGE | DIVERGE |
 | `cat.bit_flip_suppression.5` | \|α\|² = 5 -> 6, κ₁/κ₂ = 0.1 | 0.135335 | 0.134488 | 0.0063 | 0.1 | AGREE | AGREE |
 | `cat.bit_flip_suppression.6` | \|α\|² = 6 -> 7, κ₁/κ₂ = 0.1 | 0.135335 | 0.135448 | 0.00083 | 0.1 | AGREE | AGREE |
 | `cat.bit_flip_suppression.1` | \|α\|² = 1 -> 2, κ₁/κ₂ = 0.1 | 0.135335 | 0.0767483 | 0.43 | 0.1 | DIVERGE | DIVERGE |

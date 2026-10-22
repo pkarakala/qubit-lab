@@ -2,9 +2,9 @@
 // Liouvillian spectrum (simulation), theory lines from the closed forms, experiments as facts.
 
 import { useEffect, useState } from 'react'
-import { type CatParams, type Scheme, useFacts, useRates, useReferences } from '../api'
+import { type CatParams, useFacts, useRates, useReferences } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { ErrorBanner, FormulaCard, Segmented, Slider, shortCite } from '../components/ui'
+import { ErrorBanner, FormulaCard, Slider, shortCite } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 
@@ -43,15 +43,10 @@ export function FlipRates() {
     <div className="view">
       <aside className="pane pane-left">
         <h3>Noise</h3>
-        <Segmented<Scheme>
-          label="Stabilization"
-          value={draft.scheme}
-          options={[
-            { value: 'dissipative', label: 'Two-photon' },
-            { value: 'kerr', label: 'Kerr' },
-          ]}
-          onChange={(scheme) => set({ scheme })}
-        />
+        <p className="small muted">
+          Two-photon dissipation only. For a Kerr cat the slowest modes of the Liouvillian are not the flips, so this
+          method would mislabel them; use the Phase space view to watch a Kerr cat instead.
+        </p>
         <Slider label="photon loss" tex="\kappa_1/\kappa_2" value={draft.kappa_1} min={0} max={0.5} step={0.01} onChange={(kappa_1) => set({ kappa_1 })} />
         <Slider label="dephasing" tex="\kappa_\phi/\kappa_2" value={draft.kappa_phi} min={0} max={0.5} step={0.01} onChange={(kappa_phi) => set({ kappa_phi })} />
         <Slider label="thermal photons" tex="n_{th}" value={draft.n_th} min={0} max={0.2} step={0.01} onChange={(n_th) => set({ n_th })} />

@@ -8,7 +8,7 @@ H = 4E_C (n − n_g)² − E_J cos φ
 
 **The levels.** For E_J ≫ E_C it is almost a harmonic oscillator. The qubit is the bottom two levels, at E₀₁ ≈ √(8E_J E_C) − E_C. Typical numbers: E_J = 15 GHz, E_C = 0.3 GHz, so E₀₁ ≈ 5.7 GHz.
 
-**Anharmonicity.** Level 1→2 sits about E_C lower than 0→1. That gap is what keeps a microwave pulse from leaking out of the qubit. Our exact diagonalization finds it 10 to 15% larger than −E_C at E_J/E_C = 50 to 100.
+**Anharmonicity.** Level 1→2 sits about E_C lower than 0→1. That gap is what keeps a microwave pulse from leaking out of the qubit. Our exact diagonalization finds it 10 to 15% larger in magnitude than E_C at E_J/E_C = 50 to 100.
 
 **Why "transmon".** The offset charge n_g wanders in real chips. The energies wiggle with n_g by an amount that shrinks as e^(−√(8E_J/E_C)). Raising E_J/E_C from 1 to 50 flattens the bands by six orders of magnitude, at the cost of less anharmonicity.
 

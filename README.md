@@ -14,9 +14,9 @@ A learning project. Alice & Bob build cat qubits; Qolab builds transmon-family q
 ## Findings
 
 1. In the ideal two-photon model, each added photon cuts the bit-flip rate by e² ≈ 7.4 once |α|² ≳ 5. The 2020 experiment by Lescanne et al. measured 4.2.
-2. The phase-flip rate κ₁|α|² matches simulation to 0.2% for |α|² ≥ 2, and is off by 86% at |α|² = 0.3, where there is no cat to speak of.
-3. Koch et al.'s transmon frequency holds to 1% for E_J/E_C ≥ 20, but the true anharmonicity is 10 to 15% larger than E_C at E_J/E_C = 50 to 100.
-4. On a 4-level transmon, a 6 ns π pulse leaks 24% of the population to level 2. DRAG cuts that to 0.4%, but the pulse still misses |1⟩ by 13%, because level 2 also shifts the qubit frequency. The same shift makes the two-level Rabi formula miss by 1.8% for a detuned drive.
+2. The phase-flip rate κ₁|α|² matches simulation to 0.2% for |α|² ≥ 2, and is off by 86% at |α|² = 0.3. The exact two-cat result, 2κ₁|α|² coth(2|α|²), which we derive, matches there to 0.2%: the simple law only drops the small-cat correction.
+3. Koch et al.'s transmon frequency holds to 1% for E_J/E_C ≥ 20, but the true anharmonicity is 10 to 15% larger in magnitude than E_C at E_J/E_C = 50 to 100.
+4. On a 4-level transmon with α = −200 MHz, a 6 ns π pulse leaks 24% of the population to level 2. DRAG cuts that to 0.4%, but the pulse still misses |1⟩ by 13%: its peak drive is 0.67|α|, past where first-order DRAG holds, and level 2 also shifts the qubit frequency. The same shift makes the two-level Rabi formula miss by 1.8% for a detuned drive.
 
 ## Run
 
