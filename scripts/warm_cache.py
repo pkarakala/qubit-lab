@@ -19,7 +19,9 @@ if __name__ == "__main__":
     api.qec_cat(api.CatCodeRequest(p_phase=0.005, p_bit=0.005 / 1e4))
     api.compare(t_ns=25.0)
     api.transmon_surface(n_levels=3)
-    api.cat_evolve(api.EvolveRequest(**CAT, kappa_1=0, initial="vacuum", t_final=3, n_frames=31, grid=61))
+    api.cat_evolve(
+        api.EvolveRequest(**CAT, kappa_1=0, initial="vacuum", t_final=3, n_frames=31, grid=61)
+    )
     api.cat_rates(api.RatesRequest(**CAT, kappa_1=0.1, alpha_sq_values=FLIP_RATE_SIZES))
     api.cat_rates(api.RatesRequest(**CAT, kappa_1=0.01, alpha_sq_values=COMPARE_SIZES))
     api.qubit_run(api.QubitRequest(t1_ns=20000, t2_ns=20000, t_max_ns=100, n_points=121))

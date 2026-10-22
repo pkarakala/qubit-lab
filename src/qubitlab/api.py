@@ -12,7 +12,6 @@ import anyio
 import numpy as np
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -35,13 +34,11 @@ from qubitlab.theory import qec as qec_th
 from qubitlab.theory import qubit as qb_th
 from qubitlab.theory import transmon as tr_th
 
-# Public hosting knobs, all off by default (see docs/deploy.md):
+# Public hosting knobs, both off by default (see docs/deploy.md):
 # QUBITLAB_SOLVES   most simulations running at once; the rest wait their turn.
 # QUBITLAB_RATE     requests per client, e.g. "30/minute".
-# QUBITLAB_STATIC   the built explorer (web/dist), served from the same process.
 SOLVES = int(os.environ.get("QUBITLAB_SOLVES", "0"))
 RATE = os.environ.get("QUBITLAB_RATE")
-STATIC = os.environ.get("QUBITLAB_STATIC")
 
 
 @asynccontextmanager
@@ -59,10 +56,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-if RATE:
-    app.state.limiter = Limiter(key_func=get_remote_address, default_limits=[RATE])
-    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore[arg-type]
-    app.add_middleware(SlowAPIMiddleware)
+
+
+def add_rate_limit(target: FastAPI) -> None:
+    """Limit requests per visitor when QUBITLAB_RATE is set (also used by `qubitlab.serve`)."""
+    if RATE:
+        target.state.limiter = Limiter(key_func=get_remote_address, default_limits=[RATE])
+        target.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore[arg-type]
+        target.add_middleware(SlowAPIMiddleware)
+
+
+add_rate_limit(app)
 
 
 class CatRequest(BaseModel):
@@ -645,8 +649,3 @@ def playground(req: PlaygroundRequest) -> dict[str, Any]:
     except RuntimeError as e:  # Dynamiqs hit its step limit
         msg = "the solver gave up: the model is too fast or too stiff for this duration"
         raise HTTPException(422, msg) from e
-
-
-# Mounted last, so every /api route above takes precedence.
-if STATIC:
-    app.mount("/", StaticFiles(directory=STATIC, html=True), name="explorer")

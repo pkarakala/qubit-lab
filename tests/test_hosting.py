@@ -1,4 +1,4 @@
-"""The public-hosting switches in qubitlab.api: static explorer, rate limit."""
+"""The public-hosting switches in qubitlab.api, applied to `qubitlab serve`."""
 
 import importlib
 from collections.abc import Iterator
@@ -8,15 +8,16 @@ import pytest
 from fastapi.testclient import TestClient
 
 import qubitlab.api
+from qubitlab.serve import app_with_explorer
 
 
 @pytest.fixture
 def hosted(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClient]:
     (tmp_path / "index.html").write_text("<title>Qubit Lab</title>")
-    monkeypatch.setenv("QUBITLAB_STATIC", str(tmp_path))
     monkeypatch.setenv("QUBITLAB_RATE", "3/minute")
     monkeypatch.setenv("QUBITLAB_SOLVES", "2")
-    with TestClient(importlib.reload(qubitlab.api).app) as client:
+    importlib.reload(qubitlab.api)
+    with TestClient(app_with_explorer(tmp_path)) as client:
         yield client
     monkeypatch.undo()
     importlib.reload(qubitlab.api)
