@@ -38,6 +38,14 @@ Expected is the verdict predicted from the formula's validity range before runni
 | `cat.bit_flip_dephasing.1` | \|α\|² = 1, κ_φ/κ₂ = 0.01, κ₁ = 0 | 0.0013786 | 0.00139016 | 0.0084 | 0.1 | AGREE | AGREE |
 | `cat.bit_flip_dephasing.2` | \|α\|² = 2, κ_φ/κ₂ = 0.01, κ₁ = 0 | 0.000366436 | 0.000376462 | 0.027 | 0.1 | AGREE | AGREE |
 | `cat.bit_flip_dephasing.4` | \|α\|² = 4, κ_φ/κ₂ = 0.01, κ₁ = 0 | 1.34185e-05 | 1.43594e-05 | 0.07 | 0.1 | AGREE | AGREE |
+| `qec.error_exponent.surface.3.0.0008` | surface code, d = 3, p = 0.0008 to 0.002 | 2 | 2.02378 | 0.012 | 0.12 | AGREE | AGREE |
+| `qec.error_exponent.surface.5.0.0015` | surface code, d = 5, p = 0.0015 to 0.003 | 3 | 2.93594 | 0.021 | 0.12 | AGREE | AGREE |
+| `qec.error_exponent.repetition.3.0.002` | repetition code, d = 3, p = 0.002 to 0.006 | 2 | 2.01925 | 0.0096 | 0.12 | AGREE | AGREE |
+| `qec.error_exponent.repetition.5.0.003` | repetition code, d = 5, p = 0.003 to 0.008 | 3 | 3.00563 | 0.0019 | 0.12 | AGREE | AGREE |
+| `qec.error_exponent.surface.5.0.008` | surface code, d = 5, p = 0.008 to 0.012 | 3 | 2.37761 | 0.21 | 0.12 | DIVERGE | DIVERGE |
+| `qec.qubit_count.repetition.3` | repetition code, d = 3 | 5 | 5 | 0 | 0.01 | AGREE | AGREE |
+| `qec.qubit_count.repetition.7` | repetition code, d = 7 | 13 | 13 | 0 | 0.01 | AGREE | AGREE |
+| `qec.qubit_count.surface.5` | surface code, d = 5 | 81 | 49 | 0.4 | 0.01 | DIVERGE | DIVERGE |
 | `qubit.rabi_population.0.01.0.-0.3` | Ω = 10 MHz, Δ = 0 MHz, α = -300 MHz | 1 | 0.999168 | 0.00083 | 0.01 | AGREE | AGREE |
 | `qubit.rabi_population.0.01.0.01.-0.3` | Ω = 10 MHz, Δ = 10 MHz, α = -300 MHz | 0.5 | 0.490927 | 0.018 | 0.01 | DIVERGE | DIVERGE |
 | `qubit.rabi_population.0.01.0.01.-3` | Ω = 10 MHz, Δ = 10 MHz, α = -3000 MHz | 0.5 | 0.49916 | 0.0017 | 0.01 | AGREE | AGREE |
@@ -53,6 +61,10 @@ Expected is the verdict predicted from the formula's validity range before runni
 | `qubit.echo.0.005` | σ = 5 MHz (Ramsey would be gone by 32 ns) | 0.513417 | 0.513415 | 4.3e-06 | 0.01 | AGREE | AGREE |
 | `qubit.idle_fidelity.150.20` | T1 = 100 ns, T2 = 150 ns, t = 20 ns | 0.92818 | 0.92818 | 4.3e-11 | 0.001 | AGREE | AGREE |
 | `qubit.idle_fidelity.50.100` | T1 = 100 ns, T2 = 50 ns, t = 100 ns | 0.606425 | 0.606425 | 4.2e-07 | 0.001 | AGREE | AGREE |
+| `qubit.flip_probability.bit.0` | bit-flip, T = T1, T1 = 100 ns, T2 = 150 ns, σ = 0 MHz, t = 20 ns | 0.0906346 | 0.0906346 | 1.1e-09 | 0.001 | AGREE | AGREE |
+| `qubit.flip_probability.phase.0` | phase-flip, T = T2, T1 = 100 ns, T2 = 150 ns, σ = 0 MHz, t = 20 ns | 0.0624133 | 0.0624133 | 1.3e-10 | 0.001 | AGREE | AGREE |
+| `qubit.flip_probability.bit.0.002` | bit-flip, T = T1, T1 = 20000 ns, T2 = 20000 ns, σ = 2 MHz, t = 100 ns | 0.00249376 | 0.00249376 | 2.2e-14 | 0.001 | AGREE | AGREE |
+| `qubit.flip_probability.phase.0.002` | phase-flip, T = T2, T1 = 20000 ns, T2 = 20000 ns, σ = 2 MHz, t = 100 ns | 0.00249376 | 0.274112 | 1.1e+02 | 0.001 | DIVERGE | DIVERGE |
 | `transmon.qubit_frequency.100` | E_J/E_C = 100 | 27.2843 | 27.2451 | 0.0014 | 0.01 | AGREE | AGREE |
 | `transmon.qubit_frequency.50` | E_J/E_C = 50 | 19 | 18.9419 | 0.0031 | 0.01 | AGREE | AGREE |
 | `transmon.qubit_frequency.20` | E_J/E_C = 20 | 11.6491 | 11.5461 | 0.0088 | 0.01 | AGREE | AGREE |

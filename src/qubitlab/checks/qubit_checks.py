@@ -147,3 +147,32 @@ def idle_fidelity() -> list[CheckResult]:
             )
         )
     return out
+
+
+@check("qubit.flip_probability")
+def flip_probability() -> list[CheckResult]:
+    out = []
+    # (T1, T2, sigma, t). Predicted: AGREE with white noise only. With 2 MHz of quasi-static
+    # noise the X decay picks up a Gaussian factor exp(-(2 pi sigma t)^2 / 2) = 0.45 at
+    # t = 100 ns, so the phase-flip probability DIVERGEs while the bit-flip one still AGREEs.
+    regimes = ((100.0, 150.0, 0.0, 20.0, A, A), (20_000.0, 20_000.0, 0.002, 100.0, A, D))
+    for t1, t2, sigma, t, exp_bit, exp_phase in regimes:
+        q = sim.TransmonQubit(t1_ns=t1, t2_ns=t2, sigma_ghz=sigma)
+        p_bit, p_phase = sim.flip_probabilities(q, t)
+        regime = f"T1 = {t1:g} ns, T2 = {t2:g} ns, σ = {sigma * 1e3:g} MHz, t = {t:g} ns"
+        for name, T, p, expected in (
+            ("bit", t1, p_bit, exp_bit),
+            ("phase", t2, p_phase, exp_phase),
+        ):
+            out.append(
+                CheckResult(
+                    key=f"qubit.flip_probability.{name}.{sigma:g}",
+                    formula=th.flip_probability.key,
+                    regime=f"{name}-flip, T = T{1 if name == 'bit' else 2}, {regime}",
+                    theory=float(th.flip_probability(t=t, T=T)),
+                    sim=p,
+                    rel_tol=0.001,
+                    expected=expected,
+                )
+            )
+    return out

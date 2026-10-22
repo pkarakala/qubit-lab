@@ -12,13 +12,15 @@ from pydantic import BaseModel, Field
 
 from qubitlab import __version__
 from qubitlab.cache import disk_cached
-from qubitlab.facts import FACTS
+from qubitlab.facts import DEVICES, FACT, FACTS
 from qubitlab.provenance import bib_entries
 from qubitlab.sim import cat as cat_sim
+from qubitlab.sim import qec as qec_sim
 from qubitlab.sim import transmon as tr_sim
 from qubitlab.sim import transmon_dynamics as qb_sim
 from qubitlab.theory import FORMULAS
 from qubitlab.theory import cat as cat_th
+from qubitlab.theory import qec as qec_th
 from qubitlab.theory import qubit as qb_th
 from qubitlab.theory import transmon as tr_th
 
@@ -339,3 +341,160 @@ def qubit_run(req: QubitRequest) -> dict[str, Any]:
         return _qubit(req.model_dump())
     except ValueError as e:
         raise HTTPException(422, str(e)) from e
+
+
+MIN_FAILURES = 10
+P_GRID = [0.001, 0.0015, 0.002, 0.003, 0.005, 0.007, 0.01, 0.015]
+
+
+@disk_cached
+def _qec_curves(shots: int) -> dict[str, Any]:
+    curves = []
+    for code in ("surface", "repetition"):
+        for d in (3, 5, 7):
+            runs = [qec_sim.memory(code, d, p, shots) for p in P_GRID]
+            curves.append(
+                {
+                    "code": code,
+                    "d": d,
+                    "qubits": qec_sim.physical_qubits(code, d),
+                    # Under 10 failures the estimate is mostly sampling noise: not reported.
+                    "per_round": [
+                        r.per_round if r.failures >= MIN_FAILURES else None for r in runs
+                    ],
+                    "failures": [r.failures for r in runs],
+                }
+            )
+    fowler = {
+        str(d): [
+            float(qec_th.surface_code_logical_error(p=p, p_th=0.0057, d=float(d))) for p in P_GRID
+        ]
+        for d in (3, 5, 7)
+    }
+    return {
+        "p": P_GRID,
+        "shots": shots,
+        "sim": {"curves": curves},
+        "theory": {
+            "fowler_surface": fowler,
+            "fowler_p_th": 0.0057,
+            "surface_qubits": {
+                str(d): float(qec_th.surface_code_qubits(d=float(d))) for d in (3, 5, 7)
+            },
+        },
+    }
+
+
+@app.get("/api/qec/curves")
+def qec_curves() -> dict[str, Any]:
+    """Logical error per round vs physical error, Stim + PyMatching, d = 3, 5, 7."""
+    return _qec_curves(100_000)
+
+
+class CatCodeRequest(BaseModel):
+    p_phase: float = Field(0.005, gt=0.0, le=0.05, description="cat phase-flip prob. per round")
+    p_bit: float = Field(1e-6, ge=0.0, le=0.01, description="cat bit-flip prob. per round")
+    shots: int = Field(50_000, ge=1000, le=500_000)
+
+
+@disk_cached
+def _cat_code(body: dict[str, Any]) -> dict[str, Any]:
+    req = CatCodeRequest(**body)
+    rows = []
+    for d in (1, 3, 5, 7, 9, 11, 13):
+        if d == 1:
+            corrected: float | None = req.p_phase
+            failures = None
+        else:
+            m = qec_sim.memory("repetition", d, req.p_phase, req.shots)
+            corrected = m.per_round if m.failures >= MIN_FAILURES else None
+            failures = m.failures
+        rows.append(
+            {
+                "d": d,
+                "qubits": 2 * d - 1 if d > 1 else 1,
+                "sim": {"phase_flip_logical": corrected, "failures": failures},
+                "theory": {
+                    "bit_flip_floor": float(
+                        qec_th.repetition_code_bit_flip_floor(d=float(d), p_bit=req.p_bit)
+                    )
+                },
+            }
+        )
+    return {"rows": rows, "shots": req.shots}
+
+
+@app.post("/api/qec/cat")
+def qec_cat(req: CatCodeRequest) -> dict[str, Any]:
+    """A repetition code of cats: corrected phase-flips (sim) plus uncorrected bit-flips (theory).
+
+    The repetition circuit applies p to every operation, so p_phase here plays the role of the
+    cat's phase-flip probability per round; bit-flips are added from the closed form.
+    """
+    return _cat_code(req.model_dump())
+
+
+@app.get("/api/qec/shot")
+def qec_shot(d: int = 5, p: float = 0.005, seed: int = 0) -> dict[str, Any]:
+    """One surface code run: detection events in space-time and the decoder's matching."""
+    if d not in (3, 5, 7) or not 0 < p <= 0.05:
+        raise HTTPException(422, "d must be 3, 5 or 7 and 0 < p <= 0.05")
+    s = qec_sim.sample_shot(d, p, seed)
+    return {
+        "sim": {
+            "qubits": s.qubits,
+            "detectors": s.detectors,
+            "fired": s.fired,
+            "matched": s.matched,
+            "logical_error": s.logical_error,
+        }
+    }
+
+
+@disk_cached
+def _compare(t_ns: float) -> dict[str, Any]:
+    rows = []
+    for d in DEVICES:
+        t_bit = FACT[d.t_bit].value * 1e9  # facts are in seconds
+        t_phase = FACT[d.t_phase].value * 1e9
+        p_bit = float(qb_th.flip_probability(t=t_ns, T=t_bit))
+        p_phase = float(qb_th.flip_probability(t=t_ns, T=t_phase))
+        theory: dict[str, float | None] = {
+            "p_bit": p_bit,
+            "p_phase": p_phase,
+            "bias": p_phase / p_bit,
+            "idle_error": None,
+        }
+        sim: dict[str, float] | None = None
+        if d.qubit == "transmon":
+            theory["idle_error"] = 1 - float(qb_th.idle_fidelity(t=t_ns, T_1=t_bit, T_2=t_phase))
+            q = qb_sim.TransmonQubit(t1_ns=t_bit, t2_ns=t_phase)
+            s_bit, s_phase = qb_sim.flip_probabilities(q, t_ns)
+            sim = {
+                "p_bit": s_bit,
+                "p_phase": s_phase,
+                "idle_error": 1 - qb_sim.average_idle_fidelity(q, t_ns),
+            }
+        rows.append(
+            {
+                "key": d.key,
+                "label": d.label,
+                "qubit": d.qubit,
+                "t_bit": d.t_bit,
+                "t_phase": d.t_phase,
+                "theory": theory,
+                "sim": sim,
+            }
+        )
+    return {"t_ns": t_ns, "devices": rows}
+
+
+@app.get("/api/compare")
+def compare(t_ns: float = 25.0) -> dict[str, Any]:
+    """Bit- and phase-flip chance per idle step of length t for measured cats and transmons.
+
+    The default t is the Willow single-qubit gate time (willow2025, Supplement Sec. I).
+    """
+    if not 1.0 <= t_ns <= 1e5:
+        raise HTTPException(422, "t_ns must be between 1 ns and 100 us")
+    return _compare(t_ns)

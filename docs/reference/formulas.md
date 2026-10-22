@@ -161,6 +161,67 @@ Valid when: Two-photon dissipation dominates, so the state stays in the two-cat 
 
 - qubitlab_hand_calcs, docs/hand_calcs/cat_parity_decay.py (derived). Two-state jump picture: |C+> -> |C-> at kappa_1 n_+, back at kappa_1 n_-.
 
+## Errors needed to fool a distance-d code
+
+`qec.error_exponent`
+
+```latex
+d_e = \frac{d + 1}{2}
+```
+
+Valid when: Odd d, p well below threshold. Sets the slope of log P_L against log p.
+
+- [fowler2012](https://doi.org/10.1103/PhysRevA.86.032324), Eq. (10) (peer_reviewed). Odd d. For the surface code.
+- qubitlab_hand_calcs, docs/hand_calcs/repetition_code.py (derived). Step 1: the same count for the repetition code.
+
+## Surface code logical error rate
+
+`qec.surface_code_logical_error`
+
+```latex
+P_L = 0.03 \left(\frac{p}{p_{th}}\right)^{\frac{d + 1}{2}}
+```
+
+Valid when: p below threshold, Fowler's noise model. The prefactor is model dependent.
+
+- [fowler2012](https://doi.org/10.1103/PhysRevA.86.032324), Eq. (11); p_th = 0.57% in Sec. VII (peer_reviewed). Empirical fit to Fowler's own noise model. Whether P_L is per round is unverified.
+
+## Physical qubits for one surface code logical qubit
+
+`qec.surface_code_qubits`
+
+```latex
+n_q = \left(2 d - 1\right)^{2}
+```
+
+Valid when: Rotated-boundary-free planar layout as drawn by Fowler.
+
+- [fowler2012](https://doi.org/10.1103/PhysRevA.86.032324), Sec. VII.A, text after Eq. (12) (peer_reviewed). Data plus measurement qubits.
+
+## Physical qubits for one repetition code logical qubit
+
+`qec.repetition_code_qubits`
+
+```latex
+n_q = 2 d - 1
+```
+
+Valid when: Line of qubits, one ancilla between each pair of neighbors.
+
+- qubitlab_hand_calcs, docs/hand_calcs/repetition_code.py (derived). Header: d data qubits and d - 1 ancillas.
+
+## Logical errors a repetition code cannot correct
+
+`qec.repetition_bit_flip_floor`
+
+```latex
+P_{L,\mathrm{bit}} = d p_{bit}
+```
+
+Valid when: d * p_bit << 1. Grows with d, so a bigger code can make things worse.
+
+- qubitlab_hand_calcs, docs/hand_calcs/repetition_code.py (derived). Step 2: a flip on any data qubit is a logical flip.
+
 ## Rabi oscillation: population of |1> under a constant drive
 
 `qubit.rabi_population`
@@ -245,6 +306,19 @@ Valid when: Two levels, Markovian noise. Sets the error per idle gate.
 
 - [nielsen2002](https://doi.org/10.1016/S0375-9601(02)01272-0), Eq. (3) (peer_reviewed). F_avg = (d F_e + 1)/(d + 1).
 - qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 6: entanglement fidelity of the T1/T2 channel, d = 2.
+
+## Chance of a flip after time t, from the decay time of the flipped observable
+
+`qubit.flip_probability`
+
+```latex
+p(t) = \frac{1}{2} - \frac{e^{- \frac{t}{T}}}{2}
+```
+
+Valid when: Exponential (Markovian) decay. Bit-flip counts X and Y errors, phase-flip Z and Y.
+
+- qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 7: Pauli twirl. Bit-flip: T = T1 (transmon) or T_X (cat). Phase-flip: T = T2 or T_Z.
+- [reglade2024](https://doi.org/10.1038/s41586-024-07294-3), Fig. 3 caption (peer_reviewed). T_X and T_Z are exponential decay times of <Z_alpha> and <X_alpha>.
 
 ## Josephson plasma energy
 
