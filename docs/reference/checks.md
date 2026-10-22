@@ -34,6 +34,21 @@ Expected is the verdict predicted from the formula's validity range before runni
 | `cat.bit_flip_dephasing.1` | \|α\|² = 1, κ_φ/κ₂ = 0.01, κ₁ = 0 | 0.0013786 | 0.00139016 | 0.0084 | 0.1 | AGREE | AGREE |
 | `cat.bit_flip_dephasing.2` | \|α\|² = 2, κ_φ/κ₂ = 0.01, κ₁ = 0 | 0.000366436 | 0.000376462 | 0.027 | 0.1 | AGREE | AGREE |
 | `cat.bit_flip_dephasing.4` | \|α\|² = 4, κ_φ/κ₂ = 0.01, κ₁ = 0 | 1.34185e-05 | 1.43594e-05 | 0.07 | 0.1 | AGREE | AGREE |
+| `qubit.rabi_population.0.01.0.-0.3` | Ω = 10 MHz, Δ = 0 MHz, α = -300 MHz | 1 | 0.999168 | 0.00083 | 0.01 | AGREE | AGREE |
+| `qubit.rabi_population.0.01.0.01.-0.3` | Ω = 10 MHz, Δ = 10 MHz, α = -300 MHz | 0.5 | 0.490927 | 0.018 | 0.01 | DIVERGE | DIVERGE |
+| `qubit.rabi_population.0.01.0.01.-3` | Ω = 10 MHz, Δ = 10 MHz, α = -3000 MHz | 0.5 | 0.49916 | 0.0017 | 0.01 | AGREE | AGREE |
+| `qubit.rabi_population.0.1.0.-0.2` | Ω = 100 MHz, Δ = 0 MHz, α = -200 MHz | 1 | 0.850946 | 0.15 | 0.01 | DIVERGE | DIVERGE |
+| `qubit.t1_decay.200` | T1 = 100 ns, T2 = 200 ns, read at t = T1 | 0.367879 | 0.36788 | 4.9e-07 | 0.01 | AGREE | AGREE |
+| `qubit.t1_decay.50` | T1 = 100 ns, T2 = 50 ns, read at t = T1 | 0.367879 | 0.36788 | 4.9e-07 | 0.01 | AGREE | AGREE |
+| `qubit.t2.200` | T1 = 100 ns, T_φ = inf ns | 200 | 200 | 5e-09 | 0.01 | AGREE | AGREE |
+| `qubit.t2.100` | T1 = 100 ns, T_φ = 200 ns | 100 | 100 | 2.6e-07 | 0.01 | AGREE | AGREE |
+| `qubit.t2.30` | T1 = 100 ns, T_φ = 35.2941 ns | 30 | 30.0001 | 1.9e-06 | 0.01 | AGREE | AGREE |
+| `qubit.ramsey.0.0.01` | σ = 0 MHz, Δ = 10 MHz, t = 130 ns | -0.305026 | -0.305033 | 2.5e-05 | 0.02 | AGREE | AGREE |
+| `qubit.ramsey.0.002.0` | σ = 2 MHz, Δ = 0 MHz, t = 150 ns | 0.166705 | 0.166705 | 2.1e-06 | 0.02 | AGREE | AGREE |
+| `qubit.ramsey.0.002.0.01` | σ = 2 MHz, Δ = 10 MHz, t = 120 ns | 0.0979462 | 0.0979435 | 2.7e-05 | 0.02 | AGREE | AGREE |
+| `qubit.echo.0.005` | σ = 5 MHz (Ramsey would be gone by 32 ns) | 0.513417 | 0.513415 | 4.3e-06 | 0.01 | AGREE | AGREE |
+| `qubit.idle_fidelity.150.20` | T1 = 100 ns, T2 = 150 ns, t = 20 ns | 0.92818 | 0.92818 | 4.3e-11 | 0.001 | AGREE | AGREE |
+| `qubit.idle_fidelity.50.100` | T1 = 100 ns, T2 = 50 ns, t = 100 ns | 0.606425 | 0.606425 | 4.2e-07 | 0.001 | AGREE | AGREE |
 | `transmon.qubit_frequency.100` | E_J/E_C = 100 | 27.2843 | 27.2451 | 0.0014 | 0.01 | AGREE | AGREE |
 | `transmon.qubit_frequency.50` | E_J/E_C = 50 | 19 | 18.9419 | 0.0031 | 0.01 | AGREE | AGREE |
 | `transmon.qubit_frequency.20` | E_J/E_C = 20 | 11.6491 | 11.5461 | 0.0088 | 0.01 | AGREE | AGREE |

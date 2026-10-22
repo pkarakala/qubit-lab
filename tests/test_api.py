@@ -32,3 +32,16 @@ def test_transmon_bands() -> None:
 
 def test_bad_input_is_rejected() -> None:
     assert client.post("/api/cat/evolve", json={"alpha_sq": -1}).status_code == 422
+
+
+def test_qubit_t1_run_has_theory_curve() -> None:
+    body = {"experiment": "t1", "t1_ns": 100.0, "t2_ns": 150.0, "t_max_ns": 100.0, "n_points": 11}
+    data = client.post("/api/qubit/run", json=body).json()
+    assert set(data) == {"sim", "theory"}
+    assert data["sim"]["populations"][-1][1] == pytest.approx(0.3679, abs=1e-3)
+    assert data["theory"]["curve"][-1] == pytest.approx(0.3679, abs=1e-3)
+
+
+def test_qubit_rejects_t2_above_twice_t1() -> None:
+    body = {"experiment": "t1", "t1_ns": 10.0, "t2_ns": 30.0}
+    assert client.post("/api/qubit/run", json=body).status_code == 422

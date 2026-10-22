@@ -78,6 +78,34 @@ export interface Surface {
   sim: { ratios: number[]; n_g: number[]; energies_over_e01: number[][][]; ripple_over_ec: number[][][] }
 }
 
+export type Experiment = 'rabi' | 'pulse' | 't1' | 'ramsey' | 'echo'
+
+export interface QubitParams {
+  experiment: Experiment
+  alpha_ghz: number
+  t1_ns: number
+  t2_ns: number
+  sigma_ghz: number
+  delta_ghz: number
+  omega_ghz: number
+  duration_ns: number
+  drag: number
+  t_max_ns: number
+  n_points: number
+}
+
+export interface QubitRun {
+  sim: {
+    times: number[]
+    bloch: number[][] // [time][x, y, z], z = P0 - P1
+    populations: number[][] // [time][level]
+    leakage: number[]
+    omega_x: number[]
+    omega_y: number[]
+  }
+  theory: { curve: number[] | null; curve_label: string; idle_fidelity_at_end: number }
+}
+
 export interface CheckRow {
   key: string
   formula: string
@@ -149,3 +177,11 @@ export const useBands = (E_J: number, E_C: number) =>
 
 export const useSurface = () =>
   useQuery({ queryKey: ['surface'], queryFn: () => get<Surface>('/api/transmon/surface?n_levels=3'), ...forever })
+
+export const useQubit = (p: QubitParams) =>
+  useQuery({
+    queryKey: ['qubit', p],
+    queryFn: () => post<QubitRun>('/api/qubit/run', p),
+    placeholderData: keepPreviousData,
+    ...forever,
+  })

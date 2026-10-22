@@ -6,6 +6,7 @@ import { Html, OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { useMemo } from 'react'
 import * as THREE from 'three'
+import { HtmlWarmup } from './HtmlWarmup'
 
 const SPAN_X = 6 // n_g from -1 to 1
 const SPAN_Z = 7 // log10(E_J/E_C) from 0 to 2
@@ -75,6 +76,7 @@ export function BandScene({
   const zMark = SPAN_Z / 2 - (Math.log10(ratio) / 2) * SPAN_Z
   return (
     <Canvas camera={{ position: [2.5, 7.5, 11], fov: 34 }} dpr={[1, 2]} gl={{ preserveDrawingBuffer: true }} data-testid="band-canvas">
+      <HtmlWarmup />
       <color attach="background" args={[theme === 'dark' ? '#121214' : '#f6f5f2']} />
       <ambientLight intensity={0.8} />
       <directionalLight position={[5, 9, 6]} intensity={1.4} />

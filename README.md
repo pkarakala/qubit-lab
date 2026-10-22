@@ -9,12 +9,14 @@ A learning project. Alice & Bob build cat qubits; Qolab builds transmon-family q
 | | |
 | --- | --- |
 | ![Flip rates](docs/img/flip_rates.png) | ![Transmon](docs/img/transmon.png) |
+| ![Qubit control: a DRAG pulse on the Bloch sphere](docs/img/qubit_control.png) | ![Checks](docs/img/checks.png) |
 
 ## Findings
 
 1. In the ideal two-photon model, each added photon cuts the bit-flip rate by e² ≈ 7.4 once |α|² ≳ 5. The 2020 experiment by Lescanne et al. measured 4.2.
 2. The phase-flip rate κ₁|α|² matches simulation to 0.2% for |α|² ≥ 2, and is off by 86% at |α|² = 0.3, where there is no cat to speak of.
 3. Koch et al.'s transmon frequency holds to 1% for E_J/E_C ≥ 20, but the true anharmonicity is 10 to 15% larger than E_C at E_J/E_C = 50 to 100.
+4. On a 4-level transmon, a 6 ns π pulse leaks 24% of the population to level 2. DRAG cuts that to 0.4%, but the pulse still misses |1⟩ by 13%, because level 2 also shifts the qubit frequency. The same shift makes the two-level Rabi formula miss by 1.8% for a detuned drive.
 
 ## Run
 
@@ -30,12 +32,12 @@ uv run qubitlab checks       # every formula vs the simulation, in the terminal
 Three layers, kept apart by a test:
 
 - **Theory** (`src/qubitlab/theory/`): each equation is a SymPy expression with its paper and equation number, compiled to JAX.
-- **Simulation** (`src/qubitlab/sim/`): Dynamiqs for the cat's Lindblad equation, JAX for the transmon's spectrum.
+- **Simulation** (`src/qubitlab/sim/`): Dynamiqs for the cat's and the driven transmon's Lindblad equations, JAX for the transmon's spectrum. scqubits cross-checks the spectrum.
 - **Checks** (`src/qubitlab/checks/`): theory vs simulation, with the verdict predicted before running.
 
 ## Learn
 
-Start with [docs/learn/](docs/learn/): five one-screen pages. Every equation is listed with its source in [docs/reference/formulas.md](docs/reference/formulas.md), and every comparison in [docs/reference/checks.md](docs/reference/checks.md).
+Start with [docs/learn/](docs/learn/): six one-screen pages. Every equation is listed with its source in [docs/reference/formulas.md](docs/reference/formulas.md), and every comparison in [docs/reference/checks.md](docs/reference/checks.md).
 
 ## Limits
 

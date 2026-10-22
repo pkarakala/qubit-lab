@@ -68,7 +68,7 @@ def check(key: str, slow: bool = False) -> Callable[[Callable[[], list[CheckResu
 
 def run_all(include_slow: bool = True) -> list[CheckResult]:
     # Import for side effects: each module registers its checks.
-    from qubitlab.checks import cat_checks, transmon_checks  # noqa: F401
+    from qubitlab.checks import cat_checks, qubit_checks, transmon_checks  # noqa: F401
 
     out: list[CheckResult] = []
     for c in REGISTRY:
