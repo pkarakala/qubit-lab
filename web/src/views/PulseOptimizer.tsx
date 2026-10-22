@@ -5,7 +5,7 @@
 import { useEffect, useState } from 'react'
 import { type PulseParams, type PulseScore, usePulse } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { BlochScene } from '../three/BlochSphere'
@@ -100,6 +100,7 @@ export function PulseOptimizer() {
         <button className="btn" onClick={() => setReq(knobs)} disabled={!stale && !run.isFetching} data-testid="pulse-run">
           {run.isFetching ? 'Optimizing…' : stale ? 'Optimize' : 'Up to date'}
         </button>
+        <CopyPython view='pulse' inputs={req} />
       </aside>
 
       <main className="pane pane-center">

@@ -2,9 +2,9 @@
 
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
-import { useMemo } from 'react'
-import type { BibEntry, Formula } from '../api'
-import { useFormulas, useReferences } from '../api'
+import { useMemo, useState } from 'react'
+import type { BibEntry, Formula, ScriptView } from '../api'
+import { pythonScript, useFormulas, useReferences } from '../api'
 import { fmt } from '../lib/colormap'
 
 export function Tex({ src, block = false }: { src: string; block?: boolean }) {
@@ -168,6 +168,36 @@ export function ErrorBanner({ error }: { error: unknown }) {
   return (
     <div className="error-banner" role="alert">
       The engine rejected the input or is unreachable: {error instanceof Error ? error.message : String(error)}
+    </div>
+  )
+}
+
+/** "Copy as Python": fetch the script for this view at its current inputs, copy it, and show it. */
+export function CopyPython({ view, inputs }: { view: ScriptView; inputs: unknown }) {
+  const [code, setCode] = useState<string | null>(null)
+  const [state, setState] = useState<'idle' | 'copied' | 'error'>('idle')
+  const copy = async () => {
+    try {
+      const { python } = await pythonScript(view, inputs)
+      setCode(python)
+      await navigator.clipboard?.writeText(python)
+      setState('copied')
+    } catch {
+      setState('error')
+    }
+    window.setTimeout(() => setState('idle'), 1500)
+  }
+  return (
+    <div className="copy-python">
+      <h3>Take it with you</h3>
+      <button className="btn" onClick={() => void copy()} data-testid="copy-python">
+        {state === 'copied' ? 'Copied' : state === 'error' ? 'Could not copy' : 'Copy as Python'}
+      </button>
+      {code ? (
+        <pre className="code" data-testid="python-code">
+          {code}
+        </pre>
+      ) : null}
     </div>
   )
 }

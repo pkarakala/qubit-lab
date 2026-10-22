@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 import { type CatParams, useFacts, useRates, useReferences } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { ErrorBanner, FormulaCard, Slider, shortCite } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, Slider, shortCite } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { useShared } from '../lib/share'
@@ -74,6 +74,7 @@ export function FlipRates() {
             ))}
           </tbody>
         </table>
+        <CopyPython view='rates' inputs={{ ...params, alpha_sq_values: SIZES }} />
       </aside>
 
       <main className="pane pane-center">

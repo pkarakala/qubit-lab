@@ -106,3 +106,21 @@ test('checks page reports no surprises', async ({ page }) => {
   await expect(page.locator('.lede')).toContainText('0 surprises', { timeout: 600_000 })
   await page.screenshot({ path: `${IMG}/checks.png` })
 })
+
+test('every view copies a Python script', async ({ page }) => {
+  await page.goto('/')
+  const views: [string, string][] = [
+    ['Phase space', 'cat.evolve('],
+    ['Flip rates', 'cat.sweep_rates('],
+    ['Transmon', 'transmon.levels('],
+    ['Qubit control', 'qb.run('],
+    ['Pulse optimizer', 'po.optimize('],
+    ['Error correction', 'qec.memory('],
+    ['Cat vs transmon', 'theory.flip_probability('],
+  ]
+  for (const [tab, call] of views) {
+    await page.getByRole('tab', { name: tab, exact: true }).click()
+    await page.getByTestId('copy-python').click()
+    await expect(page.getByTestId('python-code')).toContainText(call)
+  }
+})
