@@ -45,3 +45,11 @@ def test_qubit_t1_run_has_theory_curve() -> None:
 def test_qubit_rejects_t2_above_twice_t1() -> None:
     body = {"experiment": "t1", "t1_ns": 10.0, "t2_ns": 30.0}
     assert client.post("/api/qubit/run", json=body).status_code == 422
+
+
+def test_cat_repetition_code_has_an_optimal_size() -> None:
+    body = {"p_phase": 0.01, "p_bit": 1e-4, "shots": 20000}
+    rows = client.post("/api/qec/cat", json=body).json()["rows"]
+    assert [r["qubits"] for r in rows[:3]] == [1, 5, 9]
+    floors = [r["theory"]["bit_flip_floor"] for r in rows]
+    assert floors == sorted(floors)  # the uncorrected part only grows with d

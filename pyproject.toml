@@ -13,7 +13,9 @@ dependencies = [
     "fastapi>=0.160.0",
     "numpy>=2.5.4",
     "pydantic>=2.14.1",
+    "pymatching>=2.4.0",
     "scqubits>=4.1.0",
+    "stim>=1.16.0",
     "sympy>=1.14.0",
     "uvicorn>=0.54.0",
 ]
@@ -53,3 +55,9 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 addopts = "-p no:cacheprovider"
 markers = ["slow: Liouvillian spectra and long solves"]
+
+[[tool.mypy.overrides]]
+# No type stubs: Stim and PyMatching are compiled extensions.
+module = ["stim", "pymatching"]
+follow_imports = "skip"
+ignore_missing_imports = true
