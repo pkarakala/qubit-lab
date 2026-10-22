@@ -69,11 +69,17 @@ def memory(code: Code, distance: int, p: float, shots: int = 100_000, seed: int 
     return Memory(code, distance, p, distance, shots, int(wrong.sum()))
 
 
-def slope(code: Code, distance: int, p_lo: float, p_hi: float, shots: int) -> float:
-    """Slope of log P_L against log p between two noise strengths."""
+def slope(
+    code: Code, distance: int, p_lo: float, p_hi: float, shots: int, min_failures: int = 100
+) -> float:
+    """Slope of log P_L against log p between two noise strengths.
+
+    Each P_L carries a relative sampling error of about 1/sqrt(failures), so with fewer than
+    `min_failures` the slope is mostly noise; that raises instead of returning a number.
+    """
     lo, hi = memory(code, distance, p_lo, shots), memory(code, distance, p_hi, shots)
-    if lo.failures == 0 or hi.failures == 0:
-        raise ValueError("no failures sampled; raise shots or p")
+    if min(lo.failures, hi.failures) < min_failures:
+        raise ValueError(f"under {min_failures} failures sampled; raise shots or p")
     return float(np.log(hi.per_round / lo.per_round) / np.log(p_hi / p_lo))
 
 

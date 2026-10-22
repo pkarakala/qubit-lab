@@ -41,7 +41,7 @@ Expected is the verdict predicted from the formula's validity range before runni
 | `qec.error_exponent.surface.3.0.0008` | surface code, d = 3, p = 0.0008 to 0.002 | 2 | 2.02378 | 0.012 | 0.12 | AGREE | AGREE |
 | `qec.error_exponent.surface.5.0.0015` | surface code, d = 5, p = 0.0015 to 0.003 | 3 | 2.93594 | 0.021 | 0.12 | AGREE | AGREE |
 | `qec.error_exponent.repetition.3.0.002` | repetition code, d = 3, p = 0.002 to 0.006 | 2 | 2.01925 | 0.0096 | 0.12 | AGREE | AGREE |
-| `qec.error_exponent.repetition.5.0.003` | repetition code, d = 5, p = 0.003 to 0.008 | 3 | 3.00563 | 0.0019 | 0.12 | AGREE | AGREE |
+| `qec.error_exponent.repetition.5.0.003` | repetition code, d = 5, p = 0.003 to 0.008 | 3 | 2.96457 | 0.012 | 0.12 | AGREE | AGREE |
 | `qec.error_exponent.surface.5.0.008` | surface code, d = 5, p = 0.008 to 0.012 | 3 | 2.37761 | 0.21 | 0.12 | DIVERGE | DIVERGE |
 | `qec.qubit_count.repetition.3` | repetition code, d = 3 | 5 | 5 | 0 | 0.01 | AGREE | AGREE |
 | `qec.qubit_count.repetition.7` | repetition code, d = 7 | 13 | 13 | 0 | 0.01 | AGREE | AGREE |
