@@ -59,7 +59,7 @@ export interface Evolution {
 
 export interface RateRow {
   alpha_sq: number
-  sim: { bit_flip_rate: number | null; phase_flip_rate: number; n_fock: number }
+  sim: { bit_flip_rate: number | null; phase_flip_rate: number | null; n_fock: number }
   theory: { phase_flip_rate: number | null; bit_flip_rate_dephasing: number | null }
 }
 
@@ -202,6 +202,56 @@ export const useQubit = (p: QubitParams) =>
     ...forever,
   })
 
+export interface QecCurve {
+  code: 'surface' | 'repetition'
+  d: number
+  qubits: number
+  per_round: (number | null)[]
+  failures: number[]
+}
+
+export interface QecCurves {
+  p: number[]
+  shots: number
+  sim: { curves: QecCurve[] }
+  theory: { fowler_surface: Record<string, number[]>; fowler_p_th: number; surface_qubits: Record<string, number> }
+}
+
+export interface CatCodeRow {
+  d: number
+  qubits: number
+  sim: { phase_flip_logical: number | null; failures: number | null }
+  theory: { bit_flip_floor: number }
+}
+
+export interface QecShot {
+  sim: {
+    qubits: [number, number, boolean][]
+    detectors: [number, number, number][]
+    fired: number[]
+    matched: [number, number][]
+    logical_error: boolean
+  }
+}
+
+export const useQecCurves = () => useQuery({ queryKey: ['qec-curves'], queryFn: () => get<QecCurves>('/api/qec/curves'), ...forever })
+
+export const useCatCode = (p_phase: number, p_bit: number) =>
+  useQuery({
+    queryKey: ['qec-cat', p_phase, p_bit],
+    queryFn: () => post<{ rows: CatCodeRow[]; shots: number }>('/api/qec/cat', { p_phase, p_bit }),
+    placeholderData: keepPreviousData,
+    ...forever,
+  })
+
+export const useQecShot = (d: number, p: number, seed: number) =>
+  useQuery({
+    queryKey: ['qec-shot', d, p, seed],
+    queryFn: () => get<QecShot>(`/api/qec/shot?d=${d}&p=${p}&seed=${seed}`),
+    placeholderData: keepPreviousData,
+    ...forever,
+  })
+
 export const useCompare = (t_ns: number) =>
   useQuery({
     queryKey: ['compare', t_ns],
@@ -235,5 +285,36 @@ export const usePlayground = (spec: PlaygroundSpec | null) =>
     enabled: spec !== null,
     placeholderData: keepPreviousData,
     retry: false,
+  })
+
+export interface PulseParams {
+  alpha_ghz: number
+  duration_ns: number
+  omega_max_ghz: number
+  t1_ns: number
+  t2_ns: number
+  steps: number
+}
+
+export interface PulseScore {
+  omega_x: number[]
+  omega_y: number[]
+  error: number
+  leakage: number
+  error_with_noise: number
+  times: number[]
+  bloch: number[][]
+  populations: number[][]
+}
+
+export interface PulseRun {
+  sim: { edges: number[]; drag: PulseScore; optimized: PulseScore & { history: number[] } }
+}
+
+export const usePulse = (p: PulseParams) =>
+  useQuery({
+    queryKey: ['pulse', p],
+    queryFn: () => post<PulseRun>('/api/pulse/optimize', p),
+    placeholderData: keepPreviousData,
     ...forever,
   })

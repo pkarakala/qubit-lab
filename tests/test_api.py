@@ -47,6 +47,19 @@ def test_qubit_rejects_t2_above_twice_t1() -> None:
     assert client.post("/api/qubit/run", json=body).status_code == 422
 
 
+def test_flip_rates_only_for_two_photon_dissipation() -> None:
+    # The Liouvillian block method mislabels modes for a Kerr cat or no stabilization.
+    assert client.post("/api/cat/rates", json={"scheme": "kerr"}).status_code == 422
+
+
+def test_cat_repetition_code_has_an_optimal_size() -> None:
+    body = {"p_phase": 0.01, "p_bit": 1e-4, "shots": 20000}
+    rows = client.post("/api/qec/cat", json=body).json()["rows"]
+    assert [r["qubits"] for r in rows[:3]] == [1, 5, 9]
+    floors = [r["theory"]["bit_flip_floor"] for r in rows]
+    assert floors == sorted(floors)  # the uncorrected part only grows with d
+
+
 def test_compare_cat_is_biased_and_transmon_is_not() -> None:
     data = client.get("/api/compare", params={"t_ns": 25.0}).json()
     by = {d["key"]: d for d in data["devices"]}
@@ -63,3 +76,13 @@ def test_compare_cat_is_biased_and_transmon_is_not() -> None:
 
 def test_compare_rejects_long_idle() -> None:
     assert client.get("/api/compare", params={"t_ns": 1e6}).status_code == 422
+
+
+def test_pulse_optimizer_beats_drag() -> None:
+    body = {"duration_ns": 6.0, "steps": 200}
+    sim = client.post("/api/pulse/optimize", json=body).json()["sim"]
+    assert sim["optimized"]["error"] < sim["drag"]["error"] / 100
+    assert len(sim["optimized"]["omega_x"]) == 24
+    # Idling for 6 ns with T1 = T2 = 50 us costs t/(3 T2) + t/(6 T1) = 6e-5. The pulse costs a
+    # little more: it briefly fills level 2, which decays and dephases faster.
+    assert 6e-5 < sim["optimized"]["error_with_noise"] < 1e-4

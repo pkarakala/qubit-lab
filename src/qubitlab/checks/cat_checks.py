@@ -112,6 +112,28 @@ def parity_decay() -> list[CheckResult]:
     return out
 
 
+@check("cat.parity_decay_exact", slow=True)
+def parity_decay_exact() -> list[CheckResult]:
+    # The coth form keeps the small-cat physics the large-cat law drops. It still assumes the
+    # state never leaves the two-cat space, so strong loss (kappa_1 ~ kappa_2) should break it.
+    regimes = ((0.3, 0.01, A), (1.0, 0.01, A), (4.0, 0.01, A), (1.0, 0.5, D))
+    out = []
+    for alpha_sq, k1, expected in regimes:
+        rates = sim.liouvillian_rates(sim.CatParams(alpha_sq=alpha_sq, kappa_1=k1))
+        out.append(
+            CheckResult(
+                key=f"cat.parity_decay_exact.{alpha_sq:g}.{k1:g}",
+                formula=th.parity_decay_rate_exact.key,
+                regime=f"|α|² = {alpha_sq:g}, κ₁/κ₂ = {k1:g}",
+                theory=float(th.parity_decay_rate_exact(kappa_1=k1, alpha=math.sqrt(alpha_sq))),
+                sim=rates.x_decay,
+                rel_tol=0.01,
+                expected=expected,
+            )
+        )
+    return out
+
+
 @check("cat.bit_flip_suppression", slow=True)
 def bit_flip_suppression() -> list[CheckResult]:
     # The e^{-2} per photon law is asymptotic: holds for big cats, not small ones.

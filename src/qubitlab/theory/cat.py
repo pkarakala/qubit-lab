@@ -209,6 +209,29 @@ kerr_cat_amplitude = Formula(
     valid_when="H = -K a+^2 a^2 + epsilon_2 (a+^2 + a^2); |+-alpha> are degenerate eigenstates.",
 )
 
+parity_decay_rate_exact = Formula(
+    key="cat.parity_decay_rate_exact",
+    title="Parity decay, any cat size",
+    lhs=r"\Gamma_{P}",
+    expr=sp.Mul(
+        2,
+        kappa_1,
+        alpha**2,
+        sp.coth(sp.Mul(2, alpha**2, evaluate=False), evaluate=False),
+        evaluate=False,
+    ),
+    args=(kappa_1, alpha),
+    sources=(
+        Source(
+            "qubitlab_hand_calcs",
+            Kind.DERIVED,
+            "docs/hand_calcs/cat_parity_decay.py",
+            "Two-state jump picture: |C+> -> |C-> at kappa_1 n_+, back at kappa_1 n_-.",
+        ),
+    ),
+    valid_when="Two-photon dissipation dominates, so the state stays in the two-cat space.",
+)
+
 ALL = (
     coherent_overlap,
     wigner_coherent,
@@ -218,6 +241,7 @@ ALL = (
     odd_cat_photon_number,
     stabilized_photon_number,
     parity_decay_rate,
+    parity_decay_rate_exact,
     phase_flip_rate,
     bit_flip_suppression,
     bit_flip_rate_dephasing,

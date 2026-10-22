@@ -10,8 +10,8 @@ where D is the Lindblad dissipator and κ₂ the two-photon rate. In hardware κ
 
 **What it does.** Start from vacuum. The state grows into an even cat, because vacuum is even and pair loss keeps parity. Start from a coherent state at +α and it stays there.
 
-**With ordinary loss.** Add single-photon loss κ₁. The cat shrinks slightly to |α∞|² = |α|² − κ₁/(2κ₂). Our simulation agrees to 0.1% when κ₁ ≪ κ₂|α|² and misses by 12% when |α|² = 1 and κ₁ = κ₂/2, as predicted.
+**With ordinary loss.** Add single-photon loss κ₁. The cat shrinks slightly to |α∞|² = |α|² − κ₁/(2κ₂). Our simulation agrees to within 1% when κ₁ ≪ κ₂|α|² and misses by 12% when |α|² = 1 and κ₁ = κ₂/2, as predicted.
 
-**Kerr cat, the alternative.** A Hamiltonian, H = −K a†²a² + ε₂(a†² + a²), holds the same two states as degenerate ground states with |α|² = ε₂/K. The explorer has a toggle.
+**Kerr cat, the alternative.** A Hamiltonian, H = −K a†²a² + ε₂(a†² + a²), holds the same two states as degenerate eigenstates with |α|² = ε₂/K. With this sign of H they sit at the top of the spectrum; papers often flip the sign and call them ground states. The Phase space view has a Kerr toggle.
 
 Sources: lescanne2020 (Eq. 1), mirrahimi2014 (Eq. 1), grimm2020 (Eq. 1), hand calcs in `docs/hand_calcs/`.

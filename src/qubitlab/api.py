@@ -16,10 +16,13 @@ from qubitlab.facts import DEVICES, FACT, FACTS
 from qubitlab.provenance import bib_entries
 from qubitlab.sim import cat as cat_sim
 from qubitlab.sim import custom as custom_sim
+from qubitlab.sim import pulse_optimizer as po_sim
+from qubitlab.sim import qec as qec_sim
 from qubitlab.sim import transmon as tr_sim
 from qubitlab.sim import transmon_dynamics as qb_sim
 from qubitlab.theory import FORMULAS
 from qubitlab.theory import cat as cat_th
+from qubitlab.theory import qec as qec_th
 from qubitlab.theory import qubit as qb_th
 from qubitlab.theory import transmon as tr_th
 
@@ -57,6 +60,10 @@ class EvolveRequest(CatRequest):
 
 
 class RatesRequest(CatRequest):
+    # The Liouvillian block method reads the flip rates off the slowest modes. That is only
+    # right when the two cats are the slowest manifold, i.e. under two-photon dissipation. With
+    # a Kerr cat or no stabilization, faster-looking intra-well modes would be mislabeled.
+    scheme: Literal["dissipative"] = "dissipative"
     alpha_sq_values: list[float] = Field(
         default_factory=lambda: [0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0],
         max_length=20,
@@ -133,7 +140,7 @@ def _rates(body: dict[str, Any]) -> dict[str, Any]:
                 "alpha_sq": n,
                 "sim": {
                     "bit_flip_rate": r.bit_flip_rate if r.z_decay_resolved else None,
-                    "phase_flip_rate": r.phase_flip_rate,
+                    "phase_flip_rate": r.phase_flip_rate if r.x_decay_resolved else None,
                     "n_fock": r.n_fock,
                 },
                 "theory": theory,
@@ -336,6 +343,171 @@ def qubit_run(req: QubitRequest) -> dict[str, Any]:
         return _qubit(req.model_dump())
     except ValueError as e:
         raise HTTPException(422, str(e)) from e
+
+
+class PulseRequest(BaseModel):
+    alpha_ghz: float = Field(-0.2, ge=-1.0, le=-0.05, description="anharmonicity")
+    duration_ns: float = Field(6.0, ge=2.0, le=40.0, description="X gate length")
+    omega_max_ghz: float = Field(0.3, ge=0.05, le=1.0, description="largest drive allowed")
+    t1_ns: float = Field(50_000.0, ge=1.0, le=1e6)
+    t2_ns: float = Field(50_000.0, ge=1.0, le=2e6)
+    steps: int = Field(300, ge=10, le=1000)
+
+
+@disk_cached
+def _pulse(body: dict[str, Any]) -> dict[str, Any]:
+    req = PulseRequest(**body)
+    if req.t2_ns > 2 * req.t1_ns:
+        raise ValueError("T2 cannot exceed 2 T1")
+    q = qb_sim.TransmonQubit(alpha_ghz=req.alpha_ghz, t1_ns=req.t1_ns, t2_ns=req.t2_ns)
+    slices = round(4 * req.duration_ns)  # 0.25 ns per slice, a 4 GS/s waveform generator
+    edges, dx, dy = po_sim.drag_slices(q, req.duration_ns, slices)
+    opt = po_sim.optimize(
+        q, req.duration_ns, slices=slices, omega_max_ghz=req.omega_max_ghz, steps=req.steps
+    )
+
+    def score(ox: Any, oy: Any, error: float, leakage: float) -> dict[str, Any]:
+        H = qb_sim.driven_h(q, 0.0, edges, ox, oy)
+        noisy = 1 - qb_sim.average_gate_fidelity(q, H, req.duration_ns, po_sim.X_GATE)
+        traj = qb_sim.run_pulse(q, edges, ox, oy)
+        return {
+            "omega_x": _round(ox),
+            "omega_y": _round(oy),
+            "error": error,
+            "leakage": leakage,
+            "error_with_noise": noisy,
+            "times": _round(traj.times_ns),
+            "bloch": _round(traj.bloch),
+            "populations": _round(traj.populations),
+        }
+
+    return {
+        "sim": {
+            "edges": _round(edges),
+            "drag": score(dx, dy, *po_sim.gate_error(q, edges, dx, dy)),
+            "optimized": {
+                **score(opt.omega_x, opt.omega_y, opt.error, opt.leakage),
+                "history": opt.history.tolist(),
+            },
+        }
+    }
+
+
+@app.post("/api/pulse/optimize")
+def pulse_optimize(req: PulseRequest) -> dict[str, Any]:
+    """An X gate on a 4-level transmon: the DRAG pulse vs a pulse found by gradient descent."""
+    try:
+        return _pulse(req.model_dump())
+    except ValueError as e:
+        raise HTTPException(422, str(e)) from e
+
+
+MIN_FAILURES = 10
+P_GRID = [0.001, 0.0015, 0.002, 0.003, 0.005, 0.007, 0.01, 0.015]
+
+
+@disk_cached
+def _qec_curves(shots: int) -> dict[str, Any]:
+    curves = []
+    for code in ("surface", "repetition"):
+        for d in (3, 5, 7):
+            runs = [qec_sim.memory(code, d, p, shots) for p in P_GRID]
+            curves.append(
+                {
+                    "code": code,
+                    "d": d,
+                    "qubits": qec_sim.physical_qubits(code, d),
+                    # Under 10 failures the estimate is mostly sampling noise: not reported.
+                    "per_round": [
+                        r.per_round if r.failures >= MIN_FAILURES else None for r in runs
+                    ],
+                    "failures": [r.failures for r in runs],
+                }
+            )
+    fowler = {
+        str(d): [
+            float(qec_th.surface_code_logical_error(p=p, p_th=0.0057, d=float(d))) for p in P_GRID
+        ]
+        for d in (3, 5, 7)
+    }
+    return {
+        "p": P_GRID,
+        "shots": shots,
+        "sim": {"curves": curves},
+        "theory": {
+            "fowler_surface": fowler,
+            "fowler_p_th": 0.0057,
+            "surface_qubits": {
+                str(d): float(qec_th.surface_code_qubits(d=float(d))) for d in (3, 5, 7)
+            },
+        },
+    }
+
+
+@app.get("/api/qec/curves")
+def qec_curves() -> dict[str, Any]:
+    """Logical error per round vs physical error, Stim + PyMatching, d = 3, 5, 7."""
+    return _qec_curves(100_000)
+
+
+class CatCodeRequest(BaseModel):
+    p_phase: float = Field(0.005, gt=0.0, le=0.05, description="cat phase-flip prob. per round")
+    p_bit: float = Field(1e-6, ge=0.0, le=0.01, description="cat bit-flip prob. per round")
+    shots: int = Field(50_000, ge=1000, le=500_000)
+
+
+@disk_cached
+def _cat_code(body: dict[str, Any]) -> dict[str, Any]:
+    req = CatCodeRequest(**body)
+    rows = []
+    for d in (1, 3, 5, 7, 9, 11, 13):
+        if d == 1:
+            corrected: float | None = req.p_phase
+            failures = None
+        else:
+            m = qec_sim.memory("repetition", d, req.p_phase, req.shots)
+            corrected = m.per_round if m.failures >= MIN_FAILURES else None
+            failures = m.failures
+        rows.append(
+            {
+                "d": d,
+                "qubits": 2 * d - 1 if d > 1 else 1,
+                "sim": {"phase_flip_logical": corrected, "failures": failures},
+                "theory": {
+                    "bit_flip_floor": float(
+                        qec_th.repetition_code_bit_flip_floor(d=float(d), p_bit=req.p_bit)
+                    )
+                },
+            }
+        )
+    return {"rows": rows, "shots": req.shots}
+
+
+@app.post("/api/qec/cat")
+def qec_cat(req: CatCodeRequest) -> dict[str, Any]:
+    """A repetition code of cats: corrected phase-flips (sim) plus uncorrected bit-flips (theory).
+
+    The repetition circuit applies p to every operation, so p_phase here plays the role of the
+    cat's phase-flip probability per round; bit-flips are added from the closed form.
+    """
+    return _cat_code(req.model_dump())
+
+
+@app.get("/api/qec/shot")
+def qec_shot(d: int = 5, p: float = 0.005, seed: int = 0) -> dict[str, Any]:
+    """One surface code run: detection events in space-time and the decoder's matching."""
+    if d not in (3, 5, 7) or not 0 < p <= 0.05:
+        raise HTTPException(422, "d must be 3, 5 or 7 and 0 < p <= 0.05")
+    s = qec_sim.sample_shot(d, p, seed)
+    return {
+        "sim": {
+            "qubits": s.qubits,
+            "detectors": s.detectors,
+            "fired": s.fired,
+            "matched": s.matched,
+            "logical_error": s.logical_error,
+        }
+    }
 
 
 @disk_cached

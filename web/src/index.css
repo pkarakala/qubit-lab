@@ -563,6 +563,8 @@ tr.is-surprise {
 .leak-bar { width: 140px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; margin: 4px 0; }
 .leak-bar > div { height: 100%; background: var(--sim); transition: width 60ms linear; }
 
+.tag-bad { color: var(--pos); font-weight: 600; }
+
 /* ---------- playground ---------- */
 
 .field {

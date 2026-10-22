@@ -3,9 +3,11 @@
 import { useEffect } from 'react'
 import { CatVsTransmon } from './views/CatVsTransmon'
 import { Checks } from './views/Checks'
+import { ErrorCorrection } from './views/ErrorCorrection'
 import { FlipRates } from './views/FlipRates'
 import { PhaseSpace } from './views/PhaseSpace'
 import { Playground } from './views/Playground'
+import { PulseOptimizer } from './views/PulseOptimizer'
 import { Qubit } from './views/Qubit'
 import { Transmon } from './views/Transmon'
 import { type View, useExplorer } from './store'
@@ -15,6 +17,8 @@ const VIEWS: { id: View; label: string; hint: string }[] = [
   { id: 'rates', label: 'Flip rates', hint: 'Bit-flips vs phase-flips' },
   { id: 'transmon', label: 'Transmon', hint: 'The other superconducting qubit' },
   { id: 'qubit', label: 'Qubit control', hint: 'Pulses and noise on a transmon' },
+  { id: 'pulse', label: 'Pulse optimizer', hint: 'Gradient descent through the simulation' },
+  { id: 'qec', label: 'Error correction', hint: 'Surface code vs a repetition code of cats' },
   { id: 'compare', label: 'Cat vs transmon', hint: 'Measured error rates and noise bias' },
   { id: 'playground', label: 'Playground', hint: 'Type your own Hamiltonian and losses' },
   { id: 'checks', label: 'Checks', hint: 'Theory vs simulation' },
@@ -81,6 +85,8 @@ export default function App() {
       {view === 'rates' ? <FlipRates /> : null}
       {view === 'transmon' ? <Transmon /> : null}
       {view === 'qubit' ? <Qubit /> : null}
+      {view === 'pulse' ? <PulseOptimizer /> : null}
+      {view === 'qec' ? <ErrorCorrection /> : null}
       {view === 'compare' ? <CatVsTransmon /> : null}
       {view === 'playground' ? <Playground /> : null}
       {view === 'checks' ? <Checks /> : null}
