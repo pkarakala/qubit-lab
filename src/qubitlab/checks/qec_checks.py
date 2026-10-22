@@ -17,22 +17,24 @@ SHOTS = 400_000
 @check("qec.error_exponent", slow=True)
 def error_exponent() -> list[CheckResult]:
     out = []
-    # (code, d, p_lo, p_hi, expected). Low-p windows are chosen so each point sees failures.
+    # (code, d, p_lo, p_hi, shots, expected). Shots give each point at least ~130 failures, so
+    # the sampled slope is good to about 4%, well inside the 12% tolerance. The d = 5
+    # repetition code fails so rarely at p = 0.003 that it needs 20 times more shots.
     regimes = (
-        ("surface", 3, 0.0008, 0.002, A),
-        ("surface", 5, 0.0015, 0.003, A),
-        ("repetition", 3, 0.002, 0.006, A),
-        ("repetition", 5, 0.003, 0.008, A),
-        ("surface", 5, 0.008, 0.012, D),
+        ("surface", 3, 0.0008, 0.002, SHOTS, A),
+        ("surface", 5, 0.0015, 0.003, SHOTS, A),
+        ("repetition", 3, 0.002, 0.006, SHOTS, A),
+        ("repetition", 5, 0.003, 0.008, 20 * SHOTS, A),
+        ("surface", 5, 0.008, 0.012, SHOTS, D),
     )
-    for code, d, lo, hi, expected in regimes:
+    for code, d, lo, hi, shots, expected in regimes:
         out.append(
             CheckResult(
                 key=f"qec.error_exponent.{code}.{d}.{lo:g}",
                 formula=th.error_exponent.key,
                 regime=f"{code} code, d = {d}, p = {lo:g} to {hi:g}",
                 theory=float(th.error_exponent(d=float(d))),
-                sim=sim.slope(code, d, lo, hi, SHOTS),  # type: ignore[arg-type]
+                sim=sim.slope(code, d, lo, hi, shots),  # type: ignore[arg-type]
                 rel_tol=0.12,
                 expected=expected,
             )
