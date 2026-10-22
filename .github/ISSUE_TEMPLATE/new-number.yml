@@ -1,0 +1,25 @@
+name: New measured number
+description: A hardware result (T1, T2, bit-flip time, gate fidelity) worth adding as a cited fact.
+labels: [facts]
+body:
+  - type: input
+    id: value
+    attributes:
+      label: Quantity and value, with units
+      placeholder: "T1 = 68 us, mean of 105 qubits"
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source and locator
+      description: DOI or arXiv link, plus the figure, table or section.
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of source
+      options: [peer reviewed, preprint, company claim]
+    validations:
+      required: true

@@ -25,12 +25,23 @@ A learning project. Alice & Bob build cat qubits; Qolab builds transmon-family q
 
 ## Run
 
+Once a release is on PyPI, one command, no Node needed:
+
+```bash
+pipx run qubitlab serve      # or: pip install qubitlab && qubitlab serve
+```
+
+It opens the explorer at http://127.0.0.1:8000. `qubitlab checks` prints every formula vs the simulation in the terminal.
+
+From a clone, to change the code:
+
 ```bash
 uv sync --all-groups
 cd web && npm install && cd ..
-./scripts/dev.sh           # API on :8000, explorer on :5173
-uv run qubitlab checks       # every formula vs the simulation, in the terminal
+./scripts/dev.sh           # API on :8000, explorer on :5173, both reload on save
 ```
+
+To try the packaged build from a clone: `cd web && npm run build:package`, then `uv run qubitlab serve`.
 
 ## How it is built
 

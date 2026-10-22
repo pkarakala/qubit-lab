@@ -1,0 +1,19 @@
+name: Bug
+description: Something in the explorer, API or install does not work.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: A share link from the explorer is ideal.
+  - type: input
+    id: env
+    attributes:
+      label: OS, Python version, browser

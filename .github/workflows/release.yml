@@ -1,0 +1,60 @@
+name: release
+
+# Push a tag like v0.2.0 (matching the version in pyproject.toml) to publish.
+# One-time setup on pypi.org: add a trusted publisher for this repo, workflow release.yml,
+# environment pypi. No API token is stored here.
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - uses: astral-sh/setup-uv@v6
+      - name: Tag matches the package version
+        run: test "v$(uv version --short)" = "$GITHUB_REF_NAME"
+      - name: Build the explorer into the package
+        working-directory: web
+        run: npm ci --legacy-peer-deps && npm run build:package
+      - run: uv build
+      - name: Smoke test the wheel
+        run: ./scripts/smoke_wheel.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  pypi:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-release:
+    needs: pypi
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - run: gh release create "$GITHUB_REF_NAME" dist/* --repo "$GITHUB_REPOSITORY" --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
