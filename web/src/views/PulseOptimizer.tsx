@@ -9,6 +9,7 @@ import { ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { BlochScene } from '../three/BlochSphere'
+import { useShared } from '../lib/share'
 
 type Which = 'drag' | 'optimized'
 
@@ -29,8 +30,8 @@ const steps = (edges: number[], v: number[]) => ({
 
 export function PulseOptimizer() {
   const theme = useExplorer((s) => s.theme)
-  const [knobs, setKnobs] = useState<PulseParams>(START)
-  const [req, setReq] = useState<PulseParams>(START)
+  const [req, setReq] = useShared<PulseParams>('pulse', START)
+  const [knobs, setKnobs] = useState<PulseParams>(req)
   const [which, setWhich] = useState<Which>('optimized')
   const run = usePulse(req)
   const d = run.data?.sim

@@ -1,6 +1,7 @@
 // Explorer state: which view, the knobs, and the playhead. Physics lives in the API.
 
 import { create } from 'zustand'
+import { fromLink, toLink } from './lib/share'
 import type { EvolveParams, QubitParams } from './api'
 
 export type View = 'phase' | 'rates' | 'transmon' | 'qubit' | 'pulse' | 'qec' | 'compare' | 'playground' | 'checks'
@@ -127,13 +128,13 @@ interface ExplorerState {
 const prefersDark = typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches
 
 export const useExplorer = create<ExplorerState>((set) => ({
-  view: 'phase',
+  view: fromLink<View>('view', 'phase'),
   theme: prefersDark ? 'dark' : 'light',
-  params: base,
+  params: fromLink('params', base),
   frame: 0,
   playing: false,
   showTheory: false,
-  ratio: 50,
+  ratio: fromLink('ratio', 50),
   E_C: 0.3,
   setView: (view) => set({ view }),
   toggleTheme: () => set((s) => ({ theme: s.theme === 'light' ? 'dark' : 'light' })),
@@ -142,6 +143,13 @@ export const useExplorer = create<ExplorerState>((set) => ({
   setPlaying: (playing) => set({ playing }),
   toggleTheory: () => set((s) => ({ showTheory: !s.showTheory })),
   setRatio: (ratio) => set({ ratio }),
-  qubit: qubitBase,
+  qubit: fromLink('qubit', qubitBase),
   setQubit: (p) => set((s) => ({ qubit: { ...s.qubit, ...p } })),
 }))
+
+// Shareable links: these parts of the explorer follow the URL hash (lib/share.ts).
+for (const key of ['view', 'params', 'ratio', 'qubit'] as const) {
+  useExplorer.subscribe((s, prev) => {
+    if (s[key] !== prev[key]) toLink(key, s[key])
+  })
+}

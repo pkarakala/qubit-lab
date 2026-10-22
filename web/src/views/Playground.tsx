@@ -8,6 +8,7 @@ import { ErrorBanner, Segmented, Slider } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { WignerScene } from '../three/WignerSurface'
+import { useShared } from '../lib/share'
 
 interface Preset {
   id: string
@@ -85,8 +86,8 @@ const INITIALS: { value: Initial; label: string }[] = [
 export function Playground() {
   const theme = useExplorer((s) => s.theme)
   const c = SERIES[theme]
-  const [draft, setDraft] = useState<PlaygroundSpec>(PLAYGROUND_PRESETS[0]?.spec ?? base)
-  const [submitted, setSubmitted] = useState<PlaygroundSpec>(draft)
+  const [submitted, setSubmitted] = useShared<PlaygroundSpec>('playground', PLAYGROUND_PRESETS[0]?.spec ?? base)
+  const [draft, setDraft] = useState<PlaygroundSpec>(submitted)
   const [frame, setFrame] = useState(0)
   const [playing, setPlaying] = useState(true)
   const [copied, setCopied] = useState(false)

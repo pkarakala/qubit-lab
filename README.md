@@ -42,6 +42,8 @@ Three layers, kept apart by a test:
 
 ## Learn
 
+Every view has a **Share** button. The link it copies reopens the same view with the same inputs.
+
 Start with [docs/learn/](docs/learn/): ten one-screen pages. Every equation is listed with its source in [docs/reference/formulas.md](docs/reference/formulas.md), and every comparison in [docs/reference/checks.md](docs/reference/checks.md).
 
 ## Limits
