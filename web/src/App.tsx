@@ -14,7 +14,7 @@ const VIEWS: { id: View; label: string; hint: string }[] = [
   { id: 'checks', label: 'Checks', hint: 'Theory vs simulation' },
 ]
 
-const REPO = 'https://github.com/pkarakala/qubitlab'
+const REPO = 'https://github.com/pkarakala/qubit-lab'
 
 export default function App() {
   const view = useExplorer((s) => s.view)

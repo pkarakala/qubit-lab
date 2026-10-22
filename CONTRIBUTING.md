@@ -9,7 +9,7 @@ Open an issue. Say what is wrong, where you saw it (explorer, a `docs/learn/` pa
 ## Set up
 
 ```bash
-git clone https://github.com/pkarakala/qubitlab && cd qubitlab
+git clone https://github.com/pkarakala/qubit-lab && cd qubit-lab
 uv sync --all-groups
 cd web && npm install && cd ..
 ./scripts/dev.sh        # API on :8000, explorer on :5173

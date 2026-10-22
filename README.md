@@ -41,6 +41,6 @@ Start with [docs/learn/](docs/learn/): five one-screen pages. Every equation is 
 
 The cat model is the standard effective one: a single mode with two-photon dissipation, no buffer mode, no gates yet. Rates are in units of κ₂, not hertz. Hardware numbers are shown as cited facts, never fitted. Not affiliated with Alice & Bob, Qolab, or any company cited.
 
-Built with an AI coding assistant (Claude Code), directed and reviewed by me. Agent rules are in [AGENTS.md](AGENTS.md).
+Parts of this repo were written with AI coding assistants, directed and reviewed by me. Agent rules are in [AGENTS.md](AGENTS.md).
 
 Apache-2.0 · Pranav Reddy
