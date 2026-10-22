@@ -44,6 +44,16 @@ test('qubit control: DRAG cuts leakage on a fast pi pulse', async ({ page }) => 
   await page.screenshot({ path: `${IMG}/qubit_control.png` })
 })
 
+test('error correction: space-time decoding and the cat code', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('tab', { name: 'Error correction' }).click()
+  await expect(page.getByTestId('spacetime-canvas').locator('canvas')).toBeVisible({ timeout: 120_000 })
+  await expect(page.getByTestId('best-cat-code')).toContainText('Best sampled: d =', { timeout: 300_000 })
+  await expect(page.locator('.dock .js-plotly-plot')).toBeVisible({ timeout: 300_000 })
+  await page.waitForTimeout(1500)
+  await page.screenshot({ path: `${IMG}/error_correction.png` })
+})
+
 test('checks page reports no surprises', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('tab', { name: 'Checks' }).click()

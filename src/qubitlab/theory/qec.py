@@ -13,6 +13,8 @@ from qubitlab.provenance import Kind, Source
 from qubitlab.theory.registry import Formula
 
 p, p_th, d, p_bit = sp.symbols("p p_th d p_bit", positive=True)
+# (d + 1)/2 and 2d - 1, kept unevaluated so they print as in the paper.
+D_E = sp.Mul(sp.Add(d, 1, evaluate=False), sp.Pow(2, -1, evaluate=False), evaluate=False)
 
 
 def fowler(locator: str, note: str = "") -> Source:
@@ -27,7 +29,7 @@ error_exponent = Formula(
     key="qec.error_exponent",
     title="Errors needed to fool a distance-d code",
     lhs=r"d_e",
-    expr=(d + 1) / 2,
+    expr=D_E,
     args=(d,),
     sources=(
         fowler("Eq. (10)", "Odd d. For the surface code."),
@@ -40,7 +42,7 @@ surface_code_logical_error = Formula(
     key="qec.surface_code_logical_error",
     title="Surface code logical error rate",
     lhs=r"P_L",
-    expr=sp.Mul(sp.Float(0.03, 2), sp.Pow(p / p_th, (d + 1) / 2, evaluate=False), evaluate=False),
+    expr=sp.Mul(sp.Float(0.03, 2), sp.Pow(p / p_th, D_E, evaluate=False), evaluate=False),
     args=(p, p_th, d),
     sources=(
         fowler(
@@ -55,7 +57,7 @@ surface_code_qubits = Formula(
     key="qec.surface_code_qubits",
     title="Physical qubits for one surface code logical qubit",
     lhs=r"n_q",
-    expr=(2 * d - 1) ** 2,
+    expr=sp.Pow(sp.Add(2 * d, -1, evaluate=False), 2, evaluate=False),
     args=(d,),
     sources=(fowler("Sec. VII.A, text after Eq. (12)", "Data plus measurement qubits."),),
     valid_when="Rotated-boundary-free planar layout as drawn by Fowler.",
@@ -65,7 +67,7 @@ repetition_code_qubits = Formula(
     key="qec.repetition_code_qubits",
     title="Physical qubits for one repetition code logical qubit",
     lhs=r"n_q",
-    expr=2 * d - 1,
+    expr=sp.Add(2 * d, -1, evaluate=False),
     args=(d,),
     sources=(hand("Header: d data qubits and d - 1 ancillas."),),
     valid_when="Line of qubits, one ancilla between each pair of neighbors.",

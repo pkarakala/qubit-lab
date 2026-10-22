@@ -339,6 +339,7 @@ def qubit_run(req: QubitRequest) -> dict[str, Any]:
         raise HTTPException(422, str(e)) from e
 
 
+MIN_FAILURES = 10
 P_GRID = [0.001, 0.0015, 0.002, 0.003, 0.005, 0.007, 0.01, 0.015]
 
 
@@ -353,7 +354,10 @@ def _qec_curves(shots: int) -> dict[str, Any]:
                     "code": code,
                     "d": d,
                     "qubits": qec_sim.physical_qubits(code, d),
-                    "per_round": [r.per_round if r.failures else None for r in runs],
+                    # Under 10 failures the estimate is mostly sampling noise: not reported.
+                    "per_round": [
+                        r.per_round if r.failures >= MIN_FAILURES else None for r in runs
+                    ],
                     "failures": [r.failures for r in runs],
                 }
             )
@@ -380,7 +384,7 @@ def _qec_curves(shots: int) -> dict[str, Any]:
 @app.get("/api/qec/curves")
 def qec_curves() -> dict[str, Any]:
     """Logical error per round vs physical error, Stim + PyMatching, d = 3, 5, 7."""
-    return _qec_curves(20_000)
+    return _qec_curves(100_000)
 
 
 class CatCodeRequest(BaseModel):
@@ -399,7 +403,7 @@ def _cat_code(body: dict[str, Any]) -> dict[str, Any]:
             failures = None
         else:
             m = qec_sim.memory("repetition", d, req.p_phase, req.shots)
-            corrected = m.per_round if m.failures else None
+            corrected = m.per_round if m.failures >= MIN_FAILURES else None
             failures = m.failures
         rows.append(
             {
