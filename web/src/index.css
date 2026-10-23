@@ -617,3 +617,23 @@ tr.is-surprise {
 .warn {
   color: var(--pos);
 }
+
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.scene-labels {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.scene-labels .axis-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  visibility: hidden;
+}

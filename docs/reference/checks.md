@@ -6,14 +6,14 @@ Expected is the verdict predicted from the formula's validity range before runni
 
 | Check | Regime | Theory | Simulation | Rel. error | Tolerance | Verdict | Expected |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `cat.wigner.even_cat.origin` | \|α\|² = 1, W at (0.00, 0.00) | 0.63662 | 0.63662 | 0 | 1e-06 | AGREE | AGREE |
-| `cat.wigner.even_cat.blob` | \|α\|² = 1, W at (1.00, 0.00) | 0.356347 | 0.356347 | 1.6e-16 | 1e-06 | AGREE | AGREE |
-| `cat.wigner.odd_cat.origin` | \|α\|² = 1, W at (0.00, 0.00) | -0.63662 | -0.63662 | 3.5e-16 | 1e-06 | AGREE | AGREE |
-| `cat.wigner.odd_cat.blob` | \|α\|² = 1, W at (1.00, 0.00) | 0.268612 | 0.268612 | 4.1e-16 | 1e-06 | AGREE | AGREE |
-| `cat.wigner.even_cat.origin` | \|α\|² = 4, W at (0.00, 0.00) | 0.63662 | 0.63662 | 5.2e-16 | 1e-06 | AGREE | AGREE |
-| `cat.wigner.even_cat.blob` | \|α\|² = 4, W at (2.00, 0.00) | 0.318417 | 0.318417 | 1.8e-13 | 1e-06 | AGREE | AGREE |
-| `cat.wigner.odd_cat.origin` | \|α\|² = 4, W at (0.00, 0.00) | -0.63662 | -0.63662 | 0 | 1e-06 | AGREE | AGREE |
-| `cat.wigner.odd_cat.blob` | \|α\|² = 4, W at (2.00, 0.00) | 0.318203 | 0.318203 | 5.8e-15 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.even_cat.origin.n1` | \|α\|² = 1, W at (0.00, 0.00) | 0.63662 | 0.63662 | 0 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.even_cat.blob.n1` | \|α\|² = 1, W at (1.00, 0.00) | 0.356347 | 0.356347 | 1.6e-16 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.odd_cat.origin.n1` | \|α\|² = 1, W at (0.00, 0.00) | -0.63662 | -0.63662 | 3.5e-16 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.odd_cat.blob.n1` | \|α\|² = 1, W at (1.00, 0.00) | 0.268612 | 0.268612 | 4.1e-16 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.even_cat.origin.n4` | \|α\|² = 4, W at (0.00, 0.00) | 0.63662 | 0.63662 | 5.2e-16 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.even_cat.blob.n4` | \|α\|² = 4, W at (2.00, 0.00) | 0.318417 | 0.318417 | 1.8e-13 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.odd_cat.origin.n4` | \|α\|² = 4, W at (0.00, 0.00) | -0.63662 | -0.63662 | 0 | 1e-06 | AGREE | AGREE |
+| `cat.wigner.odd_cat.blob.n4` | \|α\|² = 4, W at (2.00, 0.00) | 0.318203 | 0.318203 | 5.8e-15 | 1e-06 | AGREE | AGREE |
 | `cat.photon_number.even_cat.0.5` | \|α\|² = 0.5 | 0.231059 | 0.231059 | 4.8e-16 | 1e-06 | AGREE | AGREE |
 | `cat.photon_number.odd_cat.0.5` | \|α\|² = 0.5 | 1.08198 | 1.08198 | 4.1e-16 | 1e-06 | AGREE | AGREE |
 | `cat.photon_number.even_cat.1` | \|α\|² = 1 | 0.761594 | 0.761594 | 4.4e-16 | 1e-06 | AGREE | AGREE |

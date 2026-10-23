@@ -2,11 +2,10 @@
 // are negative values, the signature of a non-classical state. The optional ghost is the
 // closed-form ideal cat (theory layer), drawn as a wireframe over the simulated surface.
 
-import { Html, OrbitControls } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
+import { OrbitControls } from '@react-three/drei'
 import { useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
-import { HtmlWarmup } from './HtmlWarmup'
+import { type Label, LabeledCanvas } from './LabeledCanvas'
 import { diverging } from '../lib/colormap'
 
 const HEIGHT = 2.4 // world units for W = 2/pi
@@ -91,25 +90,21 @@ function Ghost({ xvec, w, color }: { xvec: number[]; w: number[][]; color: strin
   )
 }
 
-function Axes({ ext, ink }: { ext: number; ink: string }) {
-  const h = SPAN / 2
+function Grid({ ext, ink }: { ext: number; ink: string }) {
   const ticks = useMemo(() => {
     const out: number[] = []
     for (let t = -Math.floor(ext); t <= Math.floor(ext); t++) out.push(t)
     return out
   }, [ext])
   return (
-    <group>
-      <gridHelper args={[SPAN, ticks.length - 1 || 1, ink, ink]} position={[0, -0.001, 0]} material-opacity={0.18} material-transparent />
-      <Html position={[h + 0.35, 0, 0]} center className="axis-label">
-        x = Re β
-      </Html>
-      <Html position={[0, 0, -h - 0.35]} center className="axis-label">
-        p = Im β
-      </Html>
-    </group>
+    <gridHelper args={[SPAN, ticks.length - 1 || 1, ink, ink]} position={[0, -0.001, 0]} material-opacity={0.18} material-transparent />
   )
 }
+
+const LABELS: Label[] = [
+  { position: [SPAN / 2 + 0.35, 0, 0], text: 'x = Re β' },
+  { position: [0, 0, -SPAN / 2 - 0.35], text: 'p = Im β' },
+]
 
 export function WignerScene({
   xvec,
@@ -125,21 +120,21 @@ export function WignerScene({
   const ink = theme === 'dark' ? '#d8d6cf' : '#30302c'
   const controls = useRef(null)
   return (
-    <Canvas
+    <LabeledCanvas
+      labels={LABELS}
       camera={{ position: [5.2, 4.6, 6.4], fov: 38 }}
       dpr={[1, 2]}
       gl={{ preserveDrawingBuffer: true, antialias: true }}
       data-testid="wigner-canvas"
     >
-      <HtmlWarmup />
       <color attach="background" args={[theme === 'dark' ? '#121214' : '#f6f5f2']} />
       <ambientLight intensity={0.75} />
       <directionalLight position={[4, 8, 5]} intensity={1.6} />
       <directionalLight position={[-6, 3, -4]} intensity={0.5} />
       <Surface xvec={xvec} w={w} theme={theme} />
       {ghost ? <Ghost xvec={xvec} w={ghost} color={ink} /> : null}
-      <Axes ext={xvec[xvec.length - 1] ?? 3} ink={ink} />
+      <Grid ext={xvec[xvec.length - 1] ?? 3} ink={ink} />
       <OrbitControls ref={controls} makeDefault enableDamping target={[0, 0.4, 0]} maxPolarAngle={Math.PI / 2.05} />
-    </Canvas>
+    </LabeledCanvas>
   )
 }

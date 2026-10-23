@@ -11,7 +11,7 @@ import {
   useReferences,
 } from "../api";
 import { CONFIG, Plot, SERIES, layout } from "../components/Plot";
-import { ErrorBanner, FormulaCard, Slider, shortCite } from "../components/ui";
+import { CopyPython, ErrorBanner, FormulaCard, Slider, shortCite } from "../components/ui";
 import { fmt } from "../lib/colormap";
 import { useExplorer } from "../store";
 import { useShared } from "../lib/share";
@@ -119,6 +119,7 @@ export function CatVsTransmon() {
             )}
           </tbody>
         </table>
+        <CopyPython view="compare" inputs={{ t_ns: tNs }} />
       </aside>
 
       <main className="pane pane-center">

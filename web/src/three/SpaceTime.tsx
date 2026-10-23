@@ -3,10 +3,9 @@
 // detection event; lines are the pairs the decoder (PyMatching) joined, or a detector it sent
 // to the boundary. Errors leave pairs of events; decoding is guessing which errors made them.
 
-import { Html, Line, OrbitControls } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
+import { Line, OrbitControls } from '@react-three/drei'
 import { useMemo } from 'react'
-import { HtmlWarmup } from './HtmlWarmup'
+import { type Label, LabeledCanvas } from './LabeledCanvas'
 
 type Vec = [number, number, number]
 const LAYER = 1.4 // world units per round
@@ -47,9 +46,12 @@ export function SpaceTimeScene({
       }),
     [matched, detectors, span],
   )
+  const labels: Label[] = [
+    { position: at(span + 1.5, 0, -0.6), text: 'chip' },
+    { position: at(span + 1.5, 0, rounds), text: `round ${rounds}` },
+  ]
   return (
-    <Canvas camera={{ position: [span * 1.1, rounds * LAYER * 0.9 + 4, span * 1.5], fov: 40 }} dpr={[1, 2]} gl={{ preserveDrawingBuffer: true }} data-testid="spacetime-canvas">
-      <HtmlWarmup />
+    <LabeledCanvas labels={labels} camera={{ position: [span * 1.1, rounds * LAYER * 0.9 + 4, span * 1.5], fov: 40 }} dpr={[1, 2]} gl={{ preserveDrawingBuffer: true }} data-testid="spacetime-canvas">
       <color attach="background" args={[theme === 'dark' ? '#121214' : '#f6f5f2']} />
       <ambientLight intensity={0.9} />
       <directionalLight position={[5, 10, 6]} intensity={1.1} />
@@ -73,9 +75,7 @@ export function SpaceTimeScene({
         ),
       )}
       {lines.map((pts, i) => (pts ? <Line key={i} points={pts} color={edge} lineWidth={2.5} /> : null))}
-      <Html position={at(span + 1.5, 0, -0.6)} center className="axis-label">chip</Html>
-      <Html position={at(span + 1.5, 0, rounds)} center className="axis-label">round {rounds}</Html>
       <OrbitControls makeDefault enableDamping target={[0, (rounds * LAYER) / 2, 0]} />
-    </Canvas>
+    </LabeledCanvas>
   )
 }
