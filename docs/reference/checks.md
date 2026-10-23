@@ -75,6 +75,20 @@ Expected is the verdict predicted from the formula's validity range before runni
 | `qubit.flip_probability.phase.0` | phase-flip, T = T2, T1 = 100 ns, T2 = 150 ns, σ = 0 MHz, t = 20 ns | 0.0624133 | 0.0624133 | 1.3e-10 | 0.001 | AGREE | AGREE |
 | `qubit.flip_probability.bit.0.002` | bit-flip, T = T1, T1 = 20000 ns, T2 = 20000 ns, σ = 2 MHz, t = 100 ns | 0.00249376 | 0.00249376 | 4.5e-14 | 0.001 | AGREE | AGREE |
 | `qubit.flip_probability.phase.0.002` | phase-flip, T = T2, T1 = 20000 ns, T2 = 20000 ns, σ = 2 MHz, t = 100 ns | 0.00249376 | 0.274112 | 1.1e+02 | 0.001 | DIVERGE | DIVERGE |
+| `readout.chi_transmon.50.7` | E_J/E_C = 50, f_q = 5.68 GHz, f_r = 7 GHz, g = 54 MHz | -0.00057533 | -0.000565335 | 0.017 | 0.05 | AGREE | AGREE |
+| `readout.chi_transmon.100.6.2` | E_J/E_C = 100, f_q = 8.17 GHz, f_r = 6.2 GHz, g = 65 MHz | -0.000325904 | -0.000319269 | 0.02 | 0.05 | AGREE | AGREE |
+| `readout.chi_transmon.200.5` | E_J/E_C = 200, f_q = 11.69 GHz, f_r = 5 GHz, g = 78 MHz | -1.93322e-05 | -1.63947e-05 | 0.15 | 0.05 | DIVERGE | DIVERGE |
+| `readout.chi_transmon_harmonic.50.7` | E_J/E_C = 50, f_q = 5.68 GHz, f_r = 7 GHz, g = 54 MHz | -0.000465755 | -0.000565335 | 0.21 | 0.05 | DIVERGE | DIVERGE |
+| `readout.chi_transmon_harmonic.100.6.2` | E_J/E_C = 100, f_q = 8.17 GHz, f_r = 6.2 GHz, g = 65 MHz | -0.000430891 | -0.000319269 | 0.26 | 0.05 | DIVERGE | DIVERGE |
+| `readout.chi_two_level.50.7` | E_J/E_C = 50, f_q = 5.68 GHz, f_r = 7 GHz, g = 54 MHz | -0.0022455 | -0.000565335 | 0.75 | 0.05 | DIVERGE | DIVERGE |
+| `readout.dephasing_rate.0.05` | chi/kappa = 0.05, eps/kappa = 0.2 | 0.00313695 | 0.00313609 | 0.00027 | 0.05 | AGREE | AGREE |
+| `readout.dephasing_rate.0.5` | chi/kappa = 0.5, eps/kappa = 0.2 | 0.08 | 0.0800024 | 3e-05 | 0.05 | AGREE | AGREE |
+| `readout.dephasing_rate_weak.0.05` | chi/kappa = 0.05, eps/kappa = 0.2 | 0.0032 | 0.00313609 | 0.02 | 0.05 | AGREE | AGREE |
+| `readout.dephasing_rate_weak.0.5` | chi/kappa = 0.5, eps/kappa = 0.2 | 0.32 | 0.0800024 | 0.75 | 0.05 | DIVERGE | DIVERGE |
+| `readout.pointer_photons.e.0` | qubit in \|e>, chi/kappa = 0.5, delta_r/kappa = 0 | 0.18 | 0.180014 | 7.6e-05 | 0.001 | AGREE | AGREE |
+| `readout.pointer_photons.g.0` | qubit in \|g>, chi/kappa = 0.5, delta_r/kappa = 0 | 0.18 | 0.180014 | 7.6e-05 | 0.001 | AGREE | AGREE |
+| `readout.pointer_photons.e.0.5` | qubit in \|e>, chi/kappa = 0.5, delta_r/kappa = 0.5 | 0.072 | 0.0719973 | 3.7e-05 | 0.001 | AGREE | AGREE |
+| `readout.pointer_photons.g.0.5` | qubit in \|g>, chi/kappa = 0.5, delta_r/kappa = 0.5 | 0.36 | 0.359967 | 9.1e-05 | 0.001 | AGREE | AGREE |
 | `transmon.qubit_frequency.100` | E_J/E_C = 100 | 27.2843 | 27.2451 | 0.0014 | 0.01 | AGREE | AGREE |
 | `transmon.qubit_frequency.50` | E_J/E_C = 50 | 19 | 18.9419 | 0.0031 | 0.01 | AGREE | AGREE |
 | `transmon.qubit_frequency.20` | E_J/E_C = 20 | 11.6491 | 11.5461 | 0.0088 | 0.01 | AGREE | AGREE |

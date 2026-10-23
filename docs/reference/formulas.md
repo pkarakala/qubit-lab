@@ -373,6 +373,83 @@ Valid when: Exponential (Markovian) decay. Bit-flip counts X and Y errors, phase
 - qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 7: Pauli twirl. Bit-flip: T = T1 (transmon) or T_X (cat). Phase-flip: T = T2 or T_Z.
 - [reglade2024](https://doi.org/10.1038/s41586-024-07294-3), Fig. 3 caption (peer_reviewed). T_X and T_Z are exponential decay times of <Z_alpha> and <X_alpha>.
 
+## Dispersive shift of a two-level qubit
+
+`readout.chi_two_level`
+
+```latex
+\chi_{2\mathrm{lvl}} = \frac{g^{2}}{\Delta}
+```
+
+Valid when: Two levels only, g << |Delta|. A transmon's third level changes it a lot.
+
+- [blais2004](https://doi.org/10.1103/PhysRevA.69.062320), Eq. (12) (peer_reviewed). Written as the cavity shift sigma_z g^2/Delta; the symbol chi is not used there.
+
+## Dispersive shift of a transmon, from its 0-1 and 1-2 couplings
+
+`readout.chi_transmon`
+
+```latex
+\chi = \frac{g^{2}}{\Delta} - \frac{g_{12}^{2}}{2 \Delta + 2 \alpha}
+```
+
+Valid when: Rotating-wave coupling, levels 0 to 2, g << |Delta|, |Delta + alpha|. The neglected counter-rotating terms matter more as |Delta| grows, because chi falls as 1/Delta^2.
+
+- [koch2007](https://doi.org/10.1103/PhysRevA.76.042319), Eqs. (27), (28) (peer_reviewed). chi = chi_01 - chi_12/2, chi_ij = g_ij^2/(omega_ij - omega_r).
+
+## Dispersive shift of a transmon, with g_12 = sqrt(2) g_01
+
+`readout.chi_transmon_harmonic`
+
+```latex
+\chi_{\sqrt 2} = \frac{\alpha g^{2}}{\Delta \left(\Delta + \alpha\right)}
+```
+
+Valid when: E_J/E_C -> infinity, where g_12/g_01 -> sqrt(2). At E_J/E_C = 50 to 200 the ratio is 1.38 to 1.39, and the two terms of chi nearly cancel, so the shortcut can miss by tens of percent.
+
+- [koch2007](https://doi.org/10.1103/PhysRevA.76.042319), Eqs. (22), (27), (28) (peer_reviewed).
+- [blais2021](https://doi.org/10.1103/RevModPhys.93.025005), Eq. (43), arXiv v1 (peer_reviewed). alpha = -E_C there.
+- qubitlab_hand_calcs, docs/hand_calcs/readout.py (derived). Step 1: chi_01 - chi_12/2 with g_12 = sqrt(2) g.
+
+## Resonator photons in steady state, for the qubit in |e> (+) or |g> (-)
+
+`readout.pointer_photons`
+
+```latex
+\bar n_\pm = \frac{\epsilon^{2}}{\left(\chi + \delta_{r}\right)^{2} + \frac{\kappa^{2}}{4}}
+```
+
+Valid when: Linear dispersive model: n well below the critical number Delta^2 / 4g^2.
+
+- [gambetta2006](https://doi.org/10.1103/PhysRevA.74.042318), Eq. (28) (peer_reviewed). Pass chi with its sign: +chi for the excited state, -chi for the ground state.
+
+## Measurement-induced dephasing, drive at the bare resonator
+
+`readout.dephasing_rate`
+
+```latex
+\Gamma_m = \frac{2 \kappa \chi^{2} \epsilon^{2}}{\left(\chi^{2} + \frac{\kappa^{2}}{4}\right)^{2}}
+```
+
+Valid when: Steady state of the linear dispersive model, any chi / kappa.
+
+- [gambetta2006](https://doi.org/10.1103/PhysRevA.74.042318), Eqs. (27), (28) (peer_reviewed).
+- qubitlab_hand_calcs, docs/hand_calcs/readout.py (derived). Step 3: Eq. (27) at Delta_r = 0.
+
+## Measurement-induced dephasing for a small dispersive shift
+
+`readout.dephasing_rate_weak`
+
+```latex
+\Gamma_m^{(\chi \ll \kappa)} = \frac{32 \chi^{2} \epsilon^{2}}{\kappa^{3}}
+```
+
+Valid when: chi << kappa. At chi = kappa/2 it is 4x too high: 2x in the rate, 2x in n.
+
+- [gambetta2006](https://doi.org/10.1103/PhysRevA.74.042318), Sec. V.1, Eq. (16) and the rate after Eq. (17) (peer_reviewed). 2 kappa n theta_0^2 with theta_0 = 2 chi / kappa and n = 4 eps^2 / kappa^2.
+- [blais2004](https://doi.org/10.1103/PhysRevA.69.062320), Eq. (26) (peer_reviewed).
+- qubitlab_hand_calcs, docs/hand_calcs/readout.py (derived). Step 3: leading order in chi.
+
 ## Josephson plasma energy
 
 `transmon.plasma_frequency`

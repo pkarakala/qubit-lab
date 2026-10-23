@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import logging
+import threading
 import time
 from collections.abc import Callable
 from functools import partial
@@ -22,6 +23,28 @@ log = logging.getLogger("qubitlab.warm")
 FLIP_RATE_SIZES = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7]  # views/FlipRates.tsx
 COMPARE_SIZES = [1, 2, 3, 4, 5, 6, 7]  # views/CatVsTransmon.tsx
 CAT = {"alpha_sq": 4, "kappa_phi": 0, "n_th": 0, "scheme": "dissipative"}
+_requests = 0
+_requests_guard = threading.Lock()
+
+
+def request_started() -> None:
+    """Called per API request, so the warm-up steps aside while someone is waiting."""
+    global _requests
+    with _requests_guard:
+        _requests += 1
+
+
+def request_finished() -> None:
+    global _requests
+    with _requests_guard:
+        _requests -= 1
+
+
+def _wait_for_idle() -> None:
+    while _requests > 0:
+        time.sleep(0.2)
+
+
 PRESETS_PATH = Path(__file__).resolve().parent / "data" / "presets.json"
 
 
@@ -79,6 +102,7 @@ def warm() -> None:
             api.QubitRequest(t1_ns=20000, t2_ns=20000, t_max_ns=100, n_points=121)
         ),
         lambda: api.compare(t_ns=25.0),
+        lambda: api.readout(api.ReadoutRequest()),  # views/Readout.tsx defaults
         lambda: api.gates(api.GatesRequest()),  # views/Gates.tsx defaults
         lambda: api.cat_rates(api.RatesRequest(**CAT, kappa_1=0.01, alpha_sq_values=COMPARE_SIZES)),
         lambda: api.qec_shot(d=5, p=0.005, seed=1),
@@ -90,6 +114,7 @@ def warm() -> None:
     ]
     start = time.perf_counter()
     for step in steps:
+        _wait_for_idle()
         try:
             step()
         except Exception:  # a failed warm-up only costs speed; the request will report it

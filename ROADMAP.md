@@ -1,6 +1,6 @@
 # Roadmap
 
-What is built, what is next, and the decisions behind it. Update this file when a milestone lands or a decision changes. Rules for doing the work are in [AGENTS.md](AGENTS.md).
+What is built, what is next, and the decisions behind it. Update this file when a milestone lands or a decision changes. Rules for doing the work are in [AGENTS.md](AGENTS.md). The detailed plan for the next items is [docs/plan.md](docs/plan.md).
 
 ## Done
 
@@ -10,20 +10,25 @@ What is built, what is next, and the decisions behind it. Update this file when 
 | 2. Bit-flip vs phase-flip | Liouvillian flip rates vs \|α\|², the e^(−2\|α\|²) law, Lescanne 2020 as a measured fact |
 | 3. Transmon spectrum | scqubits bands vs Koch et al. closed forms, charge dispersion in 3D |
 | 3b. Transmon control | Rabi, π pulse, DRAG, T1, Ramsey, echo on a 4-level transmon; Bloch sphere view |
-| 4. Cat vs transmon | Flip chance per idle step and noise bias at measured numbers (Réglade 2024, Willow 2025, Place 2021) |
+| 4. Noise bias (cat vs transmon) | Flip chance per idle step and noise bias at measured numbers (Réglade 2024, Willow 2025, Place 2021) |
 | 6. Repetition vs surface code | Stim and PyMatching memory experiments, logical error vs distance, 3D space-time decoding |
 | Extras | Pulse optimizer (GRAPE through Dynamiqs), Playground for typed one-mode models, share links, Copy as Python |
 | Release tooling | `qubitlab serve` ships the explorer in the wheel; release workflow to PyPI; Docker image and Hugging Face Space workflow |
 
 ## Next
 
+In order, one PR each, merged before the next starts. Details in [docs/plan.md](docs/plan.md).
+
 | # | Milestone | Scope | Estimate |
 | --- | --- | --- | --- |
-| 7 | Release v0.2.0 | Turn on PyPI trusted publishing and the Space (docs/deploy.md), tag v0.2.0, Zenodo DOI, a short demo video. The code is ready; the rest is setup. | 1 day |
-| 5 | Chip layer (Palace) | Gmsh geometry of a transmon pad and readout resonator. Palace electrostatic solve gives the capacitance matrix and E_C; eigenmode solve gives frequencies and participation. Check against an analytic parallel-plate or CPW formula first. Palace runs offline on a laptop; results are committed as data, so the explorer never needs Palace. | 1 to 2 weeks |
-| 8 | Release v1.0 | After 5: a written walkthrough of the findings, outreach to the Dynamiqs and scqubits communities. | 2 to 3 days |
+| 7 | Release v0.2.0 | Turn on PyPI trusted publishing and the Space (docs/deploy.md), tag v0.2.0, Zenodo DOI. The code is ready; the rest is setup. | 1 day |
+| 9 | Readout | Dispersive shift from scqubits, resonator and transmon in Dynamiqs, IQ blobs and SNR vs time, checked against the papers. | 2 to 3 days |
+| 10 | Two-qubit gates | Transmon CZ through the 11 to 20 avoided crossing; bias-preserving cat CNOT. | 3 to 5 days |
+| 11 | Architecture gallery | The leading superconducting architectures as 3D chips that explode into layers, each with its spectrum and cited parameters. | 3 to 5 days |
+| 5 | Chip layer (Palace) | Gmsh geometry of a transmon pad and readout resonator. Palace electrostatic solve gives the capacitance matrix and E_C; eigenmode solve gives frequencies and participation. Check against an analytic parallel-plate or CPW formula first. Results committed as data, so the explorer never needs Palace. | 1 to 2 weeks |
+| 8 | Release v1.0 | A demo video, a written walk through the course, outreach to the Dynamiqs and scqubits communities. | 2 to 3 days |
 
-Later: upstream a transmon example to Palace (open an issue first), bias-preserving gates for cats, a transmon mode in the Playground.
+Later: upstream a transmon example to Palace (open an issue first), a transmon mode in the Playground, a photonics bridge (microwave-to-optical).
 
 ## Decisions
 

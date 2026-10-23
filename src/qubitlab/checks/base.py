@@ -73,6 +73,7 @@ def run_all(include_slow: bool = True) -> list[CheckResult]:
         gate_checks,
         qec_checks,
         qubit_checks,
+        readout_checks,
         transmon_checks,
     )
 

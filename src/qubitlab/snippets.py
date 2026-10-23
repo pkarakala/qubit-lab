@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-View = Literal["phase", "rates", "transmon", "qubit", "pulse", "qec", "compare", "gates"]
+View = Literal["phase", "rates", "transmon", "qubit", "pulse", "qec", "compare", "readout", "gates"]
 
 HEADER = "# Qubit Lab: {title}. Reproduce it with `pip install qubitlab`.\n"
 
@@ -138,6 +138,28 @@ for d in DEVICES:
     p_phase = float(theory.flip_probability(t=t_ns, T=t_phase))
     bias = p_phase / p_bit
     print(f"{{d.label:28}} bit-flip {{p_bit:.2e}}  phase-flip {{p_phase:.2e}}  bias {{bias:.3g}}")
+""",
+    ),
+    "readout": (
+        "dispersive readout of a transmon",
+        """import math
+
+from qubitlab.sim import readout
+from qubitlab.theory import readout as theory
+
+E_C = {E_C!r}  # GHz
+d = readout.dressed_chi({ratio!r} * E_C, E_C, f_r={f_r!r}, g_n={g_n!r})
+delta = d.f01 - {f_r!r}
+koch = theory.chi_transmon(g=d.g01, g_12=d.g12, Delta=delta, alpha=d.alpha)
+print(f"chi, dressed spectrum: {{d.chi * 1e3:.4f}} MHz")
+print(f"chi, Koch Eqs. 27-28:  {{float(koch) * 1e3:.4f}} MHz")
+
+kappa = 2 * math.pi * {kappa_mhz!r}  # rad/us
+chi = 2 * math.pi * d.chi * 1e3
+eps = math.sqrt({n_bar!r}) * kappa / 2
+print("dephasing, Dynamiqs:   ", readout.dephasing_rate(chi, eps, kappa), "per us")
+gamma = theory.dephasing_rate(kappa=kappa, chi=chi, epsilon=eps)
+print("dephasing, Gambetta:   ", float(gamma), "per us")
 """,
     ),
     "gates": (

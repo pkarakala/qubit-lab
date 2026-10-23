@@ -12,7 +12,7 @@ MAX_WORDS = 350
 
 
 def test_learn_pages_are_short_and_sourced() -> None:
-    pages = sorted(LEARN.glob("0*.md"))
+    pages = sorted(LEARN.glob("[1-9][0-9]-*.md"))
     assert pages
     keys = set(bib_entries())
     for page in pages:

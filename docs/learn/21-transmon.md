@@ -1,6 +1,6 @@
 # A transmon in one page
 
-The transmon is the standard superconducting qubit, and the family Qolab builds on.
+The transmon is the standard superconducting qubit: most superconducting processors use it or a close relative.
 
 **The circuit.** A Josephson junction shunted by a large capacitor. Two energies set everything: the Josephson energy E_J (how easily Cooper pairs tunnel) and the charging energy E_C (the cost of adding one charge). The Hamiltonian is
 
@@ -14,4 +14,4 @@ H = 4E_C (n − n_g)² − E_J cos φ
 
 **Try it.** In the explorer's *Transmon* view, drag E_J/E_C and watch the bands flatten.
 
-Sources: koch2007 (Eqs. 2.1, 2.4, 2.5, 2.10 to 2.12), tqi2024qolab.
+Sources: koch2007 (Eqs. 2.1, 2.4, 2.5, 2.10 to 2.12).
