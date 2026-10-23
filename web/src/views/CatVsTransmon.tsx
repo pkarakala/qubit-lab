@@ -1,4 +1,4 @@
-// Cat vs transmon at measured hardware numbers: chance of a bit-flip and a phase-flip per idle
+// Noise bias: a cat and a transmon at measured hardware numbers: chance of a bit-flip and a phase-flip per idle
 // step, and the noise bias between them. The cat curve comes from the Liouvillian (simulation,
 // rates in units of kappa_2); every device number is a cited fact.
 

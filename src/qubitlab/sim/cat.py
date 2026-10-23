@@ -1,7 +1,7 @@
 """Dynamiqs simulation of one stabilized cat qubit.
 
 Two stabilization schemes, same noise:
-- "dissipative": kappa_2 D[a^2 - alpha^2]   (Alice & Bob's scheme), rates in units of kappa_2.
+- "dissipative": kappa_2 D[a^2 - alpha^2]   (two-photon dissipation), rates in units of kappa_2.
 - "kerr":        H = -K a+^2 a^2 + K alpha^2 (a+^2 + a^2), rates in units of K.
 - "none":        no stabilization, for comparison. Rates in the same units as above.
 

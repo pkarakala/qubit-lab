@@ -54,14 +54,14 @@ test('error correction: space-time decoding and the cat code', async ({ page }) 
   await page.screenshot({ path: `${IMG}/error_correction.png` })
 })
 
-test('cat vs transmon shows the noise bias at measured numbers', async ({ page }) => {
+test('noise bias view compares a cat and a transmon at measured numbers', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('tab', { name: 'Cat vs transmon' }).click()
+  await page.getByRole('tab', { name: 'Noise bias' }).click()
   await expect(page.locator('.chart-main .js-plotly-plot')).toBeVisible({ timeout: 300_000 })
   await expect(page.getByTestId('compare-facts')).toContainText('Google Quantum AI')
   await expect(page.locator('[data-formula="qubit.flip_probability"]')).toBeVisible()
   await expect(page.locator('.hud-corner')).toHaveCount(0, { timeout: 300_000 })
-  await page.screenshot({ path: `${IMG}/cat_vs_transmon.png` })
+  await page.screenshot({ path: `${IMG}/noise_bias.png` })
 })
 
 test('playground runs a typed model and rejects unsafe input', async ({ page }) => {
@@ -116,7 +116,7 @@ test('every view copies a Python script', async ({ page }) => {
     ['Qubit control', 'qb.run('],
     ['Pulse optimizer', 'po.optimize('],
     ['Error correction', 'qec.memory('],
-    ['Cat vs transmon', 'theory.flip_probability('],
+    ['Noise bias', 'theory.flip_probability('],
   ]
   for (const [tab, call] of views) {
     await page.getByRole('tab', { name: tab, exact: true }).click()

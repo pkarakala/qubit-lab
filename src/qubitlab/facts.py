@@ -63,26 +63,6 @@ FACTS: tuple[Fact, ...] = (
         "reglade2024.tz_11.3", "Phase-flip time", 490e-9, "s", 11.3, "reglade2024", PR, "abstract"
     ),
     Fact(
-        "alicebob2025.tx",
-        "Bit-flip time, preliminary",
-        3600.0,
-        "s",
-        None,
-        "tqi2025alicebob",
-        CLAIM,
-        "over one hour, Galvanic Cat design",
-    ),
-    Fact(
-        "alicebob2024.boson4",
-        "Bit-flip time, Boson 4",
-        430.0,
-        "s",
-        None,
-        "tqi2025alicebob",
-        CLAIM,
-        "previous record, 2024",
-    ),
-    Fact(
         "willow2025.t1",
         "T1, mean of 105 qubits",
         68e-6,

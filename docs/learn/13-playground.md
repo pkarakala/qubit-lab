@@ -20,6 +20,8 @@ The first is the model behind the cat views (Mirrahimi et al. 2014). The second 
 
 **Watch the truncation.** The mode keeps N Fock states. If the state reaches the top ones, the answer is wrong, and the view says so.
 
+**Try it.** In *Playground*, pick *Kerr revival* and drag time to a third of the run. The state splits into three blobs, then comes back whole.
+
 **Take it with you.** *Copy as Python* gives a short Dynamiqs script that runs the same model.
 
 **Safety.** What you type is parsed against a whitelist, never run as code.

@@ -5,7 +5,7 @@ Conventions (shared with `qubitlab.sim`):
 - Phase space point beta = x + i p, so x = Re(beta), p = Im(beta). This matches Dynamiqs'
   `dq.wigner` default (hbar = 1/2): a coherent state |alpha> peaks at x = alpha with height 2/pi.
 - Rates are in units of the two-photon dissipation rate kappa_2 unless a name says otherwise.
-- Cat qubit basis (Alice & Bob convention): |0>, |1> ~ |+alpha>, |-alpha>. A bit-flip swaps them.
+- Cat qubit basis (convention of reglade2024): |0>, |1> ~ |+alpha>, |-alpha>. A bit-flip swaps them.
   |+>, |-> are the even and odd cats. A phase-flip swaps those, which is a parity flip.
 """
 
