@@ -176,7 +176,9 @@ export function CatVsTransmon() {
             <Solving boot what="Solving the transmon idle and the cat Liouvillians" />
           )}
           {cmp.isFetching || rates.isFetching ? (
-            <div className="hud-corner"><Solving /></div>
+            <div className="hud-corner">
+              <Solving what={rates.isFetching && rates.data ? `${rates.data.rows.length} of ${rates.data.total} cat sizes` : undefined} />
+            </div>
           ) : null}
         </div>
         <div className="dock">

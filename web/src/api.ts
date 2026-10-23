@@ -1,7 +1,7 @@
 // Typed client for the qubitlab API. Every response keeps `sim` (Dynamiqs) and `theory`
 // (closed-form SymPy formulas) apart, and the explorer never computes physics itself.
 
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { experimental_streamedQuery as streamedQuery, keepPreviousData, useQuery } from '@tanstack/react-query'
 
 export type Scheme = 'dissipative' | 'kerr' | 'none'
 export type Initial = 'vacuum' | 'coherent_plus' | 'coherent_minus' | 'even_cat' | 'odd_cat'
@@ -67,7 +67,9 @@ export interface Rates {
   rows: RateRow[]
   theory: { bit_flip_suppression_per_photon: number }
   rate_floor: number
+  total: number // rows to come; rows.length < total while the stream is open
 }
+type RatesLine = { row: RateRow } | Omit<Rates, 'rows'>
 
 export interface Bands {
   sim: { n_g: number[]; energies: number[][]; dispersion: number[]; e01_mean: number; anharmonicity: number }
@@ -159,6 +161,25 @@ async function post<T>(path: string, body: unknown): Promise<T> {
   return (await r.json()) as T
 }
 
+/** Each line of a newline-delimited JSON response, as it arrives. */
+async function* postLines<T>(path: string, body: unknown, signal: AbortSignal): AsyncGenerator<T> {
+  const r = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal })
+  if (!r.ok || !r.body) throw new Error(`${path}: ${r.status} ${await r.text()}`)
+  const reader = r.body.pipeThrough(new TextDecoderStream()).getReader()
+  let buffer = ''
+  for (;;) {
+    const { value, done } = await reader.read()
+    if (done) break
+    buffer += value
+    let end
+    while ((end = buffer.indexOf('\n')) >= 0) {
+      const line = buffer.slice(0, end)
+      buffer = buffer.slice(end + 1)
+      if (line) yield JSON.parse(line) as T
+    }
+  }
+}
+
 export type ScriptView = 'phase' | 'rates' | 'transmon' | 'qubit' | 'pulse' | 'qec' | 'compare' | 'readout' | 'gates'
 
 /** A Python script that reproduces `view` at `inputs` (see qubitlab/snippets.py). */
@@ -189,10 +210,15 @@ export const useEvolution = (p: EvolveParams) =>
     ...forever,
   })
 
+/** Flip rates, streamed: the curve fills in one cat size at a time (POST /api/cat/rates/stream). */
 export const useRates = (p: CatParams, values: number[]) =>
   useQuery({
     queryKey: ['rates', p, values],
-    queryFn: () => post<Rates>('/api/cat/rates', { ...p, alpha_sq_values: values }),
+    queryFn: streamedQuery<RatesLine, Rates>({
+      streamFn: ({ signal }) => postLines<RatesLine>('/api/cat/rates/stream', { ...p, alpha_sq_values: values }, signal),
+      reducer: (acc, line) => ('row' in line ? { ...acc, rows: [...acc.rows, line.row] } : { ...acc, ...line }),
+      initialValue: { rows: [], theory: { bit_flip_suppression_per_photon: NaN }, rate_floor: 0, total: values.length },
+    }),
     placeholderData: keepPreviousData,
     ...forever,
   })

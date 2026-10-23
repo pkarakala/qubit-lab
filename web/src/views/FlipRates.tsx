@@ -110,7 +110,11 @@ export function FlipRates() {
           ) : (
             <Solving boot what={`Diagonalizing ${SIZES.length} Liouvillians`} />
           )}
-          {q.isFetching && q.data ? <div className="hud-corner"><Solving /></div> : null}
+          {q.isFetching && q.data ? (
+            <div className="hud-corner">
+              <Solving what={`${q.data.rows.length} of ${q.data.total} sizes`} />
+            </div>
+          ) : null}
         </div>
         <div className="dock">
           {q.data ? (
