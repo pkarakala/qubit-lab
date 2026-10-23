@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -22,6 +24,19 @@ def test_evolve_keeps_theory_and_sim_apart() -> None:
 
 def test_rates_refuse_unresolved_sizes() -> None:
     assert client.post("/api/cat/rates", json={"alpha_sq_values": [9.0]}).status_code == 422
+
+
+def test_rates_stream_line_by_line_and_match_the_batch() -> None:
+    body = {"kappa_1": 0.1, "alpha_sq_values": [2.0, 1.0]}
+    lines = [
+        json.loads(x) for x in client.post("/api/cat/rates/stream", json=body).text.splitlines()
+    ]
+    batch = client.post("/api/cat/rates", json=body).json()
+    assert lines[0]["total"] == 2
+    assert lines[0]["theory"] == batch["theory"]
+    assert [x["row"] for x in lines[1:]] == batch["rows"]
+    assert [r["alpha_sq"] for r in batch["rows"]] == [1.0, 2.0]
+    assert client.post("/api/cat/rates/stream", json={"alpha_sq_values": [9.0]}).status_code == 422
 
 
 def test_transmon_bands() -> None:

@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import json
 import math
 import os
 import threading
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Iterator
 from contextlib import asynccontextmanager
 from typing import Any, Literal
 
@@ -14,6 +15,7 @@ import jax
 import numpy as np
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field, ValidationError
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -175,44 +177,52 @@ def _evolve(body: dict[str, Any]) -> dict[str, Any]:
 
 
 @disk_cached
-def _rates(body: dict[str, Any]) -> dict[str, Any]:
+def _rate_row(body: dict[str, Any]) -> dict[str, Any]:
+    """Liouvillian flip rates at one cat size (body's alpha_sq), with the closed forms there."""
     req = RatesRequest(**body)
-    base = req.params()
-    rows = []
-    for n in sorted(set(req.alpha_sq_values)):
-        if n <= 0:
-            continue
-        p = cat_sim.CatParams(**{**base.__dict__, "alpha_sq": n})
-        r = cat_sim.liouvillian_rates(p)
-        alpha = math.sqrt(n)
-        theory: dict[str, float | None] = {"phase_flip_rate": None, "bit_flip_rate_dephasing": None}
-        if req.scheme == "dissipative" and req.n_th == 0:
-            if req.kappa_1 > 0:
-                theory["phase_flip_rate"] = float(
-                    cat_th.phase_flip_rate(kappa_1=req.kappa_1, alpha=alpha)
-                )
-            if req.kappa_phi > 0 and req.kappa_1 == 0:
-                theory["bit_flip_rate_dephasing"] = float(
-                    cat_th.bit_flip_rate_dephasing(kappa_phi=req.kappa_phi, alpha=alpha)
-                )
-        rows.append(
-            {
-                "alpha_sq": n,
-                "sim": {
-                    "bit_flip_rate": r.bit_flip_rate if r.z_decay_resolved else None,
-                    "phase_flip_rate": r.phase_flip_rate if r.x_decay_resolved else None,
-                    "n_fock": r.n_fock,
-                },
-                "theory": theory,
-            }
-        )
+    n = req.alpha_sq
+    p = req.params()
+    r = cat_sim.liouvillian_rates(p)
+    alpha = math.sqrt(n)
+    theory: dict[str, float | None] = {"phase_flip_rate": None, "bit_flip_rate_dephasing": None}
+    if req.scheme == "dissipative" and req.n_th == 0:
+        if req.kappa_1 > 0:
+            theory["phase_flip_rate"] = float(
+                cat_th.phase_flip_rate(kappa_1=req.kappa_1, alpha=alpha)
+            )
+        if req.kappa_phi > 0 and req.kappa_1 == 0:
+            theory["bit_flip_rate_dephasing"] = float(
+                cat_th.bit_flip_rate_dephasing(kappa_phi=req.kappa_phi, alpha=alpha)
+            )
     return {
-        "rows": rows,
+        "alpha_sq": n,
+        "sim": {
+            "bit_flip_rate": r.bit_flip_rate if r.z_decay_resolved else None,
+            "phase_flip_rate": r.phase_flip_rate if r.x_decay_resolved else None,
+            "n_fock": r.n_fock,
+        },
+        "theory": theory,
+    }
+
+
+def _rate_bodies(req: RatesRequest) -> list[dict[str, Any]]:
+    """One request per cat size, so each row is cached on its own."""
+    sizes = [n for n in sorted(set(req.alpha_sq_values)) if n > 0]
+    return [req.model_dump() | {"alpha_sq": n, "alpha_sq_values": [n]} for n in sizes]
+
+
+def _rate_header() -> dict[str, Any]:
+    return {
         "theory": {
             "bit_flip_suppression_per_photon": float(cat_th.bit_flip_suppression(Delta_n=1.0))
         },
         "rate_floor": cat_sim.RATE_FLOOR / 2,
     }
+
+
+def _rates(body: dict[str, Any]) -> dict[str, Any]:
+    rows = [_rate_row(b) for b in _rate_bodies(RatesRequest(**body))]
+    return {"rows": rows, **_rate_header()}
 
 
 @disk_cached
@@ -255,6 +265,25 @@ def cat_rates(req: RatesRequest) -> dict[str, Any]:
     if max(req.alpha_sq_values, default=0) > 8:
         raise HTTPException(422, "Liouvillian rates are only resolved up to |alpha|^2 = 8")
     return _rates(req.model_dump())
+
+
+@app.post("/api/cat/rates/stream")
+def cat_rates_stream(req: RatesRequest) -> StreamingResponse:
+    """The same rates as /api/cat/rates, one JSON line per cat size as each is solved.
+
+    The first line is the header (theory constants and the number of rows to come), so the
+    explorer can draw the curve point by point instead of waiting for the slowest size.
+    """
+    if max(req.alpha_sq_values, default=0) > 8:
+        raise HTTPException(422, "Liouvillian rates are only resolved up to |alpha|^2 = 8")
+    bodies = _rate_bodies(req)
+
+    def lines() -> Iterator[str]:
+        yield json.dumps({**_rate_header(), "total": len(bodies)}) + "\n"
+        for b in bodies:
+            yield json.dumps({"row": _rate_row(b)}) + "\n"
+
+    return StreamingResponse(lines(), media_type="application/x-ndjson")
 
 
 @app.get("/api/transmon/bands")
