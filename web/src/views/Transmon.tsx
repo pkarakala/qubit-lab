@@ -2,7 +2,7 @@
 
 import { useBands, useSurface } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { ErrorBanner, FormulaCard, Slider } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, Slider } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { BandScene } from '../three/BandSurface'
@@ -64,6 +64,7 @@ export function Transmon() {
             </tr>
           </tbody>
         </table>
+        <CopyPython view='transmon' inputs={{ E_J, E_C }} />
       </aside>
 
       <main className="pane pane-center">

@@ -159,6 +159,11 @@ async function post<T>(path: string, body: unknown): Promise<T> {
   return (await r.json()) as T
 }
 
+export type ScriptView = 'phase' | 'rates' | 'transmon' | 'qubit' | 'pulse' | 'qec' | 'compare'
+
+/** A Python script that reproduces `view` at `inputs` (see qubitlab/snippets.py). */
+export const pythonScript = (view: ScriptView, inputs: unknown) => post<{ python: string }>(`/api/python/${view}`, inputs)
+
 const forever = { staleTime: Infinity, gcTime: Infinity }
 
 export const useFormulas = () => useQuery({ queryKey: ['formulas'], queryFn: () => get<Formula[]>('/api/formulas'), ...forever })

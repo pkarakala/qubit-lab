@@ -3,7 +3,7 @@
 
 import { useEffect } from 'react'
 import { type Initial, type Scheme, useEvolution } from '../api'
-import { ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
 import { fmt } from '../lib/colormap'
 import { PRESETS, useExplorer } from '../store'
@@ -86,6 +86,7 @@ export function PhaseSpace() {
           Rates are in units of the stabilization rate (κ₂, or K for the Kerr cat). Each change runs a Dynamiqs solve
           with {data?.sim.n_fock ?? '…'} Fock states; results are cached.
         </p>
+        <CopyPython view='phase' inputs={params} />
       </aside>
 
       <main className="pane pane-center">

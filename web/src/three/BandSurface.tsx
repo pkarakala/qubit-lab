@@ -2,11 +2,10 @@
 // Sheet m sits at height m and shows E_m(n_g) minus its average, in units of E_C. Near the
 // Cooper pair box (E_J/E_C ~ 1) the sheets ripple; in the transmon regime they are flat.
 
-import { Html, OrbitControls } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
+import { OrbitControls } from '@react-three/drei'
 import { useMemo } from 'react'
 import * as THREE from 'three'
-import { HtmlWarmup } from './HtmlWarmup'
+import { type Label, LabeledCanvas } from './LabeledCanvas'
 
 const SPAN_X = 6 // n_g from -1 to 1
 const SPAN_Z = 7 // log10(E_J/E_C) from 0 to 2
@@ -57,6 +56,8 @@ export function ridgeGeometry(ng: number[], ratios: number[], energies: number[]
   return g
 }
 
+const LIFT = -1.8
+
 export function BandScene({
   ng,
   ratios,
@@ -74,13 +75,20 @@ export function BandScene({
   const ridges = useMemo(() => [0, 1, 2].map((m) => ridgeGeometry(ng, ratios, energies, m)), [ng, ratios, energies])
   const ink = theme === 'dark' ? '#d8d6cf' : '#30302c'
   const zMark = SPAN_Z / 2 - (Math.log10(ratio) / 2) * SPAN_Z
+  const y = LIFT // the scene's group sits LIFT below the origin
+  const labels: Label[] = [
+    { position: [0, 4.6 + y, zMark], text: `E_J/E_C = ${Math.round(ratio)}` },
+    { position: [SPAN_X / 2 + 0.4, y, SPAN_Z / 2], text: 'n_g' },
+    { position: [-SPAN_X / 2 - 0.9, y, SPAN_Z / 2], text: 'E_J/E_C = 1' },
+    { position: [-SPAN_X / 2 - 0.9, y, -SPAN_Z / 2], text: 'E_J/E_C = 100' },
+    ...[0, 1, 2].map((m): Label => ({ position: [SPAN_X / 2 + 0.5, m * GAP + y, -SPAN_Z / 2], text: `level ${m}` })),
+  ]
   return (
-    <Canvas camera={{ position: [2.5, 7.5, 11], fov: 34 }} dpr={[1, 2]} gl={{ preserveDrawingBuffer: true }} data-testid="band-canvas">
-      <HtmlWarmup />
+    <LabeledCanvas labels={labels} camera={{ position: [2.5, 7.5, 11], fov: 34 }} dpr={[1, 2]} gl={{ preserveDrawingBuffer: true }} data-testid="band-canvas">
       <color attach="background" args={[theme === 'dark' ? '#121214' : '#f6f5f2']} />
       <ambientLight intensity={0.8} />
       <directionalLight position={[5, 9, 6]} intensity={1.4} />
-      <group position={[0, -1.8, 0]}>
+      <group position={[0, LIFT, 0]}>
         {sheets.map((g, m) => (
           <mesh key={m} geometry={g}>
             <meshStandardMaterial color={LEVEL_COLORS[m]} side={THREE.DoubleSide} roughness={0.8} transparent opacity={0.22} depthWrite={false} />
@@ -95,26 +103,9 @@ export function BandScene({
           <edgesGeometry args={[new THREE.PlaneGeometry(SPAN_X + 0.4, 5.2).translate(0, 1.8, 0)]} />
           <lineBasicMaterial color={ink} transparent opacity={0.6} />
         </lineSegments>
-        <Html position={[0, 4.6, zMark]} center className="axis-label">
-          E_J/E_C = {Math.round(ratio)}
-        </Html>
-        <Html position={[SPAN_X / 2 + 0.4, 0, SPAN_Z / 2]} center className="axis-label">
-          n_g
-        </Html>
-        <Html position={[-SPAN_X / 2 - 0.9, 0, SPAN_Z / 2]} center className="axis-label">
-          E_J/E_C = 1
-        </Html>
-        <Html position={[-SPAN_X / 2 - 0.9, 0, -SPAN_Z / 2]} center className="axis-label">
-          E_J/E_C = 100
-        </Html>
-        {[0, 1, 2].map((m) => (
-          <Html key={m} position={[SPAN_X / 2 + 0.5, m * GAP, -SPAN_Z / 2]} center className="axis-label">
-            level {m}
-          </Html>
-        ))}
         <gridHelper args={[SPAN_X, 4, ink, ink]} position={[0, -0.01, 0]} scale={[1, 1, SPAN_Z / SPAN_X]} material-opacity={0.15} material-transparent />
       </group>
       <OrbitControls makeDefault enableDamping target={[0, 0.6, 0]} />
-    </Canvas>
+    </LabeledCanvas>
   )
 }

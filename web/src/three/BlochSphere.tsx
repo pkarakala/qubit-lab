@@ -2,13 +2,19 @@
 // Bloch (x, y, z) maps to three.js (x, z, -y), since three.js points y up.
 // The arrow can be shorter than 1: decoherence, or population that left for level 2.
 
-import { Html, Line, OrbitControls } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
+import { Line, OrbitControls } from '@react-three/drei'
 import { useMemo } from 'react'
 import * as THREE from 'three'
-import { HtmlWarmup } from './HtmlWarmup'
+import { type Label, LabeledCanvas } from './LabeledCanvas'
 
 type Vec = [number, number, number]
+
+const LABELS: Label[] = [
+  { position: [0, 1.38, 0], text: '|0⟩' },
+  { position: [0, -1.38, 0], text: '|1⟩' },
+  { position: [1.38, 0, 0], text: 'x' },
+  { position: [0, 0, -1.38], text: 'y' },
+]
 
 export const toScene = (b: number[] | undefined): Vec => [b?.[0] ?? 0, b?.[2] ?? 0, -(b?.[1] ?? 0)]
 
@@ -43,8 +49,7 @@ export function BlochScene({
   const quat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir)
   const accent = theme === 'dark' ? '#ff7a5c' : '#c4432f'
   return (
-    <Canvas camera={{ position: [3.0, 1.7, 3.4], fov: 38 }} dpr={[1, 2]} gl={{ preserveDrawingBuffer: true }} data-testid="bloch-canvas">
-      <HtmlWarmup />
+    <LabeledCanvas labels={LABELS} camera={{ position: [3.0, 1.7, 3.4], fov: 38 }} dpr={[1, 2]} gl={{ preserveDrawingBuffer: true }} data-testid="bloch-canvas">
       <color attach="background" args={[theme === 'dark' ? '#121214' : '#f6f5f2']} />
       <ambientLight intensity={0.9} />
       <directionalLight position={[3, 5, 4]} intensity={1.1} />
@@ -71,11 +76,7 @@ export function BlochScene({
           </mesh>
         </group>
       ) : null}
-      <Html position={[0, 1.38, 0]} center className="axis-label">|0⟩</Html>
-      <Html position={[0, -1.38, 0]} center className="axis-label">|1⟩</Html>
-      <Html position={[1.38, 0, 0]} center className="axis-label">x</Html>
-      <Html position={[0, 0, -1.38]} center className="axis-label">y</Html>
       <OrbitControls makeDefault enableDamping enablePan={false} />
-    </Canvas>
+    </LabeledCanvas>
   )
 }

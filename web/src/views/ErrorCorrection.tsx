@@ -3,7 +3,7 @@
 
 import { useCatCode, useQecCurves, useQecShot } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { SpaceTimeScene } from '../three/SpaceTime'
@@ -67,6 +67,7 @@ export function ErrorCorrection() {
           A transmon has η ≈ 1. Cats reach very large η because bit-flips fall exponentially with photon number (see
           Flip rates). The code fixes phase-flips; bit-flips get through, and more qubits let more through.
         </p>
+        <CopyPython view='qec' inputs={{ p, p_phase: pPhase, p_bit: pPhase / bias }} />
       </aside>
 
       <main className="pane pane-center">
