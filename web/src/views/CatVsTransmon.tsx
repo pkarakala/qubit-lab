@@ -11,7 +11,7 @@ import {
   useReferences,
 } from "../api";
 import { CONFIG, Plot, SERIES, layout } from "../components/Plot";
-import { CopyPython, ErrorBanner, FormulaCard, Slider, shortCite } from "../components/ui";
+import { CopyPython, ErrorBanner, FormulaCard, Slider, Solving, shortCite } from "../components/ui";
 import { fmt } from "../lib/colormap";
 import { useExplorer } from "../store";
 import { useShared } from "../lib/share";
@@ -172,12 +172,10 @@ export function CatVsTransmon() {
               style={{ width: "100%", height: "100%" }}
             />
           ) : (
-            <div className="boot">
-              Solving the transmon idle and the cat Liouvillians…
-            </div>
+            <Solving boot what="Solving the transmon idle and the cat Liouvillians" />
           )}
           {cmp.isFetching || rates.isFetching ? (
-            <div className="hud-corner muted">solving…</div>
+            <div className="hud-corner"><Solving /></div>
           ) : null}
         </div>
         <div className="dock">

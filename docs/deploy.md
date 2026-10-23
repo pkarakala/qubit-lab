@@ -7,7 +7,7 @@ docker build -t qubitlab .
 docker run -p 7860:7860 qubitlab     # then open http://localhost:7860
 ```
 
-The build precomputes the slowest pages (`scripts/warm_cache.py`): every check, the error-correction curves, and the cat vs transmon table. The first visitor does not wait for them.
+The build precomputes the slowest pages (`python -m qubitlab.warm`): every check, the error-correction curves, and the cat vs transmon table. The first visitor does not wait for them.
 
 ## Limits for a public server
 

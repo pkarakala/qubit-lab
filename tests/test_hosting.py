@@ -31,3 +31,21 @@ def test_serves_the_explorer_and_the_api(hosted: TestClient) -> None:
 def test_rate_limit_answers_429(hosted: TestClient) -> None:
     codes = [hosted.get("/api/health").status_code for _ in range(4)]
     assert codes == [200, 200, 200, 429]
+
+
+def test_warm_runs_in_the_background_on_start(monkeypatch: pytest.MonkeyPatch) -> None:
+    import threading
+
+    import qubitlab.warm
+
+    started = threading.Event()
+    monkeypatch.setattr(qubitlab.warm, "warm", started.set)
+    monkeypatch.setenv("QUBITLAB_WARM", "1")
+    importlib.reload(qubitlab.api)
+    try:
+        with TestClient(qubitlab.api.app) as client:
+            assert client.get("/api/health").status_code == 200
+        assert started.wait(5)
+    finally:
+        monkeypatch.undo()
+        importlib.reload(qubitlab.api)

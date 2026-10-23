@@ -5,7 +5,7 @@
 import { useEffect, useState } from 'react'
 import { type PulseParams, type PulseScore, usePulse } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { BlochScene } from '../three/BlochSphere'
@@ -106,7 +106,7 @@ export function PulseOptimizer() {
       <main className="pane pane-center">
         <ErrorBanner error={run.error} />
         <div className="viewport">
-          {shown ? <BlochScene bloch={shown.bloch} frame={f} theme={theme} /> : <div className="boot">Optimizing the pulse…</div>}
+          {shown ? <BlochScene bloch={shown.bloch} frame={f} theme={theme} /> : <Solving boot what="Optimizing the pulse" />}
           <div className="hud">
             <Segmented
               label="pulse"

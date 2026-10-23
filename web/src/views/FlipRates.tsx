@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 import { type CatParams, useFacts, useRates, useReferences } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { CopyPython, ErrorBanner, FormulaCard, Slider, shortCite } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, Slider, Solving, shortCite } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { useShared } from '../lib/share'
@@ -107,9 +107,9 @@ export function FlipRates() {
               style={{ width: '100%', height: '100%' }}
             />
           ) : (
-            <div className="boot">Diagonalizing {SIZES.length} Liouvillians (about 30 s the first time)…</div>
+            <Solving boot what={`Diagonalizing ${SIZES.length} Liouvillians`} />
           )}
-          {q.isFetching && q.data ? <div className="hud-corner muted">solving…</div> : null}
+          {q.isFetching && q.data ? <div className="hud-corner"><Solving /></div> : null}
         </div>
         <div className="dock">
           {q.data ? (

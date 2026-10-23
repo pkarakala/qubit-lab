@@ -25,7 +25,6 @@ COPY --chown=lab docs/hand_calcs/ docs/hand_calcs/
 RUN uv sync --frozen --no-dev
 COPY --from=web --chown=lab /src/qubitlab/explorer src/qubitlab/explorer
 # Precompute the slow pages (all checks, the QEC curves) so the first visitor does not wait.
-COPY --chown=lab scripts/warm_cache.py scripts/
-RUN python scripts/warm_cache.py
+RUN python -m qubitlab.warm
 EXPOSE 7860
 CMD ["uvicorn", "--factory", "qubitlab.serve:app_with_explorer", "--host", "0.0.0.0", "--port", "7860", "--proxy-headers", "--forwarded-allow-ips", "*"]

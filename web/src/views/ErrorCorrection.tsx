@@ -3,7 +3,7 @@
 
 import { useCatCode, useQecCurves, useQecShot } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { SpaceTimeScene } from '../three/SpaceTime'
@@ -76,7 +76,7 @@ export function ErrorCorrection() {
           {s ? (
             <SpaceTimeScene qubits={s.qubits} detectors={s.detectors} fired={s.fired} matched={s.matched} theme={theme} />
           ) : (
-            <div className="boot">Sampling a surface code run…</div>
+            <Solving boot what="Sampling a surface code run" />
           )}
           <div className="hud">
             <div className="mono">
@@ -119,7 +119,7 @@ export function ErrorCorrection() {
               style={{ width: '100%', height: '100%' }}
             />
           ) : (
-            <div className="boot">Running 36 memory experiments…</div>
+            <Solving boot what="Running 36 memory experiments" />
           )}
         </div>
       </main>
