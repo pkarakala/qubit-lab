@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 import { type CatParams, useFacts, useRates, useReferences } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { CopyPython, ErrorBanner, FormulaCard, Slider, Solving, shortCite } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, PaperSettings, shortCite, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { useShared } from '../lib/share'
@@ -43,6 +43,7 @@ export function FlipRates() {
   return (
     <div className="view">
       <aside className="pane pane-left">
+        <PaperSettings view="rates" onPick={(r) => set(r as Partial<CatParams>)} />
         <h3>Noise</h3>
         <p className="small muted">
           Two-photon dissipation only. For a Kerr cat the slowest modes of the Liouvillian are not the flips, so this

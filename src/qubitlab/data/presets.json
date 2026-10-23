@@ -1,0 +1,1174 @@
+{
+ "source": "Curated from the experiment literature; each preset cites the paper its numbers come from.",
+ "presets": [
+  {
+   "view": "transmon",
+   "name": "Krantz 2019 worked example (E_J/E_C = 50)",
+   "params": {
+    "E_J": 15.0,
+    "E_C": 0.3
+   },
+   "refs": [
+    "krantz2019"
+   ]
+  },
+  {
+   "view": "transmon",
+   "name": "Koch 2007 example (E_C = 0.35 GHz, E_J/E_C ~ 85)",
+   "params": {
+    "E_J": 30.0,
+    "E_C": 0.35
+   },
+   "refs": [
+    "koch2007"
+   ]
+  },
+  {
+   "view": "transmon",
+   "name": "Rigetti 2012 (E_J = 10.39 GHz, ratio 49; E_C derived 0.212)",
+   "params": {
+    "E_J": 10.39,
+    "E_C": 0.212
+   },
+   "refs": [
+    "rigetti2012"
+   ]
+  },
+  {
+   "view": "transmon",
+   "name": "Paik 2011 3D transmon (upper end of Table I range)",
+   "params": {
+    "E_J": 34.0,
+    "E_C": 0.304
+   },
+   "refs": [
+    "paik2011"
+   ]
+  },
+  {
+   "view": "transmon",
+   "name": "Koch 2007 charge-dispersion threshold (E_J/E_C = 20)",
+   "params": {
+    "E_J": 6.0,
+    "E_C": 0.3
+   },
+   "refs": [
+    "koch2007"
+   ]
+  },
+  {
+   "view": "transmon",
+   "name": "Cooper-pair-box regime (E_J/E_C = 1)",
+   "params": {
+    "E_J": 0.3,
+    "E_C": 0.3
+   },
+   "refs": [
+    "koch2007"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Rabi: Resonant 20 ns square pi (Omega = 25 MHz)",
+   "params": {
+    "experiment": "rabi",
+    "alpha_ghz": -0.3,
+    "t1_ns": 100000.0,
+    "t2_ns": 100000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.025,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 200.0,
+    "n_points": 201
+   },
+   "refs": [
+    "krantz2019"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Rabi: Leakage onset (Omega = |alpha|)",
+   "params": {
+    "experiment": "rabi",
+    "alpha_ghz": -0.2,
+    "t1_ns": 100000.0,
+    "t2_ns": 100000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.2,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 200.0,
+    "n_points": 201
+   },
+   "refs": [
+    "motzoi2009"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Rabi: Detuned, half contrast (Delta = Omega)",
+   "params": {
+    "experiment": "rabi",
+    "alpha_ghz": -0.3,
+    "t1_ns": 100000.0,
+    "t2_ns": 100000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.01,
+    "omega_ghz": 0.01,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 200.0,
+    "n_points": 201
+   },
+   "refs": [
+    "krantz2019"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "π pulse: Motzoi 2009: 6 ns plain Gaussian, alpha = -400 MHz",
+   "params": {
+    "experiment": "pulse",
+    "alpha_ghz": -0.4,
+    "t1_ns": 100000.0,
+    "t2_ns": 100000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.02,
+    "duration_ns": 6.0,
+    "drag": 0.0,
+    "t_max_ns": 200.0,
+    "n_points": 121
+   },
+   "refs": [
+    "motzoi2009"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "π pulse: Motzoi 2009: 6 ns with DRAG",
+   "params": {
+    "experiment": "pulse",
+    "alpha_ghz": -0.4,
+    "t1_ns": 100000.0,
+    "t2_ns": 100000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.02,
+    "duration_ns": 6.0,
+    "drag": 1.0,
+    "t_max_ns": 200.0,
+    "n_points": 121
+   },
+   "refs": [
+    "motzoi2009"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "π pulse: Chen 2016: 10 ns, measured fidelity optimum drag = 0.4",
+   "params": {
+    "experiment": "pulse",
+    "alpha_ghz": -0.212,
+    "t1_ns": 22000.0,
+    "t2_ns": 22000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.02,
+    "duration_ns": 10.0,
+    "drag": 0.4,
+    "t_max_ns": 200.0,
+    "n_points": 121
+   },
+   "refs": [
+    "chen2016"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "π pulse: Chen 2016: 10 ns, measured leakage optimum drag = 1.1",
+   "params": {
+    "experiment": "pulse",
+    "alpha_ghz": -0.212,
+    "t1_ns": 22000.0,
+    "t2_ns": 22000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.02,
+    "duration_ns": 10.0,
+    "drag": 1.1,
+    "t_max_ns": 200.0,
+    "n_points": 121
+   },
+   "refs": [
+    "chen2016"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "π pulse: Werninghaus 2021: 4.16 ns DRAG baseline",
+   "params": {
+    "experiment": "pulse",
+    "alpha_ghz": -0.3153,
+    "t1_ns": 105000.0,
+    "t2_ns": 39000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.02,
+    "duration_ns": 4.16,
+    "drag": 1.0,
+    "t_max_ns": 200.0,
+    "n_points": 121
+   },
+   "refs": [
+    "werninghaus2021"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "π pulse: Bland 2025: 40 ns DRAG (alpha placeholder)",
+   "params": {
+    "experiment": "pulse",
+    "alpha_ghz": -0.2,
+    "t1_ns": 450000.0,
+    "t2_ns": 202500.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.02,
+    "duration_ns": 40.0,
+    "drag": 1.0,
+    "t_max_ns": 200.0,
+    "n_points": 121
+   },
+   "refs": [
+    "bland2025"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "π pulse: Place 2021: sigma = 50 ns Gaussian (alpha placeholder)",
+   "params": {
+    "experiment": "pulse",
+    "alpha_ghz": -0.2,
+    "t1_ns": 360000.0,
+    "t2_ns": 200000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.02,
+    "duration_ns": 200.0,
+    "drag": 0.0,
+    "t_max_ns": 200.0,
+    "n_points": 121
+   },
+   "refs": [
+    "place2021"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "T1: Paik 2011 3D transmon (best qubit)",
+   "params": {
+    "experiment": "t1",
+    "t1_ns": 60000.0,
+    "t2_ns": 60000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 300000.0,
+    "n_points": 51
+   },
+   "refs": [
+    "paik2011"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "T1: Rigetti 2012 waveguide cavity",
+   "params": {
+    "experiment": "t1",
+    "t1_ns": 70000.0,
+    "t2_ns": 70000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 350000.0,
+    "n_points": 51
+   },
+   "refs": [
+    "rigetti2012"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "T1: Chen 2016 Xmon",
+   "params": {
+    "experiment": "t1",
+    "t1_ns": 22000.0,
+    "t2_ns": 22000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 110000.0,
+    "n_points": 51
+   },
+   "refs": [
+    "chen2016"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "T1: Krantz 2019 worked example",
+   "params": {
+    "experiment": "t1",
+    "t1_ns": 85000.0,
+    "t2_ns": 85000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 425000.0,
+    "n_points": 51
+   },
+   "refs": [
+    "krantz2019"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "T1: Werninghaus 2021",
+   "params": {
+    "experiment": "t1",
+    "t1_ns": 105000.0,
+    "t2_ns": 105000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 525000.0,
+    "n_points": 51
+   },
+   "refs": [
+    "werninghaus2021"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "T1: Place 2021 Ta (best)",
+   "params": {
+    "experiment": "t1",
+    "t1_ns": 360000.0,
+    "t2_ns": 360000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 1000000.0,
+    "n_points": 51
+   },
+   "refs": [
+    "place2021"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "T1: Chen 2021 repetition-code device",
+   "params": {
+    "experiment": "t1",
+    "t1_ns": 15000.0,
+    "t2_ns": 15000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 75000.0,
+    "n_points": 51
+   },
+   "refs": [
+    "chen2021"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "T1: Acharya 2023 surface-code device (mean)",
+   "params": {
+    "experiment": "t1",
+    "t1_ns": 20000.0,
+    "t2_ns": 20000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 100000.0,
+    "n_points": 51
+   },
+   "refs": [
+    "acharya2023"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "T1: Acharya 2025 processor (mean)",
+   "params": {
+    "experiment": "t1",
+    "t1_ns": 68000.0,
+    "t2_ns": 68000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 340000.0,
+    "n_points": 51
+   },
+   "refs": [
+    "willow2025"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "T1: Bland 2025 mean over 45 qubits",
+   "params": {
+    "experiment": "t1",
+    "t1_ns": 450000.0,
+    "t2_ns": 450000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 1000000.0,
+    "n_points": 51
+   },
+   "refs": [
+    "bland2025"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "T1: Bland 2025 best time-averaged (1.68 ms peak clipped)",
+   "params": {
+    "experiment": "t1",
+    "t1_ns": 1000000.0,
+    "t2_ns": 1000000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 1000000.0,
+    "n_points": 51
+   },
+   "refs": [
+    "bland2025"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Ramsey: Krantz 2019: T_phi,G = 98 us Gaussian (sigma derived), T2 white = 2T1",
+   "params": {
+    "experiment": "ramsey",
+    "t1_ns": 85000.0,
+    "t2_ns": 170000.0,
+    "sigma_ghz": 2.3e-06,
+    "delta_ghz": 0.0001,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 186300.0,
+    "n_points": 301
+   },
+   "refs": [
+    "krantz2019"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Ramsey: Paik 2011 best qubit: T2* = 18 us",
+   "params": {
+    "experiment": "ramsey",
+    "t1_ns": 60000.0,
+    "t2_ns": 18000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0005,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 40000.0,
+    "n_points": 301
+   },
+   "refs": [
+    "paik2011"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Ramsey: Rigetti 2012: T2* = 95 us",
+   "params": {
+    "experiment": "ramsey",
+    "t1_ns": 70000.0,
+    "t2_ns": 95000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0001,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 200000.0,
+    "n_points": 301
+   },
+   "refs": [
+    "rigetti2012"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Ramsey: Werninghaus 2021: T2 = 39 us",
+   "params": {
+    "experiment": "ramsey",
+    "t1_ns": 105000.0,
+    "t2_ns": 39000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0005,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 40000.0,
+    "n_points": 301
+   },
+   "refs": [
+    "werninghaus2021"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Ramsey: Charge-sensitive CPB-like (E_J/E_C = 20 dispersion ~25 MHz, sigma at cap)",
+   "params": {
+    "experiment": "ramsey",
+    "t1_ns": 100000.0,
+    "t2_ns": 100000.0,
+    "sigma_ghz": 0.02,
+    "delta_ghz": 0.01,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 33.76,
+    "n_points": 301
+   },
+   "refs": [
+    "koch2007"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Echo: Paik 2011 best qubit: T_echo = 25 us",
+   "params": {
+    "experiment": "echo",
+    "t1_ns": 60000.0,
+    "t2_ns": 25000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 50000.0,
+    "n_points": 41
+   },
+   "refs": [
+    "paik2011"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Echo: Krantz 2019: T2E = 120 us",
+   "params": {
+    "experiment": "echo",
+    "t1_ns": 85000.0,
+    "t2_ns": 120000.0,
+    "sigma_ghz": 2.3e-06,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 240000.0,
+    "n_points": 41
+   },
+   "refs": [
+    "krantz2019"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Echo: Place 2021 Ta: T2,echo = 0.20 ms (time-averaged)",
+   "params": {
+    "experiment": "echo",
+    "t1_ns": 360000.0,
+    "t2_ns": 200000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 400000.0,
+    "n_points": 41
+   },
+   "refs": [
+    "place2021"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Echo: Acharya 2023 device: T2,CPMG = 30 us (as echo)",
+   "params": {
+    "experiment": "echo",
+    "t1_ns": 20000.0,
+    "t2_ns": 30000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 60000.0,
+    "n_points": 41
+   },
+   "refs": [
+    "acharya2023"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Echo: Acharya 2025: T2,CPMG = 89 us (as echo)",
+   "params": {
+    "experiment": "echo",
+    "t1_ns": 68000.0,
+    "t2_ns": 89000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 178000.0,
+    "n_points": 41
+   },
+   "refs": [
+    "willow2025"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Echo: Bland 2025 mean: T2E = 0.45 T1",
+   "params": {
+    "experiment": "echo",
+    "t1_ns": 450000.0,
+    "t2_ns": 202500.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 405000.0,
+    "n_points": 41
+   },
+   "refs": [
+    "bland2025"
+   ]
+  },
+  {
+   "view": "qubit",
+   "name": "Echo: Bland 2025 UHV junctions: T2E = 1.2 T1",
+   "params": {
+    "experiment": "echo",
+    "t1_ns": 1000000.0,
+    "t2_ns": 1200000.0,
+    "sigma_ghz": 0.0,
+    "delta_ghz": 0.0,
+    "omega_ghz": 0.0,
+    "duration_ns": 20.0,
+    "drag": 0.0,
+    "t_max_ns": 1000000.0,
+    "n_points": 41
+   },
+   "refs": [
+    "bland2025"
+   ]
+  },
+  {
+   "view": "pulse",
+   "name": "Werninghaus 2021: 4.16 ns (omega_max placeholder)",
+   "params": {
+    "alpha_ghz": -0.3153,
+    "duration_ns": 4.16,
+    "omega_max_ghz": 0.3,
+    "t1_ns": 105000.0,
+    "t2_ns": 39000.0,
+    "steps": 300
+   },
+   "refs": [
+    "werninghaus2021"
+   ]
+  },
+  {
+   "view": "pulse",
+   "name": "Werninghaus 2021: 10.83 ns (longest sample count)",
+   "params": {
+    "alpha_ghz": -0.3153,
+    "duration_ns": 10.83,
+    "omega_max_ghz": 0.3,
+    "t1_ns": 105000.0,
+    "t2_ns": 39000.0,
+    "steps": 300
+   },
+   "refs": [
+    "werninghaus2021"
+   ]
+  },
+  {
+   "view": "pulse",
+   "name": "Motzoi 2009 regime: 6 ns, alpha = -400 MHz",
+   "params": {
+    "alpha_ghz": -0.4,
+    "duration_ns": 6.0,
+    "omega_max_ghz": 0.3,
+    "t1_ns": 100000.0,
+    "t2_ns": 100000.0,
+    "steps": 300
+   },
+   "refs": [
+    "motzoi2009"
+   ]
+  },
+  {
+   "view": "phase",
+   "name": "Lescanne 2020 (kappa_1/kappa_2 ~ 1.3 clipped to 1.0)",
+   "params": {
+    "alpha_sq": 3.5,
+    "kappa_1": 1.0,
+    "n_th": 0.0,
+    "kappa_phi": 0.0,
+    "scheme": "dissipative",
+    "initial": "vacuum",
+    "t_final": 5.0,
+    "n_frames": 41,
+    "grid": 51
+   },
+   "refs": [
+    "lescanne2020"
+   ]
+  },
+  {
+   "view": "phase",
+   "name": "Réglade 2024: cat formation from vacuum",
+   "params": {
+    "alpha_sq": 2.5,
+    "kappa_1": 0.01,
+    "n_th": 0.1,
+    "kappa_phi": 0.0,
+    "scheme": "dissipative",
+    "initial": "vacuum",
+    "t_final": 5.0,
+    "n_frames": 41,
+    "grid": 51
+   },
+   "refs": [
+    "reglade2024"
+   ]
+  },
+  {
+   "view": "phase",
+   "name": "Réglade 2024: |+> at |alpha|^2 = 2.5",
+   "params": {
+    "alpha_sq": 2.5,
+    "kappa_1": 0.01,
+    "n_th": 0.1,
+    "kappa_phi": 0.0,
+    "scheme": "dissipative",
+    "initial": "even_cat",
+    "t_final": 60.0,
+    "n_frames": 41,
+    "grid": 51
+   },
+   "refs": [
+    "reglade2024"
+   ]
+  },
+  {
+   "view": "phase",
+   "name": "Réglade 2024: |+> at |alpha|^2 = 5.6",
+   "params": {
+    "alpha_sq": 5.6,
+    "kappa_1": 0.01,
+    "n_th": 0.1,
+    "kappa_phi": 0.0,
+    "scheme": "dissipative",
+    "initial": "even_cat",
+    "t_final": 26.79,
+    "n_frames": 41,
+    "grid": 101
+   },
+   "refs": [
+    "reglade2024"
+   ]
+  },
+  {
+   "view": "phase",
+   "name": "Réglade 2024: |alpha|^2 = 11.3 clipped to 9",
+   "params": {
+    "alpha_sq": 9.0,
+    "kappa_1": 0.01,
+    "n_th": 0.1,
+    "kappa_phi": 0.0,
+    "scheme": "dissipative",
+    "initial": "even_cat",
+    "t_final": 16.67,
+    "n_frames": 41,
+    "grid": 101
+   },
+   "refs": [
+    "reglade2024"
+   ]
+  },
+  {
+   "view": "phase",
+   "name": "Marquet 2024: Z-gate point |alpha|^2 = 9.3 clipped to 9",
+   "params": {
+    "alpha_sq": 9.0,
+    "kappa_1": 0.0065,
+    "n_th": 0.011,
+    "kappa_phi": 0.074,
+    "scheme": "dissipative",
+    "initial": "even_cat",
+    "t_final": 25.64,
+    "n_frames": 41,
+    "grid": 101
+   },
+   "refs": [
+    "marquet2024"
+   ]
+  },
+  {
+   "view": "phase",
+   "name": "Putterman 2025 storage cat, |alpha|^2 = 2 (ratios derived)",
+   "params": {
+    "alpha_sq": 2.0,
+    "kappa_1": 0.05,
+    "n_th": 0.0,
+    "kappa_phi": 0.015,
+    "scheme": "dissipative",
+    "initial": "even_cat",
+    "t_final": 15.0,
+    "n_frames": 41,
+    "grid": 51
+   },
+   "refs": [
+    "putterman2025"
+   ]
+  },
+  {
+   "view": "phase",
+   "name": "Chamberland 2022 Regime 1 (|alpha|^2 = 8, kappa_1/kappa_2 = 1e-3)",
+   "params": {
+    "alpha_sq": 8.0,
+    "kappa_1": 0.001,
+    "n_th": 0.0,
+    "kappa_phi": 0.0,
+    "scheme": "dissipative",
+    "initial": "even_cat",
+    "t_final": 187.5,
+    "n_frames": 41,
+    "grid": 101
+   },
+   "refs": [
+    "chamberland2022"
+   ]
+  },
+  {
+   "view": "phase",
+   "name": "Grimm 2020 (K/2pi = 6.7 MHz, kappa_1/K ~ 1.5e-3)",
+   "params": {
+    "alpha_sq": 2.6,
+    "kappa_1": 0.0015,
+    "n_th": 0.0,
+    "kappa_phi": 0.0,
+    "scheme": "kerr",
+    "initial": "coherent_plus",
+    "t_final": 200.0,
+    "n_frames": 41,
+    "grid": 51
+   },
+   "refs": [
+    "grimm2020"
+   ]
+  },
+  {
+   "view": "phase",
+   "name": "Hajr 2024 gate point |alpha|^2 = 4 (kappa_1/K ~ 3.4e-3, n_th 2%)",
+   "params": {
+    "alpha_sq": 4.0,
+    "kappa_1": 0.0034,
+    "n_th": 0.02,
+    "kappa_phi": 0.0,
+    "scheme": "kerr",
+    "initial": "even_cat",
+    "t_final": 110.3,
+    "n_frames": 41,
+    "grid": 51
+   },
+   "refs": [
+    "hajr2024"
+   ]
+  },
+  {
+   "view": "phase",
+   "name": "Frattini 2024 max-T_X point eps2/K = 8.9 (n_th derived 0.04, unverified)",
+   "params": {
+    "alpha_sq": 8.9,
+    "kappa_1": 0.025,
+    "n_th": 0.04,
+    "kappa_phi": 0.0,
+    "scheme": "kerr",
+    "initial": "even_cat",
+    "t_final": 6.742,
+    "n_frames": 41,
+    "grid": 101
+   },
+   "refs": [
+    "frattini2024"
+   ]
+  },
+  {
+   "view": "rates",
+   "name": "Lescanne 2020 (1.3 clipped to 1.0)",
+   "params": {
+    "kappa_1": 1.0,
+    "n_th": 0.0,
+    "kappa_phi": 0.0
+   },
+   "refs": [
+    "lescanne2020"
+   ]
+  },
+  {
+   "view": "rates",
+   "name": "Réglade 2024",
+   "params": {
+    "kappa_1": 0.01,
+    "n_th": 0.1,
+    "kappa_phi": 0.0
+   },
+   "refs": [
+    "reglade2024"
+   ]
+  },
+  {
+   "view": "rates",
+   "name": "Marquet 2024",
+   "params": {
+    "kappa_1": 0.0065,
+    "n_th": 0.011,
+    "kappa_phi": 0.074
+   },
+   "refs": [
+    "marquet2024"
+   ]
+  },
+  {
+   "view": "rates",
+   "name": "Putterman 2025 (derived ratios)",
+   "params": {
+    "kappa_1": 0.05,
+    "n_th": 0.0,
+    "kappa_phi": 0.015
+   },
+   "refs": [
+    "putterman2025"
+   ]
+  },
+  {
+   "view": "rates",
+   "name": "Chamberland 2022 Regime 1",
+   "params": {
+    "kappa_1": 0.001,
+    "n_th": 0.0,
+    "kappa_phi": 0.0
+   },
+   "refs": [
+    "chamberland2022"
+   ]
+  },
+  {
+   "view": "rates",
+   "name": "Chamberland 2022 Regime 2",
+   "params": {
+    "kappa_1": 0.0001,
+    "n_th": 0.0,
+    "kappa_phi": 0.0
+   },
+   "refs": [
+    "chamberland2022"
+   ]
+  },
+  {
+   "view": "rates",
+   "name": "Chamberland 2022 Regime 3",
+   "params": {
+    "kappa_1": 1e-05,
+    "n_th": 0.0,
+    "kappa_phi": 0.0
+   },
+   "refs": [
+    "chamberland2022"
+   ]
+  },
+  {
+   "view": "qec",
+   "name": "Krinner 2022-like d = 3 (effective p)",
+   "params": {
+    "d": 3,
+    "p": 0.005,
+    "seed": 0
+   },
+   "refs": [
+    "krinner2022"
+   ]
+  },
+  {
+   "view": "qec",
+   "name": "Acharya 2023 near-threshold d = 5 (effective p)",
+   "params": {
+    "d": 5,
+    "p": 0.007,
+    "seed": 0
+   },
+   "refs": [
+    "acharya2023"
+   ]
+  },
+  {
+   "view": "qec",
+   "name": "Acharya 2025 below threshold d = 7 (effective p)",
+   "params": {
+    "d": 7,
+    "p": 0.002,
+    "seed": 0
+   },
+   "refs": [
+    "willow2025"
+   ]
+  },
+  {
+   "view": "qec_cat",
+   "name": "Putterman 2025-like (p_phase 0.096 clipped to 0.05)",
+   "params": {
+    "p_phase": 0.05,
+    "p_bit": 0.0035
+   },
+   "refs": [
+    "putterman2025"
+   ]
+  },
+  {
+   "view": "qec_cat",
+   "name": "Le Régent 2023 eta = 1e-3, idle-level phase flips",
+   "params": {
+    "p_phase": 0.0089,
+    "p_bit": 1e-05
+   },
+   "refs": [
+    "leregent2023"
+   ]
+  },
+  {
+   "view": "qec_cat",
+   "name": "Le Régent 2023 eta = 1e-3, CNOT-level phase flips",
+   "params": {
+    "p_phase": 0.036,
+    "p_bit": 1e-05
+   },
+   "refs": [
+    "leregent2023"
+   ]
+  },
+  {
+   "view": "compare",
+   "name": "Acharya 2025 single-qubit gate (25 ns)",
+   "params": {
+    "t_ns": 25.0
+   },
+   "refs": [
+    "willow2025"
+   ]
+  },
+  {
+   "view": "compare",
+   "name": "Acharya 2025 CZ gate (42 ns)",
+   "params": {
+    "t_ns": 42.0
+   },
+   "refs": [
+    "willow2025"
+   ]
+  },
+  {
+   "view": "compare",
+   "name": "Réglade Zeno Z(pi) gate (235 ns)",
+   "params": {
+    "t_ns": 235.0
+   },
+   "refs": [
+    "reglade2024"
+   ]
+  },
+  {
+   "view": "compare",
+   "name": "Putterman CX^2 (504 ns)",
+   "params": {
+    "t_ns": 504.0
+   },
+   "refs": [
+    "putterman2025"
+   ]
+  },
+  {
+   "view": "compare",
+   "name": "Acharya 2023 QEC cycle (921 ns)",
+   "params": {
+    "t_ns": 921.0
+   },
+   "refs": [
+    "acharya2023"
+   ]
+  },
+  {
+   "view": "compare",
+   "name": "Acharya 2025 QEC cycle (1.1 us)",
+   "params": {
+    "t_ns": 1100.0
+   },
+   "refs": [
+    "willow2025"
+   ]
+  },
+  {
+   "view": "compare",
+   "name": "Putterman syndrome cycle (2.8 us)",
+   "params": {
+    "t_ns": 2800.0
+   },
+   "refs": [
+    "putterman2025"
+   ]
+  }
+ ]
+}
