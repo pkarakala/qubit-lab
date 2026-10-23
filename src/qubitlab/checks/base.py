@@ -75,4 +75,7 @@ def run_all(include_slow: bool = True) -> list[CheckResult]:
         if c.slow and not include_slow:
             continue
         out.extend(c.run())
+    keys = [r.key for r in out]
+    if len(keys) != len(set(keys)):
+        raise ValueError(f"duplicate check keys: {sorted({k for k in keys if keys.count(k) > 1})}")
     return out
