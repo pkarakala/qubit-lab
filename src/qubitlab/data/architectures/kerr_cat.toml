@@ -1,0 +1,87 @@
+# Kerr cat qubit, after grimm2020. Units: micrometres.
+
+[scene]
+id = "kerr_cat"
+name = "Kerr cat qubit"
+family = "cat"
+summary = "A SNAIL nonlinear resonator on a chip inside a 3D cavity. A squeezing drive at twice its frequency, together with its Kerr, makes a double well whose two minima are the cat qubit."
+refs = ["grimm2020"]
+
+[physics]
+model = "kerr_cat"
+K = 6.7
+eps2 = 17.5
+source = "grimm2020, Table II: K / 2 pi = 6.7 MHz; epsilon_2 / 2 pi = 17.5 to 18 MHz (Figs. 3, 4)."
+kind = "peer_reviewed"
+
+[[part]]
+id = "cavity_lower"
+name = "Readout cavity, copper half"
+role = "The lower half is copper so that the flux-bias field can get in. Its mode reads the qubit."
+size = [30000, 20000, 6000]
+position = [0, 0, -1300]
+draw_size = [7000, 4500, 1600]
+material = "copper"
+explode = [0, 0, -4000]
+dims_class = "SCHEMATIC"
+dims_source = "grimm2020, Supplement VI.A describes the two-part cavity; inner dimensions not given (Fig. 1d scale bar 2 cm)."
+
+[[part]]
+id = "chip"
+name = "Chip"
+role = "Carries the SNAIL and its pads into the cavity."
+size = [3000, 1600, 400]
+position = [0, 0, -200]
+material = "sapphire"
+explode = [0, 0, -2000]
+dims_class = "SCHEMATIC"
+dims_source = "grimm2020 does not give the substrate material, thickness or chip size."
+
+[[part]]
+id = "pad_1"
+name = "Capacitor pad"
+role = "Large pads give a big capacitance, which keeps the Kerr K small compared with a transmon."
+size = [2200, 600, 0.1]
+position = [-110, 400, 0.05]
+draw_size = [2200, 600, 40]
+material = "aluminium"
+explode = [0, 600, 1500]
+dims_class = "MEASURED"
+dims_source = "grimm2020, Supplement VI.A: pads 2.2 mm x 0.6 mm."
+
+[[part]]
+id = "pad_2"
+name = "Capacitor pad (offset)"
+role = "The offset delta between the pads sets a small, controlled coupling to the readout cavity."
+size = [2200, 600, 0.1]
+position = [110, -400, 0.05]
+draw_size = [2200, 600, 40]
+material = "aluminium"
+explode = [0, -600, 1500]
+dims_class = "MEASURED"
+dims_source = "grimm2020, Supplement VI.A: pads 2.2 mm x 0.6 mm, offset delta = 0.22 mm."
+
+[[part]]
+id = "snail"
+name = "SNAIL: one small and three large junctions"
+role = "A loop whose flux tunes both its three-wave mixing g_3 (used by the squeezing drive) and its Kerr K."
+size = [10, 5, 0.1]
+position = [0, 0, 0.05]
+draw_size = [160, 80, 80]
+enlarged = true
+material = "junction"
+explode = [0, 0, 3000]
+dims_class = "SCHEMATIC"
+dims_source = "grimm2020, Fig. 1f caption: one small junction (7.27 nH) and three large ones (0.8 nH each). Loop size not stated, drawn schematically."
+
+[[part]]
+id = "cavity_upper"
+name = "Readout cavity, aluminium half"
+role = "Superconducting upper half, aperture-coupled to a WR-90 waveguide that acts as a high-pass Purcell filter (cutoff about 8.2 GHz)."
+size = [30000, 20000, 6000]
+position = [0, 0, 1300]
+draw_size = [7000, 4500, 1600]
+material = "aluminium_bulk"
+explode = [0, 0, 4000]
+dims_class = "SCHEMATIC"
+dims_source = "grimm2020, Supplement VI.A; dimensions not given."

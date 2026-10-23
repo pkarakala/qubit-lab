@@ -1,0 +1,90 @@
+# Fluxonium, after manucharyan2009. Units: micrometres.
+
+[scene]
+id = "fluxonium"
+name = "Fluxonium"
+family = "fluxonium"
+summary = "One small junction shunted by a chain of 43 large ones. The chain is a huge, almost linear inductor, which makes the qubit low in frequency and well protected at half flux."
+refs = ["manucharyan2009"]
+
+[physics]
+model = "fluxonium"
+E_C = 2.5
+E_J = 9.0
+E_L = 0.52
+source = "manucharyan2009, main text: E_L = 0.52 GHz, E_J = 9.0 GHz, E_C = 2.5 GHz."
+kind = "peer_reviewed"
+
+[[part]]
+id = "substrate"
+name = "Silicon substrate"
+role = "High-resistivity silicon under the circuit."
+size = [400, 200, 300]
+position = [0, 0, -150]
+material = "silicon"
+explode = [0, 0, -220]
+dims_class = "MEASURED"
+dims_source = "manucharyan2009, Supporting Material 1: high-resistivity silicon, 300 um thick. Lateral size schematic."
+
+[[part]]
+id = "array"
+name = "Chain of 43 junctions (superinductance)"
+role = "Many large junctions in series act as a big linear inductor, E_L much smaller than E_J. It lets the flux spread over several wells of the small junction's potential."
+size = [20, 2, 0.1]
+position = [0, 24, 0.05]
+draw_size = [160, 12, 12]
+enlarged = true
+material = "junction"
+explode = [0, 30, 90]
+dims_class = "MEASURED"
+dims_source = "manucharyan2009, Supporting Material 1: N = 43 junctions of 0.25 x 2 um^2, spaced under 200 nm, total length 20 um."
+
+[[part]]
+id = "small_junction"
+name = "Small junction"
+role = "The one nonlinear element. Flux through the loop tilts its cosine potential; at half a flux quantum the two lowest states form the qubit."
+size = [0.2, 0.3, 0.1]
+position = [0, -24, 0.05]
+draw_size = [18, 18, 18]
+enlarged = true
+material = "junction"
+explode = [0, -30, 120]
+dims_class = "MEASURED"
+dims_source = "manucharyan2009, Supporting Material 1: 0.2 x 0.3 um^2."
+
+[[part]]
+id = "loop"
+name = "Superconducting loop"
+role = "The ring of small junction plus chain. External flux through it sets the operating point."
+size = [20, 3, 0.1]
+position = [0, 0, 0.05]
+draw_size = [170, 60, 4]
+enlarged = true
+material = "aluminium"
+explode = [0, 0, 50]
+dims_class = "MEASURED"
+dims_source = "manucharyan2009, Supporting Material 1: loop 3 x 20 um^2."
+
+[[part]]
+id = "readout"
+name = "Quarter-wave readout resonator"
+role = "A shorted coupled-microstrip resonator at about 8.17 GHz that reads the qubit dispersively."
+size = [300, 10, 0.1]
+position = [0, 60, 0.05]
+draw_size = [300, 10, 6]
+material = "aluminium"
+explode = [0, 60, 60]
+dims_class = "SCHEMATIC"
+dims_source = "manucharyan2009, Fig. 1A caption and main text: about 8.17 GHz, loaded Q = 400; length not given."
+
+[[part]]
+id = "coil"
+name = "Flux coil"
+role = "An external coil, about 1 cm across, a few mm from the chip, that sets the flux through the loop."
+size = [10000, 10000, 1000]
+position = [0, 0, -450]
+draw_size = [300, 300, 30]
+material = "copper"
+explode = [0, 0, -260]
+dims_class = "SCHEMATIC"
+dims_source = "manucharyan2009, Supporting Material 1: about 1 cm diameter, a few mm from the chip; height schematic."

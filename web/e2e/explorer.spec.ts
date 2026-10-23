@@ -107,6 +107,19 @@ test('checks page reports no surprises', async ({ page }) => {
   await page.screenshot({ path: `${IMG}/checks.png` })
 })
 
+test('architecture gallery explodes a design and shows its levels', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('tab', { name: 'Architectures', exact: true }).click()
+  await expect(page.getByTestId('arch-viewport').locator('canvas')).toBeVisible({ timeout: 120_000 })
+  await page.getByTestId('arch-fluxonium').click()
+  await expect(page.getByTestId('arch-physics')).toContainText('manucharyan2009')
+  await expect(page.locator('.dock .js-plotly-plot')).toBeVisible({ timeout: 120_000 })
+  await page.getByTestId('arch-tantalum_transmon').click()
+  await page.getByTestId('explode').fill('0.8')
+  await page.waitForTimeout(2000)
+  await page.screenshot({ path: `${IMG}/architectures.png` })
+})
+
 test('every view copies a Python script', async ({ page }) => {
   await page.goto('/')
   const views: [string, string][] = [

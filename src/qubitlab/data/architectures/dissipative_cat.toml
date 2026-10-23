@@ -1,0 +1,85 @@
+# Dissipative cat qubit, after reglade2024. Units: micrometres.
+
+[scene]
+id = "dissipative_cat"
+name = "Dissipative cat qubit"
+family = "cat"
+summary = "A long-lived memory resonator holds the cat. A lossy buffer and a nonlinear ATS swap pairs of memory photons for buffer photons that leak away, which pins the state to |+alpha> or |-alpha>."
+refs = ["reglade2024"]
+
+[physics]
+model = "dissipative_cat"
+source = "See the Phase space and Flip rates views: the effective model is two-photon dissipation (mirrahimi2014)."
+kind = "peer_reviewed"
+
+[[part]]
+id = "substrate"
+name = "Sapphire wafer"
+role = "Sapphire under the tantalum circuit."
+size = [3000, 3000, 430]
+position = [0, 0, -215]
+material = "sapphire"
+explode = [0, 0, -900]
+dims_class = "MEASURED"
+dims_source = "reglade2024, Supplement S1a: 430 um thick 2-inch sapphire wafer. Chip size schematic."
+
+[[part]]
+id = "film"
+name = "Tantalum film with flux-trapping holes"
+role = "alpha-phase tantalum, punctured with holes so that stray vortices get pinned away from the circuit."
+size = [3000, 3000, 0.2]
+position = [0, 0, 0.1]
+draw_size = [3000, 3000, 20]
+material = "tantalum_film"
+explode = [0, 0, 200]
+dims_class = "MEASURED"
+dims_source = "reglade2024, Supplement S1a: 200 nm alpha-tantalum; Fig. S1b caption: holes against vortex trapping."
+
+[[part]]
+id = "memory"
+name = "Memory resonator (quarter-wave)"
+role = "Stores the cat state. At 5.26 GHz with a 17 us lifetime, it is the qubit."
+size = [2000, 30, 0.2]
+position = [-200, 600, 0.1]
+draw_size = [2000, 30, 30]
+material = "tantalum"
+explode = [0, 500, 500]
+dims_class = "SCHEMATIC"
+dims_source = "reglade2024, main text: 5.26 GHz, kappa_a / 2 pi = 9.3 kHz; length not given, drawn short."
+
+[[part]]
+id = "buffer"
+name = "Buffer island"
+role = "A strongly damped mode at 7.70 GHz (kappa_b / 2 pi = 2.6 MHz). Photon pairs from the memory become single buffer photons that leak out."
+size = [200, 200, 0.2]
+position = [600, 0, 0.1]
+draw_size = [200, 200, 30]
+material = "tantalum"
+explode = [300, 0, 700]
+dims_class = "SCHEMATIC"
+dims_source = "reglade2024, main text gives the frequency and damping; Fig. S1b scale bar 0.2 mm (twin sample)."
+
+[[part]]
+id = "ats"
+name = "ATS: SQUID shunted by a chain of 13 junctions"
+role = "The Asymmetrically Threaded SQUID. Biased at its sweet spot, it mixes memory, buffer and pump with few unwanted terms, giving g_2 / 2 pi = 0.76 MHz."
+size = [40, 40, 0.1]
+position = [600, -160, 0.1]
+draw_size = [80, 80, 20]
+enlarged = true
+material = "junction"
+explode = [300, -200, 1000]
+dims_class = "SCHEMATIC"
+dims_source = "reglade2024, Fig. S1c caption: SQUID of two junctions shunted by a chain of 13 junctions (the main text says kinetic inductance; the supplement is used here). Size not stated, drawn schematically."
+
+[[part]]
+id = "flux_lines"
+name = "Two flux lines"
+role = "Carry the common and differential flux that bias the ATS, plus the pump tone that drives two-photon exchange."
+size = [600, 20, 0.2]
+position = [900, -400, 0.1]
+draw_size = [600, 20, 20]
+material = "tantalum"
+explode = [400, -400, 400]
+dims_class = "SCHEMATIC"
+dims_source = "reglade2024, Fig. S1a caption describes two symmetric flux lines; sizes not given."

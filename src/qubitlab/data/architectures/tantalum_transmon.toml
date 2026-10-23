@@ -1,0 +1,98 @@
+# Tantalum transmon on sapphire, after place2021. Units: micrometres.
+
+[scene]
+id = "tantalum_transmon"
+name = "Tantalum transmon"
+family = "transmon"
+summary = "A double-pad transmon in tantalum on sapphire, with an aluminium junction, a readout resonator and a copper package: the materials that pushed T1 past 0.3 ms."
+refs = ["place2021"]
+
+[physics]
+model = "transmon"
+E_C = 0.25
+E_J = 12.5
+source = "place2021 gives qubit frequencies of 3.1 to 5.5 GHz (Supplement S1.3) but not E_J or E_C. These are illustrative values with f01 near 4.7 GHz."
+kind = "assumption"
+
+[[part]]
+id = "package"
+name = "Copper package base"
+role = "Aluminium-coated oxygen-free copper that holds the chip and sinks heat. Lines reach the chip through a PCB and wirebonds."
+size = [9000, 9000, 1000]
+position = [0, 0, -1030]
+material = "copper"
+explode = [0, 0, -2500]
+dims_class = "SCHEMATIC"
+dims_source = "place2021, Supplement S1.2 describes the package but gives no dimensions."
+
+[[part]]
+id = "substrate"
+name = "Sapphire substrate"
+role = "c-plane sapphire, double-side polished. A low-loss crystal under the circuit."
+size = [7000, 7000, 530]
+position = [0, 0, -265]
+material = "sapphire"
+explode = [0, 0, -1200]
+dims_class = "MEASURED"
+dims_source = "place2021, Supplement S1.1: 0.53 mm thick, diced into 7 x 7 mm chips."
+
+[[part]]
+id = "film"
+name = "Tantalum ground plane"
+role = "alpha-phase tantalum. Its thin, stable oxide (2 to 3 nm) hosts fewer lossy defects than niobium or aluminium oxides."
+size = [7000, 7000, 0.2]
+position = [0, 0, 0.1]
+draw_size = [7000, 7000, 30]
+material = "tantalum_film"
+explode = [0, 0, 300]
+dims_class = "SCHEMATIC"
+dims_source = "place2021 states about 200 nm only for a silicon device (Table S1 caption); oxide 2 to 3 nm (main text, STEM)."
+
+[[part]]
+id = "pad_left"
+name = "Capacitor pad"
+role = "One of two floating tantalum islands. Together they set E_C and shape the qubit's electric field."
+size = [500, 300, 0.2]
+position = [-320, 0, 0.1]
+draw_size = [500, 300, 40]
+material = "tantalum"
+explode = [-400, 0, 700]
+dims_class = "SCHEMATIC"
+dims_source = "place2021 describes a double-pad design (Supplement S1.4.1); pad sizes are only in figures."
+
+[[part]]
+id = "pad_right"
+name = "Capacitor pad"
+role = "The second floating island of the double-pad transmon."
+size = [500, 300, 0.2]
+position = [320, 0, 0.1]
+draw_size = [500, 300, 40]
+material = "tantalum"
+explode = [400, 0, 700]
+dims_class = "SCHEMATIC"
+dims_source = "As the other pad."
+
+[[part]]
+id = "junction"
+name = "Al/AlOx/Al junction"
+role = "The nonlinear inductor. A nanometre-thin oxide between two aluminium layers makes the levels unequal, so two of them can be a qubit."
+size = [0.17, 0.17, 0.069]
+position = [0, 0, 0.1]
+draw_size = [60, 40, 60]
+enlarged = true
+material = "junction"
+explode = [0, 0, 1100]
+dims_class = "MEASURED"
+dims_source = "place2021, Supplement S1.1: Manhattan junction, overlap about 0.03 um^2; aluminium 15 nm then 54 nm."
+
+[[part]]
+id = "readout"
+name = "Readout resonator"
+role = "A lithographic resonator at 6.8 to 7.3 GHz, capacitively coupled to the qubit, read through a Purcell filter."
+size = [2500, 40, 0.2]
+position = [0, 1200, 0.1]
+draw_size = [2500, 40, 30]
+material = "tantalum"
+explode = [0, 600, 500]
+dims_class = "SCHEMATIC"
+dims_source = "place2021, Supplement S1.3: 6.8 to 7.3 GHz; length not given, drawn short."
