@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 import { type Experiment, useQubit } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { QUBIT_PRESETS, useExplorer } from '../store'
 import { BlochScene } from '../three/BlochSphere'
@@ -122,6 +122,7 @@ export function Qubit() {
         {ex === 'ramsey' || ex === 'echo' ? (
           <Slider label="slow frequency noise (MHz)" tex="\sigma" value={p.sigma_ghz * 1e3} min={0} max={10} step={0.5} onChange={(v) => set({ sigma_ghz: v / 1e3 })} />
         ) : null}
+        <CopyPython view='qubit' inputs={p} />
       </aside>
 
       <main className="pane pane-center">

@@ -12,13 +12,13 @@ import anyio
 import numpy as np
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 
-from qubitlab import __version__
+from qubitlab import __version__, snippets
 from qubitlab.cache import disk_cached
 from qubitlab.facts import DEVICES, FACT, FACTS
 from qubitlab.provenance import bib_entries
@@ -649,3 +649,39 @@ def playground(req: PlaygroundRequest) -> dict[str, Any]:
     except RuntimeError as e:  # Dynamiqs hit its step limit
         msg = "the solver gave up: the model is too fast or too stiff for this duration"
         raise HTTPException(422, msg) from e
+
+
+class TransmonInputs(BaseModel):
+    E_J: float = Field(15.0, gt=0.0, le=200.0)
+    E_C: float = Field(0.3, gt=0.0, le=10.0)
+
+
+class QecInputs(BaseModel):
+    p: float = Field(0.005, gt=0.0, le=0.05, description="physical error rate, surface code")
+    p_phase: float = Field(0.005, gt=0.0, le=0.05)
+    p_bit: float = Field(5e-7, ge=0.0, le=0.01)
+
+
+class CompareInputs(BaseModel):
+    t_ns: float = Field(25.0, ge=1.0, le=1e5)
+
+
+INPUTS: dict[snippets.View, type[BaseModel]] = {
+    "phase": EvolveRequest,
+    "rates": RatesRequest,
+    "transmon": TransmonInputs,
+    "qubit": QubitRequest,
+    "pulse": PulseRequest,
+    "qec": QecInputs,
+    "compare": CompareInputs,
+}
+
+
+@app.post("/api/python/{view}")
+def python_script(view: snippets.View, body: dict[str, Any]) -> dict[str, str]:
+    """A Python script that reproduces the view with these inputs (validated like the view)."""
+    try:
+        inputs = INPUTS[view](**body).model_dump()
+    except ValidationError as e:
+        raise HTTPException(422, str(e)) from e
+    return {"python": snippets.script(view, inputs)}
