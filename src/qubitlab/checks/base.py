@@ -70,6 +70,7 @@ def run_all(include_slow: bool = True) -> list[CheckResult]:
     # Import for side effects: each module registers its checks.
     from qubitlab.checks import (  # noqa: F401
         cat_checks,
+        gate_checks,
         qec_checks,
         qubit_checks,
         readout_checks,

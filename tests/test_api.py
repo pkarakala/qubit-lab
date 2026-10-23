@@ -99,3 +99,13 @@ def test_readout_keeps_theory_and_sim_apart() -> None:
     assert data["sim"]["dephasing_per_us"] == pytest.approx(
         data["theory"]["dephasing_per_us"], rel=0.01
     )
+
+
+@pytest.mark.slow
+def test_gates_cz_time_and_cnot_optimum() -> None:
+    data = client.post("/api/gates", json={}).json()
+    # Hand calc: t_CZ = pi / (sqrt(2) g) with g = 2 pi x 10 MHz is 35.36 ns.
+    assert data["cz"]["theory"]["cz_time_ns"] == pytest.approx(35.355, rel=1e-4)
+    # T* = 1 / (2 n sqrt(pi kappa_1 kappa_2)) with n = 4, kappa_1/kappa_2 = 1e-3 is 2.230 / kappa_2.
+    assert data["cnot"]["theory"]["t_opt"] == pytest.approx(2.2302, rel=1e-4)
+    assert set(data["cnot"]) == {"sim", "theory"}

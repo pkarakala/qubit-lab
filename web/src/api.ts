@@ -159,7 +159,7 @@ async function post<T>(path: string, body: unknown): Promise<T> {
   return (await r.json()) as T
 }
 
-export type ScriptView = 'phase' | 'rates' | 'transmon' | 'qubit' | 'pulse' | 'qec' | 'compare' | 'readout'
+export type ScriptView = 'phase' | 'rates' | 'transmon' | 'qubit' | 'pulse' | 'qec' | 'compare' | 'readout' | 'gates'
 
 /** A Python script that reproduces `view` at `inputs` (see qubitlab/snippets.py). */
 export const pythonScript = (view: ScriptView, inputs: unknown) => post<{ python: string }>(`/api/python/${view}`, inputs)
@@ -371,6 +371,32 @@ export const useReadout = (p: ReadoutParams) =>
   useQuery({
     queryKey: ['readout', p],
     queryFn: () => post<ReadoutRun>('/api/readout', p),
+    placeholderData: keepPreviousData,
+    ...forever,
+  })
+
+export interface GatesParams {
+  g_mhz: number
+  alpha_mhz: number
+  n: 2 | 4
+  log_kappa_ratio: number
+}
+
+export interface GatesRun {
+  cz: {
+    sim: { times_ns: number[]; phase: number[]; leakage: number[]; zz_delta_mhz: number[]; zz_mhz: number[] }
+    theory: { cz_time_ns: number; zz_mhz: number[] }
+  }
+  cnot: {
+    sim: { T: number[]; control: number[]; target: number[] }
+    theory: { T: number[]; z1: number[]; z2: number[]; control: number[]; target: number[]; t_opt: number }
+  }
+}
+
+export const useGates = (p: GatesParams) =>
+  useQuery({
+    queryKey: ['gates', p],
+    queryFn: () => post<GatesRun>('/api/gates', p),
     placeholderData: keepPreviousData,
     ...forever,
   })

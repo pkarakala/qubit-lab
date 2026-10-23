@@ -103,6 +103,7 @@ def warm() -> None:
         ),
         lambda: api.compare(t_ns=25.0),
         lambda: api.readout(api.ReadoutRequest()),  # views/Readout.tsx defaults
+        lambda: api.gates(api.GatesRequest()),  # views/Gates.tsx defaults
         lambda: api.cat_rates(api.RatesRequest(**CAT, kappa_1=0.01, alpha_sq_values=COMPARE_SIZES)),
         lambda: api.qec_shot(d=5, p=0.005, seed=1),
         lambda: api.qec_cat(api.CatCodeRequest(p_phase=0.005, p_bit=0.005 / 1e4)),

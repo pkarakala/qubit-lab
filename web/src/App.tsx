@@ -5,6 +5,7 @@ import { CatVsTransmon } from './views/CatVsTransmon'
 import { Checks } from './views/Checks'
 import { ErrorCorrection } from './views/ErrorCorrection'
 import { FlipRates } from './views/FlipRates'
+import { Gates } from './views/Gates'
 import { PhaseSpace } from './views/PhaseSpace'
 import { Playground } from './views/Playground'
 import { PulseOptimizer } from './views/PulseOptimizer'
@@ -21,6 +22,7 @@ const VIEWS: { id: View; label: string; hint: string }[] = [
   { id: 'qubit', label: 'Qubit control', hint: 'Pulses and noise on a transmon' },
   { id: 'readout', label: 'Readout', hint: 'Dispersive readout: a qubit shifts its resonator' },
   { id: 'pulse', label: 'Pulse optimizer', hint: 'Gradient descent through the simulation' },
+  { id: 'gates', label: 'Two-qubit gates', hint: 'A transmon CZ and a bias-preserving cat CNOT' },
   { id: 'qec', label: 'Error correction', hint: 'Surface code vs a repetition code of cats' },
   { id: 'compare', label: 'Noise bias', hint: 'Bit-flips vs phase-flips at measured numbers, cat and transmon' },
   { id: 'playground', label: 'Playground', hint: 'Type your own Hamiltonian and losses' },
@@ -111,6 +113,7 @@ export default function App() {
       {view === 'compare' ? <CatVsTransmon /> : null}
       {view === 'playground' ? <Playground /> : null}
       {view === 'readout' ? <Readout /> : null}
+      {view === 'gates' ? <Gates /> : null}
       {view === 'checks' ? <Checks /> : null}
       <footer className="footer small muted">
         Open-source simulator for learning superconducting qubits. Every equation is cited and checked against the
