@@ -14,6 +14,12 @@ import numpy as np
 import pymatching
 import stim
 
+# Stim's first conversion to a NumPy array sets up pybind11's NumPy bindings behind a C++ static
+# guard while holding the GIL. Two threads making that first call at once deadlock the whole
+# process (the server's request threads and its warm-up do exactly that). Make it here, once,
+# while the module is imported on one thread.
+stim.Circuit("M 0\nDETECTOR rec[-1]").compile_detector_sampler().sample(1)
+
 Code = Literal["surface", "repetition"]
 TASK: dict[Code, str] = {
     "surface": "surface_code:rotated_memory_z",
