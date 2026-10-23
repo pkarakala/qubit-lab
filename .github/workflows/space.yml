@@ -1,0 +1,32 @@
+name: space
+
+# Deploys main to the Hugging Face Space, which builds the Dockerfile.
+# One-time setup (docs/deploy.md): repo variable HF_SPACE = "<user>/qubit-lab" and repo
+# secret HF_TOKEN = a Hugging Face token with write access. Until both exist, this skips.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: vars.HF_SPACE != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Push a snapshot to the Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: |
+          # The Space reads its settings from a header on README.md, and refuses binary
+          # files outside its own storage, so the snapshot drops the screenshots.
+          printf -- '---\ntitle: Qubit Lab\nemoji: 🐈\ncolorFrom: indigo\ncolorTo: gray\nsdk: docker\napp_port: 7860\nlicense: apache-2.0\nshort_description: Cat qubits and transmons, theory vs simulation, in 3D\n---\n\n' | cat - README.md > README.tmp && mv README.tmp README.md
+          rm -rf docs/img
+          git config user.name "qubit-lab deploy"
+          git config user.email "deploy@users.noreply.github.com"
+          git checkout --orphan space
+          git add -A
+          git commit -qm "Deploy ${GITHUB_SHA::7}"
+          git push --force "https://user:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE}" space:main

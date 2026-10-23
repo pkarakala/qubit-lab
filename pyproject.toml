@@ -16,6 +16,7 @@ dependencies = [
     "pydantic>=2.14.1",
     "pymatching>=2.4.0",
     "scqubits>=4.1.0",
+    "slowapi>=0.1.10",
     "stim>=1.16.0",
     "sympy>=1.14.0",
     "uvicorn>=0.54.0",
