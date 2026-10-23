@@ -107,6 +107,15 @@ test('checks page reports no surprises', async ({ page }) => {
   await page.screenshot({ path: `${IMG}/checks.png` })
 })
 
+test('readout separates the two pointer states and compares chi', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('tab', { name: 'Readout', exact: true }).click()
+  await expect(page.locator('.chart-main .js-plotly-plot')).toBeVisible({ timeout: 120_000 })
+  await expect(page.getByTestId('chi-table')).toContainText('Koch')
+  await expect(page.getByTestId('dephasing')).toContainText('per µs')
+  await page.screenshot({ path: `${IMG}/readout.png` })
+})
+
 test('every view copies a Python script', async ({ page }) => {
   await page.goto('/')
   const views: [string, string][] = [
@@ -117,6 +126,7 @@ test('every view copies a Python script', async ({ page }) => {
     ['Pulse optimizer', 'po.optimize('],
     ['Error correction', 'qec.memory('],
     ['Noise bias', 'theory.flip_probability('],
+    ['Readout', 'readout.dressed_chi('],
   ]
   for (const [tab, call] of views) {
     await page.getByRole('tab', { name: tab, exact: true }).click()

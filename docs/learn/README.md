@@ -19,7 +19,7 @@ A short course in five parts. Each page is one idea, about two minutes, and ends
 
 - 31 [Controlling a transmon](31-qubit-control.md)
 - 32 [Letting the simulation design the pulse](32-pulse-optimizer.md)
-- 33 Dispersive readout (coming next)
+- 33 [Dispersive readout](33-dispersive-readout.md)
 
 **4. Gates and errors**
 

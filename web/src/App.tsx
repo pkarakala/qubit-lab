@@ -9,6 +9,7 @@ import { PhaseSpace } from './views/PhaseSpace'
 import { Playground } from './views/Playground'
 import { PulseOptimizer } from './views/PulseOptimizer'
 import { Qubit } from './views/Qubit'
+import { Readout } from './views/Readout'
 import { Transmon } from './views/Transmon'
 import { toLink } from './lib/share'
 import { type View, useExplorer } from './store'
@@ -18,6 +19,7 @@ const VIEWS: { id: View; label: string; hint: string }[] = [
   { id: 'rates', label: 'Flip rates', hint: 'Bit-flips vs phase-flips' },
   { id: 'transmon', label: 'Transmon', hint: 'The other superconducting qubit' },
   { id: 'qubit', label: 'Qubit control', hint: 'Pulses and noise on a transmon' },
+  { id: 'readout', label: 'Readout', hint: 'Dispersive readout: a qubit shifts its resonator' },
   { id: 'pulse', label: 'Pulse optimizer', hint: 'Gradient descent through the simulation' },
   { id: 'qec', label: 'Error correction', hint: 'Surface code vs a repetition code of cats' },
   { id: 'compare', label: 'Noise bias', hint: 'Bit-flips vs phase-flips at measured numbers, cat and transmon' },
@@ -108,6 +110,7 @@ export default function App() {
       {view === 'qec' ? <ErrorCorrection /> : null}
       {view === 'compare' ? <CatVsTransmon /> : null}
       {view === 'playground' ? <Playground /> : null}
+      {view === 'readout' ? <Readout /> : null}
       {view === 'checks' ? <Checks /> : null}
       <footer className="footer small muted">
         Open-source simulator for learning superconducting qubits. Every equation is cited and checked against the
