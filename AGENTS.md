@@ -18,7 +18,7 @@ Rules for coding agents (and people) working in this repo. Humans start at [READ
 2. **Never cite from memory.** Read the paper before you write a locator. If a detail was not checked, say so in the bib entry's `unverified` field.
 3. **Predict before you run.** Each check regime states `AGREE` or `DIVERGE` from the formula's `valid_when`, before you see the numbers. If the result surprises you, that is a finding: report it, do not tune the tolerance to hide it.
 4. **Expected test values come from hand calcs or papers,** never from running the code.
-5. **Conventions are fixed:** beta = x + ip, hbar = 1/2 Wigner convention, alpha real and positive, rates in units of kappa_2 (or K), transmon energies in units of E_C or GHz. Alice & Bob's basis: |0>, |1> ~ |+alpha>, |-alpha>. Some papers swap bit and phase flip; note it in the `Source.note`.
+5. **Conventions are fixed:** beta = x + ip, hbar = 1/2 Wigner convention, alpha real and positive, rates in units of kappa_2 (or K), transmon energies in units of E_C or GHz. Cat basis as in reglade2024: |0>, |1> ~ |+alpha>, |-alpha>. Some papers swap bit and phase flip; note it in the `Source.note`.
 6. **Human docs stay short.** A `docs/learn/` page is at most 350 words and ends with a `Sources:` line. `tests/test_docs.py` enforces both. Long material goes in `docs/reference/`, which is generated.
 7. **Reuse before you write.** Before adding a helper, check Dynamiqs, scqubits, JAX, NumPy, SciPy, SymPy and this repo (`sim/`, `theory/`) for one that already exists, and import it. Write our own only when nothing fits, and say why in its docstring.
 8. **Keep diffs small and on one topic.** Write plainly: short sentences, no filler, no em dashes.

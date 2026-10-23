@@ -1,16 +1,33 @@
 # Learn
 
-Short pages, one idea each. Read in order. Each takes about two minutes.
+A short course in five parts. Each page is one idea, about two minutes, and ends with a **Try it** step in the explorer. Read in order, or jump to the part you need.
 
-1. [A cat qubit in one page](01-cat-qubit.md)
-2. [Two-photon dissipation](02-two-photon-dissipation.md)
-3. [Bit-flips and phase-flips](03-bit-and-phase-flips.md)
-4. [A transmon in one page](04-transmon.md)
-5. [Cat vs transmon](05-cat-vs-transmon.md)
-6. [Controlling a transmon](06-qubit-control.md)
-7. [Error correction](07-error-correction.md)
-8. [Noise bias in numbers](08-noise-bias.md)
-9. [Letting the simulation design the pulse](09-pulse-optimizer.md)
-10. [The playground](10-playground.md)
+**1. Foundations**
 
-Every equation here is in [docs/reference/formulas.md](../reference/formulas.md) with its paper and equation number. Every claim that the simulation agrees is in [docs/reference/checks.md](../reference/checks.md).
+- 11 [States and the Wigner function](11-phase-space.md)
+- 12 [Open systems: T1, T2 and fidelity](12-open-systems.md)
+- 13 [The playground](13-playground.md)
+
+**2. Two qubit designs**
+
+- 21 [A transmon in one page](21-transmon.md)
+- 22 [A cat qubit in one page](22-cat-qubit.md)
+- 23 [Two-photon dissipation](23-two-photon-dissipation.md)
+- 24 [Bit-flips and phase-flips](24-bit-and-phase-flips.md)
+
+**3. Control and readout**
+
+- 31 [Controlling a transmon](31-qubit-control.md)
+- 32 [Letting the simulation design the pulse](32-pulse-optimizer.md)
+- 33 Dispersive readout (coming next)
+
+**4. Gates and errors**
+
+- 41 Two-qubit gates (planned)
+- 42 [Two designs, two bets](42-cat-vs-transmon.md)
+- 43 [Noise bias in numbers](43-noise-bias.md)
+- 44 [Error correction](44-error-correction.md)
+
+**5. Hardware** (planned): the leading architectures as exploded 3D chips, and from layout to Hamiltonian.
+
+Every equation here is in [docs/reference/formulas.md](../reference/formulas.md) with its paper and equation number. Every claim that the simulation agrees is in [docs/reference/checks.md](../reference/checks.md). The plan for the parts still to come is in [docs/plan.md](../plan.md).
