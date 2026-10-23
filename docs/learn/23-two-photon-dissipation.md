@@ -14,4 +14,6 @@ where D is the Lindblad dissipator and κ₂ the two-photon rate. In hardware κ
 
 **Kerr cat, the alternative.** A Hamiltonian, H = −K a†²a² + ε₂(a†² + a²), holds the same two states as degenerate eigenstates with |α|² = ε₂/K. With this sign of H they sit at the top of the spectrum; papers often flip the sign and call them ground states. The Phase space view has a Kerr toggle.
 
+**Try it.** In *Phase space*, pick the lesson *Grow a cat* and watch vacuum become an even cat. Then add photon loss.
+
 Sources: lescanne2020 (Eq. 1), mirrahimi2014 (Eq. 1), grimm2020 (Eq. 1), hand calcs in `docs/hand_calcs/`.

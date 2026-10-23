@@ -1,6 +1,6 @@
 # Noise bias in numbers
 
-Page 5 says cats trade one error for the other. Here are measured numbers.
+[Two designs, two bets](42-cat-vs-transmon.md) says cats trade one error for the other. Here are measured numbers.
 
 **One idle step.** Let a qubit sit for t. A bit-flip flips Z; a phase-flip flips X. If ⟨Z⟩ decays as e^(−t/T), the bit-flip chance is p = (1 − e^(−t/T))/2. The phase-flip chance follows the same way from ⟨X⟩.
 
@@ -21,6 +21,6 @@ Page 5 says cats trade one error for the other. Here are measured numbers.
 
 **Fine print.** Willow's T2 uses dynamical decoupling (CPMG), and its numbers are means over 105 qubits. The Ta device numbers are its best T1 and echo T2. The check `qubit.flip_probability` shows where the formula fails: slow frequency noise makes ⟨X⟩ decay faster than e^(−t/T2).
 
-**Try it.** In the *Cat vs transmon* view, drag the idle time.
+**Try it.** In the *Noise bias* view, drag the idle time.
 
 Sources: reglade2024 (Fig. 3), willow2025 (Sec. II, Supplement Sec. I), place2021, guillaud2019 (Sec. II), qubitlab_hand_calcs (step 7).

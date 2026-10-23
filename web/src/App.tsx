@@ -22,7 +22,7 @@ const VIEWS: { id: View; label: string; hint: string }[] = [
   { id: 'readout', label: 'Readout', hint: 'Dispersive readout: a qubit shifts its resonator' },
   { id: 'pulse', label: 'Pulse optimizer', hint: 'Gradient descent through the simulation' },
   { id: 'qec', label: 'Error correction', hint: 'Surface code vs a repetition code of cats' },
-  { id: 'compare', label: 'Cat vs transmon', hint: 'Measured error rates and noise bias' },
+  { id: 'compare', label: 'Noise bias', hint: 'Bit-flips vs phase-flips at measured numbers, cat and transmon' },
   { id: 'playground', label: 'Playground', hint: 'Type your own Hamiltonian and losses' },
   { id: 'checks', label: 'Checks', hint: 'Theory vs simulation' },
 ]
@@ -113,8 +113,8 @@ export default function App() {
       {view === 'readout' ? <Readout /> : null}
       {view === 'checks' ? <Checks /> : null}
       <footer className="footer small muted">
-        Independent learning project. Every equation is cited; numbers from companies are labeled as claims. Not
-        affiliated with Alice &amp; Bob or Qolab. Simulation: Dynamiqs + JAX.
+        Open-source simulator for learning superconducting qubits. Every equation is cited and checked against the
+        simulation. Built on Dynamiqs, scqubits, Stim, PyMatching and JAX.
       </footer>
     </div>
   )

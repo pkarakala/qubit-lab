@@ -12,7 +12,7 @@ from typing import Any, Literal
 import anyio
 import jax
 import numpy as np
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, ValidationError
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -64,6 +64,20 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 
 app = FastAPI(title="qubitlab", version=__version__, lifespan=lifespan)
+
+
+@app.middleware("http")
+async def warm_steps_aside(request: Request, call_next: Any) -> Any:
+    """Hold the background warm-up between its steps while a request is being answered."""
+    from qubitlab.warm import request_finished, request_started
+
+    request_started()
+    try:
+        return await call_next(request)
+    finally:
+        request_finished()
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],

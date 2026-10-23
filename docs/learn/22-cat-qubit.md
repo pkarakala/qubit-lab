@@ -2,7 +2,7 @@
 
 A cat qubit stores one bit in a microwave resonator, not in an atom-like level.
 
-**The two states.** A resonator can hold a coherent state |α⟩: a blob of light with amplitude α. The qubit uses two of them, |+α⟩ and |−α⟩, on opposite sides of phase space. Alice & Bob call these |0⟩ and |1⟩.
+**The two states.** A resonator can hold a coherent state |α⟩: a blob of light with amplitude α. The qubit uses two of them, |+α⟩ and |−α⟩, on opposite sides of phase space. Réglade et al. 2024 call these |0⟩ and |1⟩, and so do we.
 
 **Why they barely overlap.** The overlap is |⟨α|−α⟩|² = e^(−4|α|²). With 4 photons (|α|² = 4) that is about 10⁻⁷. Noise has to move the state a long way to turn 0 into 1.
 
@@ -12,4 +12,4 @@ A cat qubit stores one bit in a microwave resonator, not in an atom-like level.
 
 **Try it.** Open the explorer, pick *Even cat*, and raise |α|². The blobs separate and the fringes get finer.
 
-Sources: gerry2005 (Ch. 3, 7). Checked in `cat.wigner` and `cat.photon_number`.
+Sources: gerry2005 (Ch. 3, 7), reglade2024 (text after Eq. 2). Checked in `cat.wigner` and `cat.photon_number`.
