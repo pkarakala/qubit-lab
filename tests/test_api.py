@@ -101,3 +101,26 @@ def test_pulse_optimizer_beats_drag() -> None:
     # Idling for 6 ns with T1 = T2 = 50 us costs t/(3 T2) + t/(6 T1) = 6e-5. The pulse costs a
     # little more: it briefly fills level 2, which decays and dephases faster.
     assert 6e-5 < sim["optimized"]["error_with_noise"] < 1e-4
+
+
+def test_readout_keeps_theory_and_sim_apart() -> None:
+    data = client.post("/api/readout", json={}).json()
+    assert set(data) == {"sim", "theory"}
+    # Hand calc: with a resonant drive of n photons, each pointer state holds
+    # n (kappa^2/4) / (kappa^2/4 + chi^2) photons (gambetta2006 Eq. 28 at delta_r = 0).
+    chi_mhz, kappa_mhz = data["sim"]["chi_mhz"], 1.0
+    expected = (kappa_mhz**2 / 4) / (kappa_mhz**2 / 4 + chi_mhz**2)
+    assert data["sim"]["photons_g"][-1] == pytest.approx(expected, rel=0.02)
+    assert data["sim"]["dephasing_per_us"] == pytest.approx(
+        data["theory"]["dephasing_per_us"], rel=0.01
+    )
+
+
+@pytest.mark.slow
+def test_gates_cz_time_and_cnot_optimum() -> None:
+    data = client.post("/api/gates", json={}).json()
+    # Hand calc: t_CZ = pi / (sqrt(2) g) with g = 2 pi x 10 MHz is 35.36 ns.
+    assert data["cz"]["theory"]["cz_time_ns"] == pytest.approx(35.355, rel=1e-4)
+    # T* = 1 / (2 n sqrt(pi kappa_1 kappa_2)) with n = 4, kappa_1/kappa_2 = 1e-3 is 2.230 / kappa_2.
+    assert data["cnot"]["theory"]["t_opt"] == pytest.approx(2.2302, rel=1e-4)
+    assert set(data["cnot"]) == {"sim", "theory"}

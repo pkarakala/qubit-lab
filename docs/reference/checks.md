@@ -38,6 +38,16 @@ Expected is the verdict predicted from the formula's validity range before runni
 | `cat.bit_flip_dephasing.1` | \|α\|² = 1, κ_φ/κ₂ = 0.01, κ₁ = 0 | 0.0013786 | 0.00139016 | 0.0084 | 0.1 | AGREE | AGREE |
 | `cat.bit_flip_dephasing.2` | \|α\|² = 2, κ_φ/κ₂ = 0.01, κ₁ = 0 | 0.000366436 | 0.000376462 | 0.027 | 0.1 | AGREE | AGREE |
 | `cat.bit_flip_dephasing.4` | \|α\|² = 4, κ_φ/κ₂ = 0.01, κ₁ = 0 | 1.34185e-05 | 1.43594e-05 | 0.07 | 0.1 | AGREE | AGREE |
+| `gates.static_zz.0.7` | Delta = 700 MHz, alpha = -300 MHz, g = 10 MHz | -0.0003 | -0.000299566 | 0.0014 | 0.05 | AGREE | AGREE |
+| `gates.static_zz.0.32` | Delta = 320 MHz, alpha = -300 MHz, g = 10 MHz | -0.00967742 | -0.00706368 | 0.27 | 0.05 | DIVERGE | DIVERGE |
+| `gates.cz_time.0.005` | g = 5 MHz, alpha = -300 MHz, phase at t_CZ | 3.14159 | 3.12303 | 0.0059 | 0.05 | AGREE | AGREE |
+| `gates.cz_time.0.05` | g = 50 MHz, alpha = -300 MHz, phase at t_CZ | 3.14159 | 2.94544 | 0.062 | 0.05 | DIVERGE | DIVERGE |
+| `gates.cat_cnot.control.0.5` | control parity flip, p_Z1 + p_Z1Z2; \|alpha\|^2 = 4, kappa_1/kappa_2 = 0.001, kappa_2 T = 0.5 | 0.0825775 | 0.0790059 | 0.043 | 0.1 | AGREE | AGREE |
+| `gates.cat_cnot.target.0.5` | target parity flip, p_Z2 + p_Z1Z2; \|alpha\|^2 = 4, kappa_1/kappa_2 = 0.001, kappa_2 T = 0.5 | 0.002 | 0.00198319 | 0.0084 | 0.1 | AGREE | AGREE |
+| `gates.cat_cnot.control.2.23` | control parity flip, p_Z1 + p_Z1Z2; \|alpha\|^2 = 4, kappa_1/kappa_2 = 0.001, kappa_2 T = 2.23 | 0.0312222 | 0.0337051 | 0.08 | 0.1 | AGREE | AGREE |
+| `gates.cat_cnot.target.2.23` | target parity flip, p_Z2 + p_Z1Z2; \|alpha\|^2 = 4, kappa_1/kappa_2 = 0.001, kappa_2 T = 2.23 | 0.00892062 | 0.00882551 | 0.011 | 0.1 | AGREE | AGREE |
+| `gates.cat_cnot.control.10` | control parity flip, p_Z1 + p_Z1Z2; \|alpha\|^2 = 4, kappa_1/kappa_2 = 0.001, kappa_2 T = 10 | 0.0639789 | 0.0617077 | 0.035 | 0.1 | AGREE | AGREE |
+| `gates.cat_cnot.target.10` | target parity flip, p_Z2 + p_Z1Z2; \|alpha\|^2 = 4, kappa_1/kappa_2 = 0.001, kappa_2 T = 10 | 0.04 | 0.0384056 | 0.04 | 0.1 | AGREE | AGREE |
 | `qec.error_exponent.surface.3.0.0008` | surface code, d = 3, p = 0.0008 to 0.002 | 2 | 2.08805 | 0.044 | 0.12 | AGREE | AGREE |
 | `qec.error_exponent.surface.5.0.0015` | surface code, d = 5, p = 0.0015 to 0.003 | 3 | 2.86154 | 0.046 | 0.12 | AGREE | AGREE |
 | `qec.error_exponent.repetition.3.0.002` | repetition code, d = 3, p = 0.002 to 0.006 | 2 | 1.91782 | 0.041 | 0.12 | AGREE | AGREE |
@@ -65,6 +75,20 @@ Expected is the verdict predicted from the formula's validity range before runni
 | `qubit.flip_probability.phase.0` | phase-flip, T = T2, T1 = 100 ns, T2 = 150 ns, σ = 0 MHz, t = 20 ns | 0.0624133 | 0.0624133 | 1.3e-10 | 0.001 | AGREE | AGREE |
 | `qubit.flip_probability.bit.0.002` | bit-flip, T = T1, T1 = 20000 ns, T2 = 20000 ns, σ = 2 MHz, t = 100 ns | 0.00249376 | 0.00249376 | 4.5e-14 | 0.001 | AGREE | AGREE |
 | `qubit.flip_probability.phase.0.002` | phase-flip, T = T2, T1 = 20000 ns, T2 = 20000 ns, σ = 2 MHz, t = 100 ns | 0.00249376 | 0.274112 | 1.1e+02 | 0.001 | DIVERGE | DIVERGE |
+| `readout.chi_transmon.50.7` | E_J/E_C = 50, f_q = 5.68 GHz, f_r = 7 GHz, g = 54 MHz | -0.00057533 | -0.000565335 | 0.017 | 0.05 | AGREE | AGREE |
+| `readout.chi_transmon.100.6.2` | E_J/E_C = 100, f_q = 8.17 GHz, f_r = 6.2 GHz, g = 65 MHz | -0.000325904 | -0.000319269 | 0.02 | 0.05 | AGREE | AGREE |
+| `readout.chi_transmon.200.5` | E_J/E_C = 200, f_q = 11.69 GHz, f_r = 5 GHz, g = 78 MHz | -1.93322e-05 | -1.63947e-05 | 0.15 | 0.05 | DIVERGE | DIVERGE |
+| `readout.chi_transmon_harmonic.50.7` | E_J/E_C = 50, f_q = 5.68 GHz, f_r = 7 GHz, g = 54 MHz | -0.000465755 | -0.000565335 | 0.21 | 0.05 | DIVERGE | DIVERGE |
+| `readout.chi_transmon_harmonic.100.6.2` | E_J/E_C = 100, f_q = 8.17 GHz, f_r = 6.2 GHz, g = 65 MHz | -0.000430891 | -0.000319269 | 0.26 | 0.05 | DIVERGE | DIVERGE |
+| `readout.chi_two_level.50.7` | E_J/E_C = 50, f_q = 5.68 GHz, f_r = 7 GHz, g = 54 MHz | -0.0022455 | -0.000565335 | 0.75 | 0.05 | DIVERGE | DIVERGE |
+| `readout.dephasing_rate.0.05` | chi/kappa = 0.05, eps/kappa = 0.2 | 0.00313695 | 0.00313609 | 0.00027 | 0.05 | AGREE | AGREE |
+| `readout.dephasing_rate.0.5` | chi/kappa = 0.5, eps/kappa = 0.2 | 0.08 | 0.0800024 | 3e-05 | 0.05 | AGREE | AGREE |
+| `readout.dephasing_rate_weak.0.05` | chi/kappa = 0.05, eps/kappa = 0.2 | 0.0032 | 0.00313609 | 0.02 | 0.05 | AGREE | AGREE |
+| `readout.dephasing_rate_weak.0.5` | chi/kappa = 0.5, eps/kappa = 0.2 | 0.32 | 0.0800024 | 0.75 | 0.05 | DIVERGE | DIVERGE |
+| `readout.pointer_photons.e.0` | qubit in \|e>, chi/kappa = 0.5, delta_r/kappa = 0 | 0.18 | 0.180014 | 7.6e-05 | 0.001 | AGREE | AGREE |
+| `readout.pointer_photons.g.0` | qubit in \|g>, chi/kappa = 0.5, delta_r/kappa = 0 | 0.18 | 0.180014 | 7.6e-05 | 0.001 | AGREE | AGREE |
+| `readout.pointer_photons.e.0.5` | qubit in \|e>, chi/kappa = 0.5, delta_r/kappa = 0.5 | 0.072 | 0.0719973 | 3.7e-05 | 0.001 | AGREE | AGREE |
+| `readout.pointer_photons.g.0.5` | qubit in \|g>, chi/kappa = 0.5, delta_r/kappa = 0.5 | 0.36 | 0.359967 | 9.1e-05 | 0.001 | AGREE | AGREE |
 | `transmon.qubit_frequency.100` | E_J/E_C = 100 | 27.2843 | 27.2451 | 0.0014 | 0.01 | AGREE | AGREE |
 | `transmon.qubit_frequency.50` | E_J/E_C = 50 | 19 | 18.9419 | 0.0031 | 0.01 | AGREE | AGREE |
 | `transmon.qubit_frequency.20` | E_J/E_C = 20 | 11.6491 | 11.5461 | 0.0088 | 0.01 | AGREE | AGREE |
