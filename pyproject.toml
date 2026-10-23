@@ -1,6 +1,6 @@
 [project]
 name = "qubitlab"
-version = "0.1.0"
+version = "0.2.0"
 description = "Cat qubit and transmon physics, from closed-form theory to Dynamiqs simulation, with a 3D explorer"
 readme = "README.md"
 authors = [
