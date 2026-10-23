@@ -110,7 +110,7 @@ def warm() -> None:
         lambda: api.pulse_optimize(api.PulseRequest()),
         api.qec_curves,
         *preset_steps(),
-        api.checks,
+        api.checks,  # instant when data/checks.json matches the code
     ]
     start = time.perf_counter()
     for step in steps:

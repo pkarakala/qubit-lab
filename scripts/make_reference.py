@@ -9,6 +9,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+from qubitlab import snapshot
+from qubitlab.checks.base import CheckResult
 from qubitlab.provenance import cite
 from qubitlab.theory import FORMULAS
 
@@ -35,9 +37,7 @@ def formulas_md() -> str:
     return "\n".join(lines)
 
 
-def checks_md() -> str:
-    from qubitlab.checks import run_all
-
+def checks_md(results: list[CheckResult]) -> str:
     lines = [
         "# Checks: theory vs simulation",
         "",
@@ -48,7 +48,7 @@ def checks_md() -> str:
         "| Check | Regime | Theory | Simulation | Rel. error | Tolerance | Verdict | Expected |",
         "| --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
-    for r in run_all():
+    for r in results:
         regime = r.regime.replace("|", "\\|")
         lines.append(
             f"| `{r.key}` | {regime} | {r.theory:.6g} | {r.sim:.6g} | {r.rel_error:.2g} "
@@ -61,7 +61,11 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "formulas.md").write_text(formulas_md(), encoding="utf-8")
     if "--formulas" not in sys.argv:
-        (OUT / "checks.md").write_text(checks_md(), encoding="utf-8")
+        from qubitlab.checks import run_all
+
+        results = run_all()
+        (OUT / "checks.md").write_text(checks_md(results), encoding="utf-8")
+        snapshot.write([r.describe() for r in results])  # the Checks page loads this
 
 
 if __name__ == "__main__":
