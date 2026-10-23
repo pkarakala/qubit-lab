@@ -21,6 +21,7 @@ Every equation carries its paper and equation number, and is checked against a s
 | Flip rates | Drag the cat size and watch bit-flips fall exponentially while phase-flips rise linearly. |
 | Transmon | Drag E_J/E_C and watch the charge bands flatten in 3D, next to the closed forms of Koch et al. |
 | Qubit control | Run Rabi, π pulse, DRAG, T1, Ramsey and echo on a 4-level transmon and follow the Bloch vector. |
+| Readout | Watch a qubit pull its resonator by ±χ, and compare χ from the exact spectrum with three textbook formulas. |
 | Pulse optimizer | Let gradient descent through the simulation design a fast gate, and compare it with DRAG. |
 | Noise bias | Compare bit-flip and phase-flip chances for cats and transmons at measured, cited hardware numbers. |
 | Error correction | Run surface and repetition codes with Stim, decode with PyMatching, and see errors in space-time. |
