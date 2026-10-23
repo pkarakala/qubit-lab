@@ -2,9 +2,9 @@
 // Simulation (Dynamiqs) drives the Bloch sphere; theory (two-level closed forms) is the dashed line.
 
 import { useEffect, useState } from 'react'
-import { type Experiment, useQubit } from '../api'
+import { type Experiment, type QubitParams, useQubit } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, PaperSettings, Segmented, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { QUBIT_PRESETS, useExplorer } from '../store'
 import { BlochScene } from '../three/BlochSphere'
@@ -77,14 +77,15 @@ export function Qubit() {
             </button>
           ))}
         </div>
+        <PaperSettings view="qubit" onPick={(q) => useExplorer.setState({ qubit: q as unknown as QubitParams })} />
         <h3>Experiment</h3>
         <Segmented label="experiment" value={ex} options={EXPERIMENTS} onChange={(v) => set({ experiment: v })} />
         {ex === 'rabi' ? (
-          <Slider label="drive strength (MHz)" tex="\Omega" value={p.omega_ghz * 1e3} min={1} max={150} step={1} onChange={(v) => set({ omega_ghz: v / 1e3 })} />
+          <Slider label="drive strength (MHz)" tex="\Omega" value={p.omega_ghz * 1e3} min={0} max={200} step={1} onChange={(v) => set({ omega_ghz: v / 1e3 })} />
         ) : null}
         {ex === 'pulse' ? (
           <>
-            <Slider label="pulse length (ns)" value={p.duration_ns} min={2} max={40} step={1} onChange={(v) => set({ duration_ns: v })} />
+            <Slider label="pulse length (ns)" value={p.duration_ns} min={2} max={200} step={1} onChange={(v) => set({ duration_ns: v })} />
             <Slider label="DRAG coefficient" value={p.drag} min={0} max={2} step={0.05} onChange={(v) => set({ drag: v })} testId="drag" />
           </>
         ) : null}
@@ -92,7 +93,15 @@ export function Qubit() {
           <Slider label="detuning (MHz)" tex="\Delta" value={p.delta_ghz * 1e3} min={-50} max={50} step={1} onChange={(v) => set({ delta_ghz: v / 1e3 })} />
         ) : null}
         {ex !== 'pulse' ? (
-          <Slider label="duration (ns)" value={p.t_max_ns} min={20} max={1000} step={10} onChange={(v) => set({ t_max_ns: v })} />
+          <Slider
+            label="duration (ns)"
+            value={Math.log10(p.t_max_ns)}
+            min={1}
+            max={6}
+            step={0.02}
+            format={() => fmt(p.t_max_ns)}
+            onChange={(v) => set({ t_max_ns: Math.round(10 ** v) })}
+          />
         ) : null}
         <h3>Device</h3>
         <Slider label="anharmonicity (MHz)" tex="\alpha" value={p.alpha_ghz * 1e3} min={-500} max={-100} step={10} onChange={(v) => set({ alpha_ghz: v / 1e3 })} />
@@ -101,7 +110,7 @@ export function Qubit() {
           tex="T_1"
           value={Math.log10(p.t1_ns)}
           min={1}
-          max={5}
+          max={6}
           step={0.05}
           format={() => fmt(p.t1_ns)}
           onChange={(v) => {
@@ -128,7 +137,7 @@ export function Qubit() {
       <main className="pane pane-center">
         <ErrorBanner error={run.error} />
         <div className="viewport">
-          {d ? <BlochScene bloch={d.sim.bloch} frame={f} theme={theme} /> : <div className="boot">Solving the master equation…</div>}
+          {d ? <BlochScene bloch={d.sim.bloch} frame={f} theme={theme} /> : <Solving boot what="Solving the master equation" />}
           <div className="hud">
             <div className="mono">t = {fmt(d?.sim.times[f])} ns</div>
             <div className="small">

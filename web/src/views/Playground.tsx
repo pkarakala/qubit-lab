@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 import { type Initial, type PlaygroundSpec, usePlayground } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { ErrorBanner, Segmented, Slider } from '../components/ui'
+import { ErrorBanner, Segmented, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { WignerScene } from '../three/WignerSurface'
@@ -152,7 +152,7 @@ export function Playground() {
       <main className="pane pane-center">
         <ErrorBanner error={q.error} />
         <div className="viewport">
-          {data ? <WignerScene xvec={data.sim.xvec} w={data.sim.wigner[f] ?? []} ghost={null} theme={theme} /> : <div className="boot">Solving your model…</div>}
+          {data ? <WignerScene xvec={data.sim.xvec} w={data.sim.wigner[f] ?? []} ghost={null} theme={theme} /> : <Solving boot what="Solving your model" />}
           <div className="hud">
             <div>
               <span className="muted">time</span> <span className="mono">t = {fmt(t[f] ?? 0)}</span>
@@ -166,7 +166,7 @@ export function Playground() {
             <div>
               <span className="muted">purity</span> <span className="mono">{fmt(data?.sim.purity[f])}</span>
             </div>
-            {q.isFetching ? <div className="muted">solving…</div> : null}
+            {q.isFetching ? <Solving /> : null}
           </div>
         </div>
         <div className="transport">

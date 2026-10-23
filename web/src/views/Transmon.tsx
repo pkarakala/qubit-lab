@@ -2,7 +2,7 @@
 
 import { useBands, useSurface } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { CopyPython, ErrorBanner, FormulaCard, Slider } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, PaperSettings, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { BandScene } from '../three/BandSurface'
@@ -22,13 +22,17 @@ export function Transmon() {
   return (
     <div className="view">
       <aside className="pane pane-left">
+        <PaperSettings
+          view="transmon"
+          onPick={(t) => useExplorer.setState({ ratio: Number(t.E_J) / Number(t.E_C), E_C: Number(t.E_C) })}
+        />
         <h3>Circuit</h3>
         <Slider
           label="Josephson / charging"
           tex="E_J/E_C"
           value={Math.log10(ratio)}
           min={0}
-          max={2}
+          max={2.2}
           step={0.02}
           format={() => fmt(ratio)}
           onChange={(v) => setRatio(Math.round(10 ** v * 10) / 10)}
@@ -79,7 +83,7 @@ export function Transmon() {
               theme={theme}
             />
           ) : (
-            <div className="boot">Diagonalizing the transmon over E_J/E_C…</div>
+            <Solving boot what="Diagonalizing the transmon over E_J/E_C" />
           )}
           <div className="hud">
             <div className="muted">How much each level wiggles with offset charge n_g (units of E_C).<br />Blue: level 0, red: level 1, green: level 2. Flat means immune to charge noise.</div>

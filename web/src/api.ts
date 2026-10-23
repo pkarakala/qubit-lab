@@ -170,6 +170,15 @@ export const useFormulas = () => useQuery({ queryKey: ['formulas'], queryFn: () 
 export const useReferences = () =>
   useQuery({ queryKey: ['references'], queryFn: () => get<Record<string, BibEntry>>('/api/references'), ...forever })
 export const useFacts = () => useQuery({ queryKey: ['facts'], queryFn: () => get<Fact[]>('/api/facts'), ...forever })
+/** A setting from a published experiment (qubitlab/data/presets.json). The server warms the cache with each one. */
+export type PresetView = 'phase' | 'rates' | 'transmon' | 'qubit' | 'pulse' | 'qec' | 'qec_cat' | 'compare'
+export interface Preset {
+  view: PresetView
+  name: string
+  params: Record<string, number | string | boolean>
+  refs: string[]
+}
+export const usePresets = () => useQuery({ queryKey: ['presets'], queryFn: () => get<Preset[]>('/api/presets'), ...forever })
 export const useChecks = () => useQuery({ queryKey: ['checks'], queryFn: () => get<CheckRow[]>('/api/checks'), ...forever })
 
 export const useEvolution = (p: EvolveParams) =>

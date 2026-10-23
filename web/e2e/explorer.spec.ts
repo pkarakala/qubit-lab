@@ -124,3 +124,11 @@ test('every view copies a Python script', async ({ page }) => {
     await expect(page.getByTestId('python-code')).toContainText(call)
   }
 })
+
+test('a published setting loads with its citation', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('tab', { name: 'Transmon', exact: true }).click()
+  await page.getByTestId('paper-transmon').selectOption({ label: 'Krantz 2019 worked example (E_J/E_C = 50)' })
+  await expect(page.locator('.paper-settings')).toContainText('Krantz et al. 2019')
+  await expect(page.locator('.pane-left')).toContainText('E_J = 15 GHz')
+})

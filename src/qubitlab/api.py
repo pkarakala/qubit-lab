@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import math
 import os
+import threading
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Any, Literal
 
 import anyio
+import jax
 import numpy as np
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,7 +21,7 @@ from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 
 from qubitlab import __version__, snippets
-from qubitlab.cache import disk_cached
+from qubitlab.cache import CACHE_DIR, disk_cached
 from qubitlab.facts import DEVICES, FACT, FACTS
 from qubitlab.provenance import bib_entries
 from qubitlab.sim import cat as cat_sim
@@ -37,8 +39,14 @@ from qubitlab.theory import transmon as tr_th
 # Public hosting knobs, both off by default (see docs/deploy.md):
 # QUBITLAB_SOLVES   most simulations running at once; the rest wait their turn.
 # QUBITLAB_RATE     requests per client, e.g. "30/minute".
+# QUBITLAB_WARM     "1": precompute the default views in the background on start (qubitlab.warm).
 SOLVES = int(os.environ.get("QUBITLAB_SOLVES", "0"))
 RATE = os.environ.get("QUBITLAB_RATE")
+WARM = os.environ.get("QUBITLAB_WARM") == "1"
+
+# JAX keeps compiled solvers on disk, so a restarted server skips most of the first-run compile.
+jax.config.update("jax_compilation_cache_dir", str(CACHE_DIR / "jax"))  # type: ignore[no-untyped-call]
+jax.config.update("jax_persistent_cache_min_compile_time_secs", 0.1)  # type: ignore[no-untyped-call]
 
 
 @asynccontextmanager
@@ -46,6 +54,10 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     if SOLVES:
         # Sync endpoints run in AnyIO's thread pool, so its size caps concurrent solves.
         anyio.to_thread.current_default_thread_limiter().total_tokens = SOLVES
+    if WARM:
+        from qubitlab.warm import warm
+
+        threading.Thread(target=warm, name="qubitlab-warm", daemon=True).start()
     yield
 
 
@@ -266,6 +278,14 @@ def transmon_bands(
             ],
         },
     }
+
+
+@app.get("/api/presets")
+def presets() -> list[dict[str, Any]]:
+    """Settings from published experiments, each citing its paper. The cache warms them."""
+    from qubitlab.warm import presets as load
+
+    return load()
 
 
 @app.get("/api/checks")

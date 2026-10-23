@@ -2,8 +2,8 @@
 // with the closed-form ideal cat as an optional ghost, and the observables over time below.
 
 import { useEffect } from 'react'
-import { type Initial, type Scheme, useEvolution } from '../api'
-import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
+import { type EvolveParams, type Initial, type Scheme, useEvolution } from '../api'
+import { CopyPython, ErrorBanner, FormulaCard, PaperSettings, Segmented, Slider, Solving } from '../components/ui'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
 import { fmt } from '../lib/colormap'
 import { PRESETS, useExplorer } from '../store'
@@ -72,16 +72,26 @@ export function PhaseSpace() {
             </button>
           ))}
         </div>
+        <PaperSettings view="phase" onPick={(p) => useExplorer.setState({ params: p as unknown as EvolveParams, frame: 0, playing: true })} />
         <h3>Stabilization</h3>
         <Segmented label="Stabilization" value={params.scheme} options={SCHEMES} onChange={(scheme) => setParams({ scheme })} />
         <h3>Initial state</h3>
         <Segmented label="Initial state" value={params.initial} options={INITIALS} onChange={(initial) => setParams({ initial })} />
         <h3>Knobs</h3>
-        <Slider label="cat size" tex="|\alpha|^2" value={params.alpha_sq} min={0.5} max={8} step={0.5} onChange={(alpha_sq) => setParams({ alpha_sq })} testId="alpha-sq" />
-        <Slider label="photon loss" tex="\kappa_1/\kappa_2" value={params.kappa_1} min={0} max={0.5} step={0.01} onChange={(kappa_1) => setParams({ kappa_1 })} />
+        <Slider label="cat size" tex="|\alpha|^2" value={params.alpha_sq} min={0.5} max={9} step={0.5} onChange={(alpha_sq) => setParams({ alpha_sq })} testId="alpha-sq" />
+        <Slider label="photon loss" tex="\kappa_1/\kappa_2" value={params.kappa_1} min={0} max={1} step={0.01} onChange={(kappa_1) => setParams({ kappa_1 })} />
         <Slider label="dephasing" tex="\kappa_\phi/\kappa_2" value={params.kappa_phi} min={0} max={0.5} step={0.01} onChange={(kappa_phi) => setParams({ kappa_phi })} />
         <Slider label="thermal photons" tex="n_{th}" value={params.n_th} min={0} max={0.2} step={0.01} onChange={(n_th) => setParams({ n_th })} />
-        <Slider label="duration" tex="\kappa_2 t" value={params.t_final} min={0.5} max={20} step={0.5} onChange={(t_final) => setParams({ t_final })} />
+        <Slider
+          label="duration"
+          tex="\kappa_2 t"
+          value={Math.log10(params.t_final)}
+          min={Math.log10(0.5)}
+          max={Math.log10(200)}
+          step={0.01}
+          format={() => fmt(params.t_final)}
+          onChange={(v) => setParams({ t_final: Math.round(10 ** v * 10) / 10 })}
+        />
         <p className="small muted">
           Rates are in units of the stabilization rate (κ₂, or K for the Kerr cat). Each change runs a Dynamiqs solve
           with {data?.sim.n_fock ?? '…'} Fock states; results are cached.
@@ -95,7 +105,7 @@ export function PhaseSpace() {
           {data ? (
             <WignerScene xvec={data.sim.xvec} w={data.sim.wigner[f] ?? []} ghost={ghost} theme={theme} />
           ) : (
-            <div className="boot">Solving the master equation…</div>
+            <Solving boot what="Solving the master equation" />
           )}
           <div className="hud">
             <div>
@@ -110,7 +120,7 @@ export function PhaseSpace() {
             <div>
               <span className="muted">side ⟨Z⟩</span> <span className="mono">{fmt(data?.sim.sign_x[f])}</span>
             </div>
-            {q.isFetching ? <div className="muted">solving…</div> : null}
+            {q.isFetching ? <Solving /> : null}
           </div>
           <div className="legend-wigner">
             <span className="swatch swatch-neg" /> W &lt; 0 (quantum) <span className="swatch swatch-pos" /> W &gt; 0

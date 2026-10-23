@@ -5,7 +5,7 @@
 import { useEffect, useState } from 'react'
 import { type PulseParams, type PulseScore, usePulse } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, PaperSettings, Segmented, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { BlochScene } from '../three/BlochSphere'
@@ -54,6 +54,14 @@ export function PulseOptimizer() {
   return (
     <div className="view">
       <aside className="pane pane-left">
+        <PaperSettings
+          view="pulse"
+          onPick={(g) => {
+            const next = g as unknown as PulseParams
+            setKnobs(next)
+            setReq(next)
+          }}
+        />
         <h3>Gate</h3>
         <p className="small muted">An X gate (a π pulse) on a transmon. Short gates leak to level 2; that is what the optimizer fights.</p>
         <Slider
@@ -106,7 +114,7 @@ export function PulseOptimizer() {
       <main className="pane pane-center">
         <ErrorBanner error={run.error} />
         <div className="viewport">
-          {shown ? <BlochScene bloch={shown.bloch} frame={f} theme={theme} /> : <div className="boot">Optimizing the pulse…</div>}
+          {shown ? <BlochScene bloch={shown.bloch} frame={f} theme={theme} /> : <Solving boot what="Optimizing the pulse" />}
           <div className="hud">
             <Segmented
               label="pulse"
