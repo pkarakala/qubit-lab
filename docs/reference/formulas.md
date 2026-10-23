@@ -162,6 +162,58 @@ Valid when: Two-photon dissipation dominates, so the state stays in the two-cat 
 
 - qubitlab_hand_calcs, docs/hand_calcs/cat_parity_decay.py (derived). Two-state jump picture: |C+> -> |C-> at kappa_1 n_+, back at kappa_1 n_-.
 
+## Always-on ZZ shift of two coupled transmons
+
+`gates.static_zz`
+
+```latex
+\zeta = 2 g^{2} \left(\frac{1}{\Delta - \alpha_{2}} - \frac{1}{\Delta + \alpha_{1}}\right)
+```
+
+Valid when: g much smaller than |Delta|, |Delta - alpha_2| and |Delta + alpha_1|.
+
+- [krantz2019](https://www.arxiv.org/pdf/1904.06560), Eqs. (116), (119) (peer_reviewed). zeta = w11 - w01 - w10.
+- qubitlab_hand_calcs, docs/hand_calcs/two_qubit_gates.py (derived). Step 1: second-order shifts of |01>, |10>, |11>.
+
+## Diabatic CZ: hold time at the 11-20 resonance
+
+`gates.cz_time`
+
+```latex
+t_{CZ} = \frac{\pi \sqrt{2}}{2 g}
+```
+
+Valid when: Sudden jump to the resonance, g << |alpha|, so |01>, |10> barely move.
+
+- [krantz2019](https://www.arxiv.org/pdf/1904.06560), Sec. IV.F, text after Eq. (123) (peer_reviewed).
+- qubitlab_hand_calcs, docs/hand_calcs/two_qubit_gates.py (derived). Step 2: a full cycle in {|11>, |20>} returns |11> with a phase of -1.
+
+## Cat CNOT: phase-flip chance on the control
+
+`gates.cat_cnot_z1`
+
+```latex
+p_{Z_1} = T \kappa_{1} n + \frac{1}{2 \pi T \kappa_{2} n}
+```
+
+Valid when: Photon loss only, kappa_1 << kappa_2, gate not much faster than 1/(kappa_2 n).
+
+- [guillaud2019](https://doi.org/10.1103/PhysRevX.9.041053), Sec. VI, Gate fidelity and optimal gate time (peer_reviewed). The 1/(2 pi) is a numerical fit in the paper.
+- [chamberland2022](https://knowledge.uchicago.edu/record/11478/files/PRXQuantum.3.010329.pdf), Eq. (27) (peer_reviewed). Perturbation theory gives pi^2/64 = 0.154 in place of 1/(2 pi) = 0.159.
+
+## Cat CNOT: phase-flip chance on the target (and on both)
+
+`gates.cat_cnot_z2`
+
+```latex
+p_{Z_2} = p_{Z_1 Z_2} = \frac{T \kappa_{1} n}{2}
+```
+
+Valid when: Photon loss only. Loss on the target during the gate spreads to the control.
+
+- [guillaud2019](https://doi.org/10.1103/PhysRevX.9.041053), Sec. VI, Eq. (3) (peer_reviewed).
+- [chamberland2022](https://knowledge.uchicago.edu/record/11478/files/PRXQuantum.3.010329.pdf), Eq. (27) (peer_reviewed).
+
 ## Errors needed to fool a distance-d code
 
 `qec.error_exponent`

@@ -25,6 +25,7 @@ CASES = {
     "pulse": {"duration_ns": 4, "steps": 10},
     "qec": {"p": 0.005, "p_phase": 0.01, "p_bit": 1e-5},
     "compare": {"t_ns": 25},
+    "gates": {"g_mhz": 20, "n": 2, "log_kappa_ratio": -2},
 }
 
 

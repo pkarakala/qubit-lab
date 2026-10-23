@@ -4,7 +4,7 @@ No simulation code lives here. See `qubitlab.sim` for Dynamiqs solvers and `qubi
 for where the two are compared.
 """
 
-from qubitlab.theory import cat, qec, qubit, transmon
+from qubitlab.theory import cat, gates, qec, qubit, transmon
 from qubitlab.theory.registry import FORMULAS, Formula
 
-__all__ = ["FORMULAS", "Formula", "cat", "qec", "qubit", "transmon"]
+__all__ = ["FORMULAS", "Formula", "cat", "gates", "qec", "qubit", "transmon"]

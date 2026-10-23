@@ -107,6 +107,14 @@ test('checks page reports no surprises', async ({ page }) => {
   await page.screenshot({ path: `${IMG}/checks.png` })
 })
 
+test('two-qubit gates: CZ phase and cat CNOT errors next to the papers', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('tab', { name: 'Two-qubit gates', exact: true }).click()
+  await expect(page.locator('.chart-main .js-plotly-plot')).toBeVisible({ timeout: 180_000 })
+  await expect(page.getByTestId('gates-summary')).toContainText('fewest phase-flips')
+  await page.screenshot({ path: `${IMG}/two_qubit_gates.png` })
+})
+
 test('every view copies a Python script', async ({ page }) => {
   await page.goto('/')
   const views: [string, string][] = [
@@ -117,6 +125,7 @@ test('every view copies a Python script', async ({ page }) => {
     ['Pulse optimizer', 'po.optimize('],
     ['Error correction', 'qec.memory('],
     ['Cat vs transmon', 'theory.flip_probability('],
+    ['Two-qubit gates', 'two_qubit.cat_cnot('],
   ]
   for (const [tab, call] of views) {
     await page.getByRole('tab', { name: tab, exact: true }).click()
