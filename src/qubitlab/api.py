@@ -21,6 +21,7 @@ from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 
 from qubitlab import __version__, snippets
+from qubitlab.architectures import scenes as architecture_scenes
 from qubitlab.cache import CACHE_DIR, disk_cached
 from qubitlab.facts import DEVICES, FACT, FACTS
 from qubitlab.provenance import bib_entries
@@ -29,6 +30,7 @@ from qubitlab.sim import custom as custom_sim
 from qubitlab.sim import pulse_optimizer as po_sim
 from qubitlab.sim import qec as qec_sim
 from qubitlab.sim import readout as ro_sim
+from qubitlab.sim import spectra as spectra_sim
 from qubitlab.sim import transmon as tr_sim
 from qubitlab.sim import transmon_dynamics as qb_sim
 from qubitlab.sim import two_qubit as tq_sim
@@ -839,6 +841,44 @@ def _cnot(n: int, log_kappa_ratio: float) -> dict[str, Any]:
 def gates(req: GatesRequest) -> dict[str, Any]:
     """A transmon CZ and a cat CNOT: simulation next to the papers' formulas."""
     return {"cz": _cz(req.g_mhz, req.alpha_mhz), "cnot": _cnot(req.n, req.log_kappa_ratio)}
+
+
+@app.get("/api/architectures")
+def architectures() -> list[dict[str, Any]]:
+    """Every scene in the gallery, with each part's size and where it comes from."""
+    return [s.describe() for s in architecture_scenes().values()]
+
+
+@disk_cached
+def _spectrum(scene_id: str) -> dict[str, Any] | None:
+    p = architecture_scenes()[scene_id].physics
+    model = p["model"]
+    if model == "tunable_transmon":
+        sp = spectra_sim.tunable_transmon(p["E_J_max"], p["E_C"], p["d"])
+    elif model == "transmon":
+        sp = spectra_sim.transmon(p["E_J"], p["E_C"])
+    elif model == "fluxonium":
+        sp = spectra_sim.fluxonium(p["E_J"], p["E_C"], p["E_L"])
+    elif model == "kerr_cat":
+        sp = spectra_sim.kerr_cat(p["K"], 1.5 * p["eps2"])
+    else:
+        return None  # the dissipative cat has its own views
+    return {
+        "sim": {
+            "x": _round(sp.x),
+            "levels": _round(sp.levels),
+            "x_label": sp.x_label,
+            "unit": sp.unit,
+        }
+    }
+
+
+@app.get("/api/architectures/{scene_id}/spectrum")
+def architecture_spectrum(scene_id: str) -> dict[str, Any] | None:
+    """The scene's energy levels against its control knob (flux, charge or drive)."""
+    if scene_id not in architecture_scenes():
+        raise HTTPException(404, f"no scene {scene_id!r}")
+    return _spectrum(scene_id)
 
 
 INPUTS: dict[snippets.View, type[BaseModel]] = {

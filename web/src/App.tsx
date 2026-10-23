@@ -1,6 +1,7 @@
 // The explorer shell: top bar with the views, then the active view.
 
 import { useEffect, useState } from 'react'
+import { Architectures } from './views/Architectures'
 import { CatVsTransmon } from './views/CatVsTransmon'
 import { Checks } from './views/Checks'
 import { ErrorCorrection } from './views/ErrorCorrection'
@@ -25,6 +26,7 @@ const VIEWS: { id: View; label: string; hint: string }[] = [
   { id: 'gates', label: 'Two-qubit gates', hint: 'A transmon CZ and a bias-preserving cat CNOT' },
   { id: 'qec', label: 'Error correction', hint: 'Surface code vs a repetition code of cats' },
   { id: 'compare', label: 'Noise bias', hint: 'Bit-flips vs phase-flips at measured numbers, cat and transmon' },
+  { id: 'architectures', label: 'Architectures', hint: 'The leading qubit designs as exploded 3D chips' },
   { id: 'playground', label: 'Playground', hint: 'Type your own Hamiltonian and losses' },
   { id: 'checks', label: 'Checks', hint: 'Theory vs simulation' },
 ]
@@ -114,6 +116,7 @@ export default function App() {
       {view === 'playground' ? <Playground /> : null}
       {view === 'readout' ? <Readout /> : null}
       {view === 'gates' ? <Gates /> : null}
+      {view === 'architectures' ? <Architectures /> : null}
       {view === 'checks' ? <Checks /> : null}
       <footer className="footer small muted">
         Open-source simulator for learning superconducting qubits. Every equation is cited and checked against the

@@ -400,3 +400,41 @@ export const useGates = (p: GatesParams) =>
     placeholderData: keepPreviousData,
     ...forever,
   })
+
+export interface ArchPart {
+  id: string
+  name: string
+  role: string
+  size: [number, number, number] // micrometres, the real size
+  position: [number, number, number]
+  material: string
+  explode: [number, number, number]
+  dims_class: 'MEASURED' | 'SCHEMATIC'
+  dims_source: string
+  draw_size: [number, number, number] | null
+  enlarged: boolean
+}
+
+export interface ArchScene {
+  id: string
+  name: string
+  family: string
+  summary: string
+  refs: string[]
+  physics: Record<string, string | number>
+  parts: ArchPart[]
+}
+
+export interface ArchSpectrum {
+  sim: { x: number[]; levels: number[][]; x_label: string; unit: string }
+}
+
+export const useArchitectures = () =>
+  useQuery({ queryKey: ['architectures'], queryFn: () => get<ArchScene[]>('/api/architectures'), ...forever })
+
+export const useArchSpectrum = (id: string) =>
+  useQuery({
+    queryKey: ['arch-spectrum', id],
+    queryFn: () => get<ArchSpectrum | null>(`/api/architectures/${id}/spectrum`),
+    ...forever,
+  })

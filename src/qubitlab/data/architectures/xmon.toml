@@ -1,0 +1,113 @@
+# Flux-tunable Xmon transmon, after barends2013. Units: micrometres.
+# MEASURED parts cite the paper and locator; SCHEMATIC parts give the reason.
+
+[scene]
+id = "xmon"
+name = "Xmon transmon"
+family = "transmon"
+summary = "A cross-shaped capacitor to ground, a SQUID for a tunable frequency, a quarter-wave readout resonator and two control lines."
+refs = ["barends2013"]
+
+[physics]
+model = "tunable_transmon"
+E_C = 0.224   # GHz
+E_J_max = 21.3   # GHz, 95 x E_C
+d = 0.0
+source = "barends2013, main text p. 2: about 6 GHz, nonlinearity about 230 MHz (Table I: 222 to 228), E_J/E_C about 95. E_C from alpha ~ -E_C (koch2007)."
+kind = "derived"
+
+[[part]]
+id = "substrate"
+name = "Sapphire substrate"
+role = "A low-loss crystal that holds the circuit. Defects at its surfaces absorb qubit energy."
+size = [1000, 1000, 400]
+position = [0, 0, -200]
+material = "sapphire"
+explode = [0, 0, -500]
+dims_class = "SCHEMATIC"
+dims_source = "barends2013 says c-plane sapphire but gives no thickness or chip size."
+
+[[part]]
+id = "ground"
+name = "Aluminium ground plane"
+role = "The large grounded film around the circuit. The Xmon's cross is one plate of its capacitor; the ground plane is the other."
+size = [1000, 1000, 0.1]
+position = [0, 0, 0.05]
+draw_size = [1000, 1000, 6]
+material = "aluminium_film"
+explode = [0, 0, 120]
+dims_class = "MEASURED"
+dims_source = "barends2013, Supplement, Device fabrication: MBE aluminium about 100 nm. Lateral size schematic."
+
+[[part]]
+id = "cross"
+name = "Xmon cross capacitor"
+role = "Four arms set the charging energy E_C. Wider arms and gaps spread the field and lowered loss in this paper."
+size = [284, 24, 0.1]
+position = [0, 0, 0.05]
+draw_size = [284, 24, 8]
+material = "aluminium"
+explode = [0, 0, 240]
+dims_class = "MEASURED"
+dims_source = "barends2013, Table I, chip A: arm length L = 130 um, centre width S = 24 um, gap W = 12 um. Drawn as two arms of L across the centre."
+
+[[part]]
+id = "cross_v"
+name = "Xmon cross capacitor"
+role = "Four arms set the charging energy E_C. Wider arms and gaps spread the field and lowered loss in this paper."
+size = [24, 284, 0.1]
+position = [0, 0, 0.05]
+draw_size = [24, 284, 8]
+material = "aluminium"
+explode = [0, 0, 240]
+dims_class = "MEASURED"
+dims_source = "barends2013, Table I, chip A: L = 130 um, S = 24 um, W = 12 um."
+
+[[part]]
+id = "squid"
+name = "SQUID (two junctions)"
+role = "Two Josephson junctions in a loop act as one junction whose E_J follows the flux through the loop, so the qubit frequency can be tuned."
+size = [0.3, 0.2, 0.13]
+position = [0, -150, 0.07]
+draw_size = [16, 10, 10]
+enlarged = true
+material = "junction"
+explode = [0, 0, 360]
+dims_class = "MEASURED"
+dims_source = "barends2013, Fig. 1b caption and Supplement: each junction 0.30 x 0.20 um^2; layers 30 nm and 100 nm."
+
+[[part]]
+id = "z_line"
+name = "Z line (flux bias)"
+role = "A current line beside the SQUID. Its flux moves the qubit frequency, fast enough for gates."
+size = [8, 300, 0.1]
+position = [0, -320, 0.05]
+draw_size = [8, 300, 6]
+material = "aluminium"
+explode = [0, 0, 200]
+dims_class = "SCHEMATIC"
+dims_source = "barends2013 gives the mutual inductance M = 2.2 pH (main text), not the line's size."
+
+[[part]]
+id = "xy_line"
+name = "XY drive line"
+role = "A weakly coupled line (60 aF) for microwave pulses that rotate the qubit."
+size = [300, 8, 0.1]
+position = [-320, 60, 0.05]
+draw_size = [300, 8, 6]
+material = "aluminium"
+explode = [0, 0, 200]
+dims_class = "SCHEMATIC"
+dims_source = "barends2013 gives C_c = 60 aF (main text), not the line's size."
+
+[[part]]
+id = "readout"
+name = "Quarter-wave readout resonator"
+role = "A coplanar resonator at 6.4 to 6.7 GHz whose frequency shifts with the qubit state (dispersive readout)."
+size = [400, 12, 0.1]
+position = [260, 160, 0.05]
+draw_size = [400, 12, 6]
+material = "aluminium"
+explode = [0, 0, 200]
+dims_class = "SCHEMATIC"
+dims_source = "barends2013 gives 6.4 to 6.7 GHz and Q = 1e4 (Fig. 1a caption); the length is drawn short, not to scale."

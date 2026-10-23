@@ -23,11 +23,14 @@ A short course in five parts. Each page is one idea, about two minutes, and ends
 
 **4. Gates and errors**
 
-- 41 Two-qubit gates (planned)
+- 41 [Two-qubit gates](41-two-qubit-gates.md)
 - 42 [Two designs, two bets](42-cat-vs-transmon.md)
 - 43 [Noise bias in numbers](43-noise-bias.md)
 - 44 [Error correction](44-error-correction.md)
 
-**5. Hardware** (planned): the leading architectures as exploded 3D chips, and from layout to Hamiltonian.
+**5. Hardware**
+
+- 51 [Inside the chip](51-architectures.md)
+- 52 From layout to Hamiltonian (planned)
 
 Every equation here is in [docs/reference/formulas.md](../reference/formulas.md) with its paper and equation number. Every claim that the simulation agrees is in [docs/reference/checks.md](../reference/checks.md). The plan for the parts still to come is in [docs/plan.md](../plan.md).

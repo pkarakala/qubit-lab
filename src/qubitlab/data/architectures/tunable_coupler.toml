@@ -1,0 +1,89 @@
+# Two tunable transmons and a tunable coupler, after yan2018 (circuit) and barends2013 (Xmon
+# geometry). Units: micrometres. The coupler layout is schematic: neither paper gives it.
+
+[scene]
+id = "tunable_coupler"
+name = "Tunable coupler"
+family = "transmon"
+summary = "Two qubits and a third transmon between them. Tuning the coupler's frequency cancels the qubits' direct coupling, or turns on an exchange for a gate."
+refs = ["yan2018", "barends2013"]
+
+[physics]
+model = "tunable_transmon"
+E_C = 0.224
+E_J_max = 21.3
+d = 0.0
+source = "Each qubit drawn as the barends2013 Xmon (E_J/E_C about 95, alpha about -224 MHz). yan2018 gives the coupler circuit, not these values."
+kind = "derived"
+
+[[part]]
+id = "substrate"
+name = "Substrate"
+role = "The chip under the circuit."
+size = [1600, 900, 400]
+position = [0, 0, -200]
+material = "sapphire"
+explode = [0, 0, -500]
+dims_class = "SCHEMATIC"
+dims_source = "yan2018 is a circuit proposal with no device geometry."
+
+[[part]]
+id = "qubit1"
+name = "Qubit 1 (Xmon cross)"
+role = "A tunable transmon. Its capacitance to the coupler, C_1c, sets how strongly the two interact."
+size = [284, 284, 0.1]
+position = [-450, 0, 0.05]
+draw_size = [284, 24, 8]
+material = "aluminium"
+explode = [-200, 0, 240]
+dims_class = "MEASURED"
+dims_source = "barends2013, Table I, chip A: L = 130 um, S = 24 um (drawn as one arm pair)."
+
+[[part]]
+id = "qubit2"
+name = "Qubit 2 (Xmon cross)"
+role = "The second tunable transmon."
+size = [284, 284, 0.1]
+position = [450, 0, 0.05]
+draw_size = [284, 24, 8]
+material = "aluminium"
+explode = [200, 0, 240]
+dims_class = "MEASURED"
+dims_source = "barends2013, Table I, chip A."
+
+[[part]]
+id = "coupler"
+name = "Tunable coupler"
+role = "A transmon between the qubits. Far detuned, it cancels the direct coupling (off). Moved closer, it turns on a controlled exchange (on). yan2018 Eq. (5)."
+size = [400, 30, 0.1]
+position = [0, 0, 0.05]
+draw_size = [400, 30, 8]
+material = "aluminium"
+explode = [0, 0, 420]
+dims_class = "SCHEMATIC"
+dims_source = "yan2018 gives capacitances (Fig. 2 caption: C_c = 200 fF, C_1c = 4 fF), not a layout."
+
+[[part]]
+id = "coupler_squid"
+name = "Coupler SQUID"
+role = "Makes the coupler's frequency tunable with flux."
+size = [0.3, 0.2, 0.13]
+position = [0, -40, 0.07]
+draw_size = [16, 10, 10]
+enlarged = true
+material = "junction"
+explode = [0, 0, 560]
+dims_class = "SCHEMATIC"
+dims_source = "Drawn like the barends2013 SQUID; the coupler's junctions are not specified."
+
+[[part]]
+id = "coupler_flux"
+name = "Coupler flux line"
+role = "Sets the coupler's frequency, and with it the qubit-qubit coupling: from about +5 MHz to -40 MHz on Sycamore."
+size = [8, 300, 0.1]
+position = [0, -220, 0.05]
+draw_size = [8, 300, 6]
+material = "aluminium"
+explode = [0, 0, 300]
+dims_class = "SCHEMATIC"
+dims_source = "arute2019, Supplement Sec. I gives the coupling range, not the line's size."
