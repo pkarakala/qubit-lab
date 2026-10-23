@@ -23,7 +23,7 @@ A short course in five parts. Each page is one idea, about two minutes, and ends
 
 **4. Gates and errors**
 
-- 41 Two-qubit gates (planned)
+- 41 [Two-qubit gates](41-two-qubit-gates.md)
 - 42 [Two designs, two bets](42-cat-vs-transmon.md)
 - 43 [Noise bias in numbers](43-noise-bias.md)
 - 44 [Error correction](44-error-correction.md)

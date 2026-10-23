@@ -25,6 +25,7 @@ Every equation carries its paper and equation number, and is checked against a s
 | Pulse optimizer | Let gradient descent through the simulation design a fast gate, and compare it with DRAG. |
 | Noise bias | Compare bit-flip and phase-flip chances for cats and transmons at measured, cited hardware numbers. |
 | Error correction | Run surface and repetition codes with Stim, decode with PyMatching, and see errors in space-time. |
+| Two-qubit gates | Run a transmon CZ through the 11-20 crossing and a bias-preserving cat CNOT, next to the papers' error formulas. |
 | Architectures | Explode six qubit designs, from the Xmon to the Kerr cat, into their layers, with every size cited or marked schematic. |
 | Playground | Type your own Hamiltonian and losses, watch the Wigner function evolve, and copy the run as Python. |
 
