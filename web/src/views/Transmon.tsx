@@ -2,7 +2,7 @@
 
 import { useBands, useSurface } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { CopyPython, ErrorBanner, FormulaCard, Slider } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { BandScene } from '../three/BandSurface'
@@ -79,7 +79,7 @@ export function Transmon() {
               theme={theme}
             />
           ) : (
-            <div className="boot">Diagonalizing the transmon over E_J/E_C…</div>
+            <Solving boot what="Diagonalizing the transmon over E_J/E_C" />
           )}
           <div className="hud">
             <div className="muted">How much each level wiggles with offset charge n_g (units of E_C).<br />Blue: level 0, red: level 1, green: level 2. Flat means immune to charge noise.</div>

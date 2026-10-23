@@ -26,11 +26,13 @@ def main() -> None:
         print(f"\n{len(results)} checks, {surprises} surprises")
         raise SystemExit(1 if surprises else 0)
 
+    import os
     import threading
     import webbrowser
 
     import uvicorn
 
+    os.environ.setdefault("QUBITLAB_WARM", "1")  # read when qubitlab.api is imported
     from qubitlab.serve import app_with_explorer, has_explorer
 
     if not has_explorer():

@@ -2,7 +2,7 @@
 
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { BibEntry, Formula, ScriptView } from '../api'
 import { pythonScript, useFormulas, useReferences } from '../api'
 import { fmt } from '../lib/colormap'
@@ -198,6 +198,32 @@ export function CopyPython({ view, inputs }: { view: ScriptView; inputs: unknown
           {code}
         </pre>
       ) : null}
+    </div>
+  )
+}
+
+/** What is running and for how long, so a long first solve never looks frozen. */
+export function Solving({ what = 'solving', boot = false }: { what?: string; boot?: boolean }) {
+  const [start] = useState(() => performance.now())
+  const [seconds, setSeconds] = useState(0)
+  useEffect(() => {
+    const id = window.setInterval(() => setSeconds((performance.now() - start) / 1000), 100)
+    return () => window.clearInterval(id)
+  }, [start])
+  const line = (
+    <span>
+      <span className="spinner" aria-hidden /> {what} <span className="mono">{seconds.toFixed(1)} s</span>
+    </span>
+  )
+  if (!boot) return <div className="solving muted" role="status" data-testid="solving">{line}</div>
+  return (
+    <div className="boot" role="status" data-testid="solving">
+      <div className="solving-boot">
+        {line}
+        {seconds > 3 ? (
+          <p className="small muted">The first run of a simulation compiles it, which can take 10 to 30 s. Later runs reuse it.</p>
+        ) : null}
+      </div>
     </div>
   )
 }

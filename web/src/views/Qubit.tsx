@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 import { type Experiment, useQubit } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { QUBIT_PRESETS, useExplorer } from '../store'
 import { BlochScene } from '../three/BlochSphere'
@@ -128,7 +128,7 @@ export function Qubit() {
       <main className="pane pane-center">
         <ErrorBanner error={run.error} />
         <div className="viewport">
-          {d ? <BlochScene bloch={d.sim.bloch} frame={f} theme={theme} /> : <div className="boot">Solving the master equation…</div>}
+          {d ? <BlochScene bloch={d.sim.bloch} frame={f} theme={theme} /> : <Solving boot what="Solving the master equation" />}
           <div className="hud">
             <div className="mono">t = {fmt(d?.sim.times[f])} ns</div>
             <div className="small">

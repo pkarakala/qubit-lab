@@ -3,7 +3,7 @@
 
 import { useEffect } from 'react'
 import { type Initial, type Scheme, useEvolution } from '../api'
-import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider, Solving } from '../components/ui'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
 import { fmt } from '../lib/colormap'
 import { PRESETS, useExplorer } from '../store'
@@ -95,7 +95,7 @@ export function PhaseSpace() {
           {data ? (
             <WignerScene xvec={data.sim.xvec} w={data.sim.wigner[f] ?? []} ghost={ghost} theme={theme} />
           ) : (
-            <div className="boot">Solving the master equation…</div>
+            <Solving boot what="Solving the master equation" />
           )}
           <div className="hud">
             <div>
@@ -110,7 +110,7 @@ export function PhaseSpace() {
             <div>
               <span className="muted">side ⟨Z⟩</span> <span className="mono">{fmt(data?.sim.sign_x[f])}</span>
             </div>
-            {q.isFetching ? <div className="muted">solving…</div> : null}
+            {q.isFetching ? <Solving /> : null}
           </div>
           <div className="legend-wigner">
             <span className="swatch swatch-neg" /> W &lt; 0 (quantum) <span className="swatch swatch-pos" /> W &gt; 0
