@@ -11,7 +11,7 @@ import {
   useReferences,
 } from "../api";
 import { CONFIG, Plot, SERIES, layout } from "../components/Plot";
-import { CopyPython, ErrorBanner, FormulaCard, Slider, Solving, shortCite } from "../components/ui";
+import { CopyPython, ErrorBanner, FormulaCard, PaperSettings, shortCite, Slider, Solving } from "../components/ui";
 import { fmt } from "../lib/colormap";
 import { useExplorer } from "../store";
 import { useShared } from "../lib/share";
@@ -63,6 +63,7 @@ export function CatVsTransmon() {
   return (
     <div className="view">
       <aside className="pane pane-left">
+        <PaperSettings view="compare" onPick={(s) => setLogT(Math.log10(Number(s.t_ns)))} />
         <h3>Idle step</h3>
         <Slider
           label="idle time t"

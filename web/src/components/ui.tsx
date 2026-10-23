@@ -3,8 +3,8 @@
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import { useEffect, useMemo, useState } from 'react'
-import type { BibEntry, Formula, ScriptView } from '../api'
-import { pythonScript, useFormulas, useReferences } from '../api'
+import type { BibEntry, Formula, Preset, PresetView, ScriptView } from '../api'
+import { pythonScript, useFormulas, usePresets, useReferences } from '../api'
 import { fmt } from '../lib/colormap'
 
 export function Tex({ src, block = false }: { src: string; block?: boolean }) {
@@ -224,6 +224,57 @@ export function Solving({ what = 'solving', boot = false }: { what?: string; boo
           <p className="small muted">The first run of a simulation compiles it, which can take 10 to 30 s. Later runs reuse it.</p>
         ) : null}
       </div>
+    </div>
+  )
+}
+
+/** Settings from published experiments, each with its paper. Picking one loads it; the cache already holds its solve. */
+export function PaperSettings({ view, onPick, title = 'From the literature' }: { view: PresetView; onPick: (params: Preset['params']) => void; title?: string }) {
+  const presets = (usePresets().data ?? []).filter((p) => p.view === view)
+  const refs = useReferences().data
+  const [picked, setPicked] = useState<Preset | null>(null)
+  if (presets.length === 0) return null
+  return (
+    <div className="paper-settings">
+      <h3>{title}</h3>
+      <select
+        className="select"
+        value={picked?.name ?? ''}
+        onChange={(e) => {
+          const p = presets.find((x) => x.name === e.target.value) ?? null
+          setPicked(p)
+          if (p) onPick(p.params)
+        }}
+        aria-label={title}
+        data-testid={`paper-${view}`}
+      >
+        <option value="">Pick a published setting</option>
+        {presets.map((p) => (
+          <option key={p.name} value={p.name}>
+            {p.name}
+          </option>
+        ))}
+      </select>
+      {picked ? (
+        <p className="small muted">
+          {picked.refs.map((k, i) => {
+            const href = sourceLink(refs?.[k])
+            const cite = shortCite(refs?.[k], k)
+            return (
+              <span key={k}>
+                {i > 0 ? '; ' : ''}
+                {href ? (
+                  <a href={href} target="_blank" rel="noreferrer">
+                    {cite}
+                  </a>
+                ) : (
+                  cite
+                )}
+              </span>
+            )
+          })}
+        </p>
+      ) : null}
     </div>
   )
 }

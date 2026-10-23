@@ -668,3 +668,13 @@ tr.is-surprise {
     animation: none;
   }
 }
+
+.paper-settings .select {
+  width: 100%;
+  font: inherit;
+  padding: 6px 8px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--raised);
+  color: var(--ink);
+}

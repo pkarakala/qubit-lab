@@ -280,6 +280,14 @@ def transmon_bands(
     }
 
 
+@app.get("/api/presets")
+def presets() -> list[dict[str, Any]]:
+    """Settings from published experiments, each citing its paper. The cache warms them."""
+    from qubitlab.warm import presets as load
+
+    return load()
+
+
 @app.get("/api/checks")
 def checks() -> list[dict[str, Any]]:
     return _checks()

@@ -3,7 +3,7 @@
 
 import { useCatCode, useQecCurves, useQecShot } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider, Solving } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, PaperSettings, Segmented, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useExplorer } from '../store'
 import { SpaceTimeScene } from '../three/SpaceTime'
@@ -35,6 +35,14 @@ export function ErrorCorrection() {
   return (
     <div className="view">
       <aside className="pane pane-left">
+        <PaperSettings
+          view="qec"
+          onPick={(s) => {
+            setD(Number(s.d))
+            setP(Number(s.p))
+            setSeed(Number(s.seed))
+          }}
+        />
         <h3>One surface code run</h3>
         <Segmented
           label="distance"
@@ -51,7 +59,15 @@ export function ErrorCorrection() {
           detection events. Raise p and watch the pairs get long enough to fool the decoder.
         </p>
         <h3>A repetition code of cats</h3>
-        <Slider label="cat phase-flip per round (%)" tex="p_Z" value={pPhase * 100} min={0.1} max={3} step={0.1} onChange={(v) => setPPhase(v / 100)} />
+        <PaperSettings
+          view="qec_cat"
+          title="Cat codes in the literature"
+          onPick={(s) => {
+            setPPhase(Number(s.p_phase))
+            setBias(Number(s.p_phase) / Number(s.p_bit))
+          }}
+        />
+        <Slider label="cat phase-flip per round (%)" tex="p_Z" value={pPhase * 100} min={0.1} max={5} step={0.1} onChange={(v) => setPPhase(v / 100)} />
         <Slider
           label="noise bias p_Z / p_X"
           tex="\eta"
