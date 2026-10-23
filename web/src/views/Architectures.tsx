@@ -50,7 +50,7 @@ export function Architectures() {
         <h3>View</h3>
         <Slider label="explode" value={explode} min={0} max={1} step={0.01} onChange={setExplode} testId="explode" />
         <p className="small muted">
-          Drag to rotate, scroll to zoom, click a part. Parts flagged "drawn at a different size" would be invisible, or
+          Drag to rotate, scroll to zoom. Click a part to fly to it; click empty space to fly back. Parts flagged "drawn at a different size" would be invisible, or
           would hide everything else, at their true size.
         </p>
       </aside>
