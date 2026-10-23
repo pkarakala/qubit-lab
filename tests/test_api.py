@@ -86,3 +86,16 @@ def test_pulse_optimizer_beats_drag() -> None:
     # Idling for 6 ns with T1 = T2 = 50 us costs t/(3 T2) + t/(6 T1) = 6e-5. The pulse costs a
     # little more: it briefly fills level 2, which decays and dephases faster.
     assert 6e-5 < sim["optimized"]["error_with_noise"] < 1e-4
+
+
+def test_readout_keeps_theory_and_sim_apart() -> None:
+    data = client.post("/api/readout", json={}).json()
+    assert set(data) == {"sim", "theory"}
+    # Hand calc: with a resonant drive of n photons, each pointer state holds
+    # n (kappa^2/4) / (kappa^2/4 + chi^2) photons (gambetta2006 Eq. 28 at delta_r = 0).
+    chi_mhz, kappa_mhz = data["sim"]["chi_mhz"], 1.0
+    expected = (kappa_mhz**2 / 4) / (kappa_mhz**2 / 4 + chi_mhz**2)
+    assert data["sim"]["photons_g"][-1] == pytest.approx(expected, rel=0.02)
+    assert data["sim"]["dephasing_per_us"] == pytest.approx(
+        data["theory"]["dephasing_per_us"], rel=0.01
+    )

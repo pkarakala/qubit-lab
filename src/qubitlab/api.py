@@ -28,12 +28,14 @@ from qubitlab.sim import cat as cat_sim
 from qubitlab.sim import custom as custom_sim
 from qubitlab.sim import pulse_optimizer as po_sim
 from qubitlab.sim import qec as qec_sim
+from qubitlab.sim import readout as ro_sim
 from qubitlab.sim import transmon as tr_sim
 from qubitlab.sim import transmon_dynamics as qb_sim
 from qubitlab.theory import FORMULAS
 from qubitlab.theory import cat as cat_th
 from qubitlab.theory import qec as qec_th
 from qubitlab.theory import qubit as qb_th
+from qubitlab.theory import readout as ro_th
 from qubitlab.theory import transmon as tr_th
 
 # Public hosting knobs, both off by default (see docs/deploy.md):
@@ -686,6 +688,72 @@ class CompareInputs(BaseModel):
     t_ns: float = Field(25.0, ge=1.0, le=1e5)
 
 
+class ReadoutRequest(BaseModel):
+    ratio: float = Field(50.0, ge=20.0, le=200.0, description="E_J / E_C")
+    E_C: float = Field(0.3, ge=0.1, le=0.5, description="charging energy, GHz")
+    f_r: float = Field(7.0, ge=4.0, le=9.0, description="bare resonator frequency, GHz")
+    g_n: float = Field(0.05, ge=0.005, le=0.15, description="coupling to n (a + a+), GHz")
+    kappa_mhz: float = Field(1.0, ge=0.1, le=20.0, description="resonator linewidth / 2 pi")
+    n_bar: float = Field(1.0, ge=0.05, le=10.0, description="photons for a resonant drive")
+    delta_r_mhz: float = Field(0.0, ge=-20.0, le=20.0, description="omega_r - omega_d, / 2 pi")
+
+
+@disk_cached
+def _readout(body: dict[str, Any]) -> dict[str, Any]:
+    req = ReadoutRequest(**body)
+    d = ro_sim.dressed_chi(req.ratio * req.E_C, req.E_C, req.f_r, req.g_n)
+    delta = d.f01 - req.f_r
+    theory_chi = {
+        "transmon": float(ro_th.chi_transmon(g=d.g01, g_12=d.g12, Delta=delta, alpha=d.alpha)),
+        "harmonic": float(ro_th.chi_transmon_harmonic(g=d.g01, Delta=delta, alpha=d.alpha)),
+        "two_level": float(ro_th.chi_two_level(g=d.g01, Delta=delta)),
+    }
+    # Dynamics in rad/us: chi and kappa from MHz, the drive set by the resonant photon number.
+    two_pi = 2 * math.pi
+    chi = two_pi * d.chi * 1e3
+    kappa = two_pi * req.kappa_mhz
+    delta_r = two_pi * req.delta_r_mhz
+    eps = math.sqrt(req.n_bar) * kappa / 2
+    t_max = 12 / kappa
+    p = ro_sim.pointer_trajectories(chi, eps, kappa, delta_r, t_max, n_points=61)
+    probe = np.linspace(-4, 4, 161) * max(abs(chi), kappa / 2)
+    return {
+        "sim": {
+            "chi_mhz": d.chi * 1e3,
+            "f01_ghz": d.f01,
+            "alpha_mhz": d.alpha * 1e3,
+            "g01_mhz": d.g01 * 1e3,
+            "g12_mhz": d.g12 * 1e3,
+            "times_us": _round(p.times),
+            "field_g": [_round(p.field_g.real), _round(p.field_g.imag)],
+            "field_e": [_round(p.field_e.real), _round(p.field_e.imag)],
+            "photons_g": _round(p.photons_g),
+            "photons_e": _round(p.photons_e),
+            "dephasing_per_us": ro_sim.dephasing_rate(chi, eps, kappa),
+        },
+        "theory": {
+            "chi_mhz": {k: v * 1e3 for k, v in theory_chi.items()},
+            "probe_mhz": _round(probe / two_pi),
+            "response_g": _round(
+                ro_th.pointer_photons(epsilon=eps, kappa=kappa, delta_r=probe, chi=-chi)
+            ),
+            "response_e": _round(
+                ro_th.pointer_photons(epsilon=eps, kappa=kappa, delta_r=probe, chi=chi)
+            ),
+            "dephasing_per_us": float(ro_th.dephasing_rate(kappa=kappa, chi=chi, epsilon=eps)),
+            "dephasing_weak_per_us": float(
+                ro_th.dephasing_rate_weak(kappa=kappa, chi=chi, epsilon=eps)
+            ),
+        },
+    }
+
+
+@app.post("/api/readout")
+def readout(req: ReadoutRequest) -> dict[str, Any]:
+    """Dispersive readout of a transmon: chi from the dressed spectrum, pointer states over time."""
+    return _readout(req.model_dump())
+
+
 INPUTS: dict[snippets.View, type[BaseModel]] = {
     "phase": EvolveRequest,
     "rates": RatesRequest,
@@ -694,6 +762,7 @@ INPUTS: dict[snippets.View, type[BaseModel]] = {
     "pulse": PulseRequest,
     "qec": QecInputs,
     "compare": CompareInputs,
+    "readout": ReadoutRequest,
 }
 
 

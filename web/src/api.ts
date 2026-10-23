@@ -159,7 +159,7 @@ async function post<T>(path: string, body: unknown): Promise<T> {
   return (await r.json()) as T
 }
 
-export type ScriptView = 'phase' | 'rates' | 'transmon' | 'qubit' | 'pulse' | 'qec' | 'compare'
+export type ScriptView = 'phase' | 'rates' | 'transmon' | 'qubit' | 'pulse' | 'qec' | 'compare' | 'readout'
 
 /** A Python script that reproduces `view` at `inputs` (see qubitlab/snippets.py). */
 export const pythonScript = (view: ScriptView, inputs: unknown) => post<{ python: string }>(`/api/python/${view}`, inputs)
@@ -329,6 +329,48 @@ export const usePulse = (p: PulseParams) =>
   useQuery({
     queryKey: ['pulse', p],
     queryFn: () => post<PulseRun>('/api/pulse/optimize', p),
+    placeholderData: keepPreviousData,
+    ...forever,
+  })
+
+export interface ReadoutParams {
+  ratio: number
+  E_C: number
+  f_r: number
+  g_n: number
+  kappa_mhz: number
+  n_bar: number
+  delta_r_mhz: number
+}
+
+export interface ReadoutRun {
+  sim: {
+    chi_mhz: number
+    f01_ghz: number
+    alpha_mhz: number
+    g01_mhz: number
+    g12_mhz: number
+    times_us: number[]
+    field_g: [number[], number[]] // [I, Q] over time
+    field_e: [number[], number[]]
+    photons_g: number[]
+    photons_e: number[]
+    dephasing_per_us: number
+  }
+  theory: {
+    chi_mhz: { transmon: number; harmonic: number; two_level: number }
+    probe_mhz: number[]
+    response_g: number[]
+    response_e: number[]
+    dephasing_per_us: number
+    dephasing_weak_per_us: number
+  }
+}
+
+export const useReadout = (p: ReadoutParams) =>
+  useQuery({
+    queryKey: ['readout', p],
+    queryFn: () => post<ReadoutRun>('/api/readout', p),
     placeholderData: keepPreviousData,
     ...forever,
   })
