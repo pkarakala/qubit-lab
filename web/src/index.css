@@ -151,12 +151,23 @@ code {
   font-size: 12px;
 }
 
+@media (max-width: 1500px) {
+  .brand-sub {
+    display: none;
+  }
+}
+
 .tabs {
   display: flex;
   gap: 2px;
+  min-width: 0;
+  overflow-x: auto; /* twelve tabs: scroll sideways on narrow screens instead of wrapping */
+  scrollbar-width: none;
 }
 
 .tab {
+  flex: none;
+  white-space: nowrap;
   height: 30px;
   padding: 0 12px;
   border: 1px solid transparent;
