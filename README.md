@@ -1,8 +1,8 @@
 # Qubit Lab
 
-An open-source simulator for learning superconducting qubits, from the equations in the papers to full open-system simulation, in an interactive 3D explorer. For students, engineers and researchers.
+An open source simulator for learning superconducting qubits, from the equations in the papers to full open system simulation, in an interactive 3D explorer. For students, engineers and researchers.
 
-Every equation carries its paper and equation number, and is checked against a simulation built on maintained open-source solvers: Dynamiqs, scqubits, Stim, PyMatching and JAX.
+Every equation carries its paper and equation number, and is checked against a simulation built on maintained open- ource solvers: Dynamiqs, scqubits, Stim, PyMatching and JAX.
 
 ![A cat losing its fringes to photon loss, with the ideal cat from theory as a wireframe](docs/img/phase_space.png)
 
