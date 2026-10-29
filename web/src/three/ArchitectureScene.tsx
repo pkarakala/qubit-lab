@@ -1,23 +1,32 @@
 // A qubit design as a stack of parts that explodes apart. Each part is a box at its cited size
-// (or at draw_size when the true size would be invisible). Click a part to inspect it.
+// (or at draw_size when the true size would be invisible). Click a part to fly the camera to it
+// (drei's CameraControls, built on yomotsu/camera-controls); click empty space to fly back.
 
-import { OrbitControls } from '@react-three/drei'
+import { CameraControls, Edges } from '@react-three/drei'
 import { type ThreeEvent, useFrame } from '@react-three/fiber'
-import { useMemo, useRef } from 'react'
+import { type RefObject, useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import type { ArchPart } from '../api'
 import { LabeledCanvas } from './LabeledCanvas'
 
-const COLORS: Record<string, { color: string; opacity: number; metalness: number }> = {
-  sapphire: { color: '#9cc4e4', opacity: 0.45, metalness: 0 },
-  silicon: { color: '#7d8590', opacity: 0.85, metalness: 0.1 },
-  aluminium: { color: '#d4d7dc', opacity: 1, metalness: 0.8 },
-  aluminium_bulk: { color: '#c9ccd2', opacity: 0.35, metalness: 0.8 },
-  tantalum: { color: '#8f9bb3', opacity: 1, metalness: 0.7 },
-  aluminium_film: { color: '#d4d7dc', opacity: 0.3, metalness: 0.6 },
-  tantalum_film: { color: '#8f9bb3', opacity: 0.3, metalness: 0.6 },
-  junction: { color: '#ff7a3d', opacity: 1, metalness: 0.2 },
-  copper: { color: '#c47a45', opacity: 0.9, metalness: 0.8 },
+// How each material is drawn. Rendering choices, not data: plain lit materials with no
+// environment map, so every GPU (and the headless test browser) draws them the same.
+interface Look {
+  color: string
+  opacity: number
+  metalness: number
+  roughness: number
+}
+const LOOKS: Record<string, Look> = {
+  sapphire: { color: '#a9d2f0', opacity: 0.5, metalness: 0, roughness: 0.1 },
+  silicon: { color: '#6b7280', opacity: 0.9, metalness: 0.2, roughness: 0.35 },
+  aluminium: { color: '#dfe3e8', opacity: 1, metalness: 0.45, roughness: 0.3 },
+  aluminium_bulk: { color: '#cfd3d9', opacity: 0.3, metalness: 0.45, roughness: 0.35 },
+  tantalum: { color: '#9aa8c4', opacity: 1, metalness: 0.45, roughness: 0.3 },
+  aluminium_film: { color: '#dfe3e8', opacity: 0.4, metalness: 0.4, roughness: 0.3 },
+  tantalum_film: { color: '#9aa8c4', opacity: 0.4, metalness: 0.4, roughness: 0.3 },
+  junction: { color: '#ff7a3d', opacity: 1, metalness: 0.1, roughness: 0.5 },
+  copper: { color: '#d08050', opacity: 0.9, metalness: 0.5, roughness: 0.3 },
 }
 
 type V = [number, number, number]
@@ -51,6 +60,7 @@ function Box({
   t,
   selected,
   onPick,
+  meshes,
 }: {
   part: ArchPart
   k: number
@@ -58,14 +68,20 @@ function Box({
   t: number
   selected: boolean
   onPick: (id: string) => void
+  meshes: RefObject<Map<string, THREE.Mesh>>
 }) {
   const ref = useRef<THREE.Mesh>(null)
+  useEffect(() => {
+    const map = meshes.current
+    if (ref.current) map.set(part.id, ref.current)
+    return () => void map.delete(part.id)
+  }, [meshes, part.id])
   const d = part.draw_size ?? part.size
   const minDim = 0.03 / k // never thinner than 0.03 world units, so films stay visible
   const dims: V = [Math.max(d[0], minDim) * k, Math.max(d[2], minDim) * k, Math.max(d[1], minDim) * k]
   const home = toWorld(part.position, k, c)
   const away = toWorld(part.explode, k)
-  const look = COLORS[part.material] ?? COLORS.aluminium!
+  const look = LOOKS[part.material] ?? LOOKS.aluminium!
   useFrame(() => {
     const m = ref.current
     if (!m) return
@@ -87,11 +103,12 @@ function Box({
         transparent={look.opacity < 1}
         opacity={look.opacity}
         metalness={look.metalness}
-        roughness={0.4}
+        roughness={look.roughness}
         emissive={selected ? '#ffd166' : '#000000'}
         emissiveIntensity={selected ? 0.6 : 0}
         depthWrite={look.opacity >= 1}
       />
+      <Edges threshold={15} color={selected ? '#ffb000' : '#3b3f46'} transparent opacity={selected ? 1 : 0.35} />
     </mesh>
   )
 }
@@ -108,19 +125,32 @@ export function ArchitectureScene({
   onPick: (id: string | null) => void
 }) {
   const { k, center } = useFit(parts, explode)
+  const controls = useRef<CameraControls>(null)
+  const meshes = useRef(new Map<string, THREE.Mesh>())
+  // Fly to the picked part once it has settled at its exploded position, or back to the overview.
+  useEffect(() => {
+    const cam = controls.current
+    if (!cam) return
+    const id = window.setTimeout(() => {
+      const mesh = selected ? meshes.current.get(selected) : undefined
+      if (mesh) void cam.fitToSphere(mesh, true) // keeps the viewing direction; fitToBox turns to face the part
+      else void cam.setLookAt(8, 6, 10, 0, 0, 0, true)
+    }, 250)
+    return () => window.clearTimeout(id)
+  }, [selected, parts])
   const sel = parts.find((p) => p.id === selected)
   const labels = sel
     ? [{ position: toWorld(sel.position.map((x, i) => x + sel.explode[i]! * explode) as V, k, center).map((x, i) => (i === 1 ? x + 0.6 : x)) as V, text: sel.name }]
     : []
   return (
     <LabeledCanvas labels={labels} camera={{ position: [8, 6, 10], fov: 45 }} onPointerMissed={() => onPick(null)}>
-      <ambientLight intensity={0.7} />
-      <directionalLight position={[8, 12, 6]} intensity={1.4} />
-      <directionalLight position={[-6, 4, -8]} intensity={0.5} />
+      <hemisphereLight args={['#ffffff', '#8a8f99', 0.9]} />
+      <directionalLight position={[8, 12, 6]} intensity={1.6} />
+      <directionalLight position={[-6, 4, -8]} intensity={0.6} />
       {parts.map((p) => (
-        <Box key={p.id} part={p} k={k} c={center} t={explode} selected={p.id === selected} onPick={onPick} />
+        <Box key={p.id} part={p} k={k} c={center} t={explode} selected={p.id === selected} onPick={onPick} meshes={meshes} />
       ))}
-      <OrbitControls makeDefault enableDamping />
+      <CameraControls ref={controls} makeDefault minDistance={0.05} />
     </LabeledCanvas>
   )
 }
