@@ -12,14 +12,14 @@
 | --- | --- | --- | --- |
 | Cat, \|α\|² = 2.5 | 313 µs | 2.7 µs | about 116 |
 | Cat, \|α\|² = 11.3 | 15 s | 490 ns | about 3 × 10⁷ |
-| Transmon, Willow mean | 68 µs | 89 µs | 0.76 |
+| Transmon, Acharya 2025 mean | 68 µs | 89 µs | 0.76 |
 | Transmon, best Ta device | 0.36 ms | 0.20 ms | 1.8 |
 
 **What it means.** A transmon's two errors come at similar rates, so its code must fix both. A big cat almost never bit-flips, so a code only has to fix phase-flips. That is why a line of cat qubits can do the job of a 2D grid (Guillaud and Mirrahimi 2019).
 
-**The catch.** The cat's phase-flips are more common than a transmon's. In 25 ns the |α|² = 11.3 cat phase-flips with chance 2.5%; the Willow transmon 0.014%.
+**The catch.** The cat's phase-flips are more common than a transmon's. In 25 ns the |α|² = 11.3 cat phase-flips with chance 2.5%; the Acharya 2025 transmon 0.014%.
 
-**Fine print.** Willow's T2 uses dynamical decoupling (CPMG), and its numbers are means over 105 qubits. The Ta device numbers are its best T1 and echo T2. The check `qubit.flip_probability` shows where the formula fails: slow frequency noise makes ⟨X⟩ decay faster than e^(−t/T2).
+**Fine print.** Acharya 2025's T2 uses dynamical decoupling (CPMG), and its numbers are means over 105 qubits. The Ta device numbers are its best T1 and echo T2. The check `qubit.flip_probability` shows where the formula fails: slow frequency noise makes ⟨X⟩ decay faster than e^(−t/T2).
 
 **Try it.** In the *Noise bias* view, drag the idle time.
 

@@ -11,7 +11,9 @@ Every equation carries its paper and equation number, and is checked against a s
 | ![Flip rates](docs/img/flip_rates.png) | ![Transmon](docs/img/transmon.png) |
 | ![Qubit control: a DRAG pulse on the Bloch sphere](docs/img/qubit_control.png) | ![Noise bias: a cat and a transmon at measured hardware numbers](docs/img/noise_bias.png) |
 | ![Error correction: one surface code run in space-time](docs/img/error_correction.png) | ![Pulse optimizer: GRAPE vs DRAG on a 6 ns gate](docs/img/pulse_optimizer.png) |
-| ![Playground: a Kerr state written by hand, with its Dynamiqs script](docs/img/playground.png) | ![Checks](docs/img/checks.png) |
+| ![Readout: two pointer states separating in the IQ plane](docs/img/readout.png) | ![Two-qubit gates: a transmon CZ and a cat CNOT](docs/img/two_qubit_gates.png) |
+| ![Architectures: an Xmon transmon exploded into its layers](docs/img/architectures.png) | ![Playground: a Kerr state written by hand, with its Dynamiqs script](docs/img/playground.png) |
+| ![Checks](docs/img/checks.png) | |
 
 ## What you can do
 
@@ -73,7 +75,7 @@ Start with [docs/learn/](docs/learn/): a short course in five parts, from states
 
 ## Limits
 
-The cat model is the standard effective one: a single mode with two-photon dissipation, no buffer mode. Two-qubit gates and readout are next (see [docs/plan.md](docs/plan.md)). Rates are in units of κ₂, not hertz. Hardware numbers come from peer-reviewed papers, shown as cited facts, never fitted. Not affiliated with any company or lab whose work is cited.
+The cat model is the standard effective one: a single mode with two-photon dissipation, no buffer mode. Chip geometry is schematic or taken from papers; computing it from a layout with Palace is next (see [ROADMAP.md](ROADMAP.md)). Rates are in units of κ₂, not hertz. Hardware numbers come from peer-reviewed papers, shown as cited facts, never fitted. Not affiliated with any company or lab whose work is cited.
 
 Parts of this repo were written with AI coding assistants, directed and reviewed by me. Agent rules are in [AGENTS.md](AGENTS.md).
 

@@ -83,7 +83,7 @@ def test_compare_cat_is_biased_and_transmon_is_not() -> None:
     # willow2025: 68 us / 89 us = 0.76. Transmon bias is order 1.
     assert by["willow2025"]["theory"]["bias"] == pytest.approx(68 / 89, rel=0.01)
     assert by["reglade2024.2.5"]["sim"] is None
-    # 1 - F = 1/2 - e^{-t/T2}/3 - e^{-t/T1}/6 ~ t/(3 T2) + t/(6 T1) = 1.55e-4 for Willow at 25 ns.
+    # 1 - F = 1/2 - e^{-t/T2}/3 - e^{-t/T1}/6 ~ t/(3 T2) + t/(6 T1) = 1.55e-4 at 25 ns (willow2025).
     willow = by["willow2025"]
     assert willow["theory"]["idle_error"] == pytest.approx(1.55e-4, rel=0.01)
     assert willow["sim"]["idle_error"] == pytest.approx(willow["theory"]["idle_error"], rel=1e-3)

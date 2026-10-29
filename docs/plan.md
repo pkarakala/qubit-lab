@@ -2,6 +2,8 @@
 
 Approved by the maintainer on 2026-10-22. This file is the working plan; ROADMAP.md keeps the one-line status.
 
+**Status (2026-10-29):** items 1 to 4 are done and the code is ready for v1.0.0. Item 5 (Palace) is next.
+
 ## Goal
 
 An open-source simulator for learning superconducting qubits, for students, engineers and researchers alike. It teaches concepts, not companies. Every equation is cited to a paper and an equation number, and checked against a simulation. Hardware numbers come from peer-reviewed papers only.
