@@ -1,7 +1,7 @@
 // Every closed-form formula against the simulation, with the verdict predicted beforehand.
 
 import { useChecks, useFormulas } from '../api'
-import { ErrorBanner, Tex } from '../components/ui'
+import { ErrorBanner, Solving, Tex } from '../components/ui'
 import { fmt } from '../lib/colormap'
 
 export function Checks() {
@@ -19,6 +19,7 @@ export function Checks() {
           the verdict predicted from the formula's validity range before running: a formula should agree inside it
           and diverge outside it. {q.data ? `${rows.length} checks, ${surprises} surprises.` : 'Running every check (about two minutes the first time)…'}
         </p>
+        {!q.data && !q.error ? <Solving what="Running every check" /> : null}
         {formulas
           .filter((f) => rows.some((r) => r.formula === f.key))
           .map((f) => (
