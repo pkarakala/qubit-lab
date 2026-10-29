@@ -238,6 +238,13 @@ def _checks() -> list[dict[str, Any]]:
     return [r.describe() for r in run_all()]
 
 
+def _checks_fast() -> list[dict[str, Any]]:
+    """The shipped results when they match this code (qubitlab.snapshot), else a live run."""
+    from qubitlab import snapshot
+
+    return snapshot.load() or _checks()
+
+
 @app.get("/api/health")
 def health() -> dict[str, str]:
     return {"status": "ok", "version": __version__}
@@ -339,7 +346,7 @@ def presets() -> list[dict[str, Any]]:
 
 @app.get("/api/checks")
 def checks() -> list[dict[str, Any]]:
-    return _checks()
+    return _checks_fast()
 
 
 @disk_cached
