@@ -142,6 +142,8 @@ DEVICES: tuple[Device, ...] = (
     Device(
         "reglade2024.11.3", "Cat, |α|² = 11.3", "cat", "reglade2024.tx_11.3", "reglade2024.tz_11.3"
     ),
-    Device("willow2025", "Transmon, Willow mean", "transmon", "willow2025.t1", "willow2025.t2"),
+    Device(
+        "willow2025", "Transmon, Acharya 2025 mean", "transmon", "willow2025.t1", "willow2025.t2"
+    ),
     Device("place2021", "Transmon, best Ta device", "transmon", "place2021.t1", "place2021.t2"),
 )

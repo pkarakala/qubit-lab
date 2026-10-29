@@ -76,7 +76,7 @@ export function CatVsTransmon() {
           testId="idle-time"
         />
         <p className="small muted">
-          Starts at {WILLOW_GATE_NS} ns, the Willow single-qubit gate time. Each
+          Starts at {WILLOW_GATE_NS} ns, the single-qubit gate time of Acharya et al. 2025. Each
           qubit idles for t with the measured decay times below.
         </p>
         <h3>Cat model</h3>
@@ -220,13 +220,13 @@ export function CatVsTransmon() {
         <h3>Why bias matters</h3>
         <p className="small" data-testid="bias-summary">
           In {fmt(tNs)} ns the |α|² = 11.3 cat is {fmt(bias(bigCat), 2)} times
-          more likely to phase-flip than to bit-flip. The Willow transmon's
+          more likely to phase-flip than to bit-flip. The Acharya 2025 transmon's
           ratio is {fmt(bias(willow), 2)}: both errors matter. A code that only
           has to fix one error type can be a line of qubits (Guillaud 2019). The
           price: the cat's phase-flips are more common than the transmon's.
         </p>
         <p className="small" data-testid="idle-error">
-          Willow error per idle step, 1 − F̄: theory{" "}
+          Acharya 2025 error per idle step, 1 − F̄: theory{" "}
           {fmt(willow?.theory.idle_error)}, simulation{" "}
           {fmt(willow?.sim?.idle_error)}.
         </p>
@@ -239,7 +239,7 @@ export function CatVsTransmon() {
           formulaKey="qubit.flip_probability"
           theory={willow?.theory.p_phase}
           sim={willow?.sim?.p_phase}
-          simLabel="Willow phase-flip, 4-level transmon"
+          simLabel="Acharya 2025 phase-flip, 4-level transmon"
         />
         <FormulaCard formulaKey="qubit.idle_fidelity" />
         <FormulaCard formulaKey="cat.bit_flip_suppression" />

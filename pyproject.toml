@@ -1,13 +1,21 @@
 [project]
 name = "qubitlab"
-version = "0.2.0"
-description = "Cat qubit and transmon physics, from closed-form theory to Dynamiqs simulation, with a 3D explorer"
+version = "1.0.0"
+description = "An open-source simulator for learning superconducting qubits: cited theory, checked against Dynamiqs, scqubits and Stim, in a 3D explorer"
 readme = "README.md"
 authors = [
     { name = "Pranav Reddy" }
 ]
 license = "Apache-2.0"
 requires-python = ">=3.12"
+keywords = ["superconducting qubits", "cat qubit", "transmon", "quantum error correction", "education"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+]
 dependencies = [
     "dynamiqs>=0.3.7",
     "fastapi>=0.160.0",
@@ -21,6 +29,11 @@ dependencies = [
     "sympy>=1.14.0",
     "uvicorn>=0.54.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/pkarakala/qubit-lab"
+Changelog = "https://github.com/pkarakala/qubit-lab/blob/main/CHANGELOG.md"
+Course = "https://github.com/pkarakala/qubit-lab/tree/main/docs/learn"
 
 [project.scripts]
 qubitlab = "qubitlab.cli:main"

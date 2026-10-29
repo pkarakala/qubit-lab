@@ -655,7 +655,8 @@ def _compare(t_ns: float) -> dict[str, Any]:
 def compare(t_ns: float = 25.0) -> dict[str, Any]:
     """Bit- and phase-flip chance per idle step of length t for measured cats and transmons.
 
-    The default t is the Willow single-qubit gate time (willow2025, Supplement Sec. I).
+    The default t is the single-qubit gate time of Acharya et al. 2025
+    (willow2025, Supplement Sec. I).
     """
     if not 1.0 <= t_ns <= 1e5:
         raise HTTPException(422, "t_ns must be between 1 ns and 100 us")

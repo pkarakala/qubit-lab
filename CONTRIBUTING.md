@@ -34,8 +34,8 @@ If you used an AI assistant, point it at [AGENTS.md](AGENTS.md) and say so in th
 
 ## Release (maintainer)
 
-1. Set the version: `uv version 0.2.0`, commit, merge to main.
-2. Tag and push: `git tag v0.2.0 && git push origin v0.2.0`.
+1. Set the version and add its entry to [CHANGELOG.md](CHANGELOG.md): `uv version X.Y.Z`, commit, merge to main.
+2. Tag and push: `git tag vX.Y.Z && git push origin vX.Y.Z`.
 3. The release workflow builds the explorer into the wheel, smoke-tests `qubitlab serve`, publishes to PyPI and makes a GitHub release.
 
-PyPI needs a one-time trusted publisher for this repo (workflow `release.yml`, environment `pypi`).
+One-time setup (PyPI trusted publisher, Zenodo, the Hugging Face Space) is in [docs/deploy.md](docs/deploy.md#first-release).

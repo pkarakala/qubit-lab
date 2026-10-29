@@ -1,8 +1,19 @@
 cff-version: 1.2.0
 message: "If you use qubitlab, please cite it as below."
-title: "qubitlab: cat qubits and transmons, theory vs simulation"
+title: "Qubit Lab: an open-source simulator for learning superconducting qubits"
+version: 1.0.0
 authors:
   - family-names: Reddy
     given-names: Pranav
 license: Apache-2.0
 repository-code: "https://github.com/pkarakala/qubit-lab"
+abstract: >-
+  An interactive simulator for learning superconducting qubits (cat qubits and
+  transmons), where every equation is cited to its paper and checked against an
+  open-system simulation built on Dynamiqs, scqubits, Stim, PyMatching and JAX.
+keywords:
+  - superconducting qubits
+  - cat qubits
+  - transmon
+  - quantum error correction
+  - education
