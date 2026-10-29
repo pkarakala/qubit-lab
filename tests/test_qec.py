@@ -1,3 +1,6 @@
+import subprocess
+import sys
+
 import pytest
 
 from qubitlab.sim import qec
@@ -24,3 +27,20 @@ def test_shot_matches_every_fired_detector() -> None:
     assert sum(q[2] for q in shot.qubits) == 25  # d^2 data qubits
     in_pairs = {i for pair in shot.matched for i in pair if i >= 0}
     assert in_pairs == set(shot.fired)
+
+
+CONCURRENT_FIRST_CALLS = """
+import threading
+from qubitlab.sim import qec
+ts = [threading.Thread(target=qec.sample_shot, args=(5, 0.005, s)) for s in range(4)]
+ts.append(threading.Thread(target=qec.memory, args=("surface", 3, 0.005, 1000)))
+for t in ts: t.start()
+for t in ts: t.join()
+"""
+
+
+def test_concurrent_first_samples_do_not_deadlock() -> None:
+    # Before Stim's NumPy bindings were set up at import, about 2 runs in 5 of this hung forever:
+    # the server's request threads and its warm-up make these first calls at the same time.
+    for _ in range(3):
+        subprocess.run([sys.executable, "-c", CONCURRENT_FIRST_CALLS], check=True, timeout=120)
