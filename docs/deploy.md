@@ -21,7 +21,7 @@ All off unless set. The Dockerfile sets them.
 | --- | --- | --- |
 | `QUBITLAB_SOLVES` | 2 | Most simulations running at once. The rest queue. |
 | `QUBITLAB_RATE` | 120/minute | Requests per visitor (by IP, through the proxy). Over it: HTTP 429. |
-| `QUBITLAB_CACHE` | .cache/qubitlab | Where results are cached on disk. |
+| `QUBITLAB_CACHE` | .cache/qubitlab | Where results are cached on disk. Unset: ~/.cache/qubitlab. |
 
 Every request is also bounded by its own input limits (grid size, number of steps, durations), so one request cannot run for minutes.
 

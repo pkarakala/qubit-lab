@@ -1,4 +1,10 @@
-"""Disk cache for slow solves, keyed by function, arguments and package version."""
+"""Disk cache for slow solves, keyed by function, arguments and the code that ran them.
+
+The cache lives in $QUBITLAB_CACHE, else $XDG_CACHE_HOME/qubitlab, else ~/.cache/qubitlab,
+so every folder `qubitlab serve` starts from shares it. A result is reused only by the same
+package version and the same code, so an edited checkout or a new release never serves answers
+from other code. Old entries are never read again; deleting the folder is always safe.
+"""
 
 from __future__ import annotations
 
@@ -12,8 +18,14 @@ from pathlib import Path
 from typing import Any
 
 from qubitlab import __version__
+from qubitlab.snapshot import fingerprint
 
-CACHE_DIR = Path(os.environ.get("QUBITLAB_CACHE", Path.cwd() / ".cache" / "qubitlab"))
+CACHE_DIR = Path(
+    os.environ.get("QUBITLAB_CACHE")
+    or Path(os.environ.get("XDG_CACHE_HOME") or Path.home() / ".cache") / "qubitlab"
+)
+# Every file that can change a cached answer: the modules and the architecture scenes.
+CODE = fingerprint(("*.py", "theory/*.py", "sim/*.py", "checks/*.py", "data/architectures/*"))
 _locks: dict[str, threading.Lock] = {}
 _locks_guard = threading.Lock()
 
@@ -29,7 +41,7 @@ def disk_cached[F: Callable[..., Any]](fn: F) -> F:
     @functools.wraps(fn)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
         payload = json.dumps(
-            {"fn": fn.__qualname__, "v": __version__, "args": args, "kwargs": kwargs},
+            {"fn": fn.__qualname__, "v": __version__, "code": CODE, "args": args, "kwargs": kwargs},
             sort_keys=True,
             default=str,
         )
