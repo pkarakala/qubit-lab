@@ -2,9 +2,10 @@
 
     python -m qubitlab.warm
 
-The Docker build runs it, and `qubitlab serve` and scripts/dev.sh run it in the background on
-start (QUBITLAB_WARM=1). Each call matches a view's default request in web/src: if a view's
-defaults change, update its line here. Results land in the disk cache (qubitlab.cache).
+The Docker build runs it and stops if a step fails; `qubitlab serve` and scripts/dev.sh run it in
+the background on start (QUBITLAB_WARM=1). Each call matches a view's default request in
+web/src: if a view's defaults change, update its line here. Results land in the disk cache
+(qubitlab.cache).
 """
 
 from __future__ import annotations
@@ -86,8 +87,11 @@ def preset_steps() -> list[Callable[[], object]]:
     return steps
 
 
-def warm() -> None:
-    """Fill the cache: each view's defaults, then the published presets, then the checks."""
+def warm() -> int:
+    """Fill the cache: each view's defaults, then the published presets, then the checks.
+
+    Returns how many steps failed. Each failure is logged with its traceback.
+    """
     from qubitlab import api
 
     steps = [
@@ -113,15 +117,23 @@ def warm() -> None:
         api.checks,  # instant when data/checks.json matches the code
     ]
     start = time.perf_counter()
+    failed = 0
     for step in steps:
         _wait_for_idle()
         try:
             step()
-        except Exception:  # a failed warm-up only costs speed; the request will report it
+        except Exception:  # in a server this only costs speed; the request will report it
+            failed += 1
             log.exception("warm-up step failed")
-    log.info("warm-up done in %.0f s", time.perf_counter() - start)
+    log.info(
+        "warm-up done in %.0f s, %d of %d steps failed",
+        time.perf_counter() - start,
+        failed,
+        len(steps),
+    )
+    return failed
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    warm()
+    raise SystemExit(1 if warm() else 0)  # a failed step fails the Docker build
