@@ -2,7 +2,7 @@
 
 An open source simulator for learning superconducting qubits, from the equations in the papers to full open system simulation, in an interactive 3D explorer. For students, engineers and researchers.
 
-Every equation carries its paper and equation number, and is checked against a simulation built on maintained open- ource solvers: Dynamiqs, scqubits, Stim, PyMatching and JAX.
+Every equation carries its paper and equation number, and is checked against a simulation built on maintained open source solvers: Dynamiqs, scqubits, Stim, PyMatching and JAX.
 
 ![A cat losing its fringes to photon loss, with the ideal cat from theory as a wireframe](https://raw.githubusercontent.com/pkarakala/qubit-lab/main/docs/img/phase_space.png)
 
@@ -31,7 +31,7 @@ Every equation carries its paper and equation number, and is checked against a s
 | Architectures | Explode six qubit designs, from the Xmon to the Kerr cat, into their layers, with every size cited or marked schematic. |
 | Playground | Type your own Hamiltonian and losses, watch the Wigner function evolve, and copy the run as Python. |
 
-Every view has **Share** (a link that restores its inputs) and **Copy as Python** (a script that reproduces it).
+Every view has **Share**, a link that restores its inputs, and **Copy as Python**, a script that reruns the view's simulation next to its theory. CI runs every script, so they stay in step with the code.
 
 ## How we know it's right
 
@@ -67,15 +67,11 @@ Three layers, kept apart by a test:
 
 ## Learn
 
-Every view has a **Share** button. The link it copies reopens the same view with the same inputs.
-Every view also has **Copy as Python**: a short script that calls `qubitlab` with the inputs on screen and prints
-the simulation next to its theory. CI runs every script, so they stay in step with the code.
-
 Start with [docs/learn/](https://github.com/pkarakala/qubit-lab/tree/main/docs/learn): a short course in five parts, from states and noise to qubit designs, control, gates and error correction. Every equation is listed with its source in [docs/reference/formulas.md](https://github.com/pkarakala/qubit-lab/blob/main/docs/reference/formulas.md), and every comparison in [docs/reference/checks.md](https://github.com/pkarakala/qubit-lab/blob/main/docs/reference/checks.md).
 
 ## Limits
 
-The cat model is the standard effective one: a single mode with two-photon dissipation, no buffer mode. Chip geometry is schematic or taken from papers; computing it from a layout with Palace is next (see [ROADMAP.md](https://github.com/pkarakala/qubit-lab/blob/main/ROADMAP.md)). Rates are in units of κ₂, not hertz. Hardware numbers come from peer-reviewed papers, shown as cited facts, never fitted. Not affiliated with any company or lab whose work is cited.
+The cat model is the standard effective one: a single mode with two-photon dissipation, no buffer mode. Chip geometry is schematic or taken from papers; computing it from a layout with Palace is next (see [ROADMAP.md](https://github.com/pkarakala/qubit-lab/blob/main/ROADMAP.md)). Rates are in units of κ₂, not hertz. Measured hardware numbers are cited to their papers and shown beside the simulation, never fitted to it. Not affiliated with any company or lab whose work is cited.
 
 Parts of this repo were written with AI coding assistants, directed and reviewed by me. Agent rules are in [AGENTS.md](https://github.com/pkarakala/qubit-lab/blob/main/AGENTS.md).
 
