@@ -7,6 +7,7 @@ authors = [
     { name = "Pranav Reddy" }
 ]
 license = "Apache-2.0"
+license-files = ["LICENSE"]
 requires-python = ">=3.12"
 keywords = ["superconducting qubits", "cat qubit", "transmon", "quantum error correction", "education"]
 classifiers = [

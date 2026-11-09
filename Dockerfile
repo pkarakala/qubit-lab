@@ -19,7 +19,7 @@ ENV UV_COMPILE_BYTECODE=1 \
     QUBITLAB_CACHE=/home/lab/app/.cache/qubitlab \
     QUBITLAB_SOLVES=2 \
     QUBITLAB_RATE=120/minute
-COPY --chown=lab pyproject.toml uv.lock README.md references.bib ./
+COPY --chown=lab pyproject.toml uv.lock README.md LICENSE ./
 COPY --chown=lab src/ src/
 COPY --chown=lab docs/hand_calcs/ docs/hand_calcs/
 RUN uv sync --frozen --no-dev

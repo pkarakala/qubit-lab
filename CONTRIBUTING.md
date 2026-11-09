@@ -18,7 +18,7 @@ cd web && npm install && cd ..
 ## Add or fix a formula
 
 1. Read the paper. Note the equation number.
-2. Add the BibTeX entry to `references.bib` if it is new.
+2. Add the BibTeX entry to `src/qubitlab/data/references.bib` if it is new.
 3. Write the `Formula` in `src/qubitlab/theory/` with its `Source` and `valid_when`.
 4. Add a check in `src/qubitlab/checks/`: pick regimes where it should agree and one where it should not, and write the expected verdict first.
 5. Run `uv run python scripts/make_reference.py` and the tests.
