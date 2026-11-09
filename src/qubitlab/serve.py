@@ -10,6 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 
 EXPLORER = Path(__file__).resolve().parent / "explorer"
@@ -35,5 +36,6 @@ def app_with_explorer(explorer: Path = EXPLORER) -> FastAPI:
     add_rate_limit(root)  # the hosting limits in qubitlab.api, when set
     # The API's own route objects, not include_router: slowapi only sees plain routes.
     root.router.routes.extend(r for r in api.routes if getattr(r, "path", "").startswith("/api/"))
+    root.add_middleware(GZipMiddleware)  # as on the API; also shrinks the explorer's scripts
     root.mount("/", StaticFiles(directory=explorer, html=True), name="explorer")
     return root

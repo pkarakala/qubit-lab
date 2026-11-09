@@ -1,20 +1,23 @@
 // The explorer shell: top bar with the views, then the active view.
 
-import { useEffect, useState } from 'react'
-import { Architectures } from './views/Architectures'
-import { CatVsTransmon } from './views/CatVsTransmon'
-import { Checks } from './views/Checks'
-import { ErrorCorrection } from './views/ErrorCorrection'
-import { FlipRates } from './views/FlipRates'
-import { Gates } from './views/Gates'
-import { PhaseSpace } from './views/PhaseSpace'
-import { Playground } from './views/Playground'
-import { PulseOptimizer } from './views/PulseOptimizer'
-import { Qubit } from './views/Qubit'
-import { Readout } from './views/Readout'
-import { Transmon } from './views/Transmon'
+import { Suspense, lazy, useEffect, useState } from 'react'
+import { Solving } from './components/ui'
 import { toLink } from './lib/share'
 import { type View, useExplorer } from './store'
+
+// Each view's code (and Plotly or three.js, if it draws with them) loads when the view first opens.
+const Architectures = lazy(() => import('./views/Architectures').then((m) => ({ default: m.Architectures })))
+const CatVsTransmon = lazy(() => import('./views/CatVsTransmon').then((m) => ({ default: m.CatVsTransmon })))
+const Checks = lazy(() => import('./views/Checks').then((m) => ({ default: m.Checks })))
+const ErrorCorrection = lazy(() => import('./views/ErrorCorrection').then((m) => ({ default: m.ErrorCorrection })))
+const FlipRates = lazy(() => import('./views/FlipRates').then((m) => ({ default: m.FlipRates })))
+const Gates = lazy(() => import('./views/Gates').then((m) => ({ default: m.Gates })))
+const PhaseSpace = lazy(() => import('./views/PhaseSpace').then((m) => ({ default: m.PhaseSpace })))
+const Playground = lazy(() => import('./views/Playground').then((m) => ({ default: m.Playground })))
+const PulseOptimizer = lazy(() => import('./views/PulseOptimizer').then((m) => ({ default: m.PulseOptimizer })))
+const Qubit = lazy(() => import('./views/Qubit').then((m) => ({ default: m.Qubit })))
+const Readout = lazy(() => import('./views/Readout').then((m) => ({ default: m.Readout })))
+const Transmon = lazy(() => import('./views/Transmon').then((m) => ({ default: m.Transmon })))
 
 const VIEWS: { id: View; label: string; hint: string }[] = [
   { id: 'phase', label: 'Phase space', hint: 'One cat qubit, live' },
@@ -106,18 +109,20 @@ export default function App() {
           {theme === 'light' ? 'Dark' : 'Light'}
         </button>
       </header>
-      {view === 'phase' ? <PhaseSpace /> : null}
-      {view === 'rates' ? <FlipRates /> : null}
-      {view === 'transmon' ? <Transmon /> : null}
-      {view === 'qubit' ? <Qubit /> : null}
-      {view === 'pulse' ? <PulseOptimizer /> : null}
-      {view === 'qec' ? <ErrorCorrection /> : null}
-      {view === 'compare' ? <CatVsTransmon /> : null}
-      {view === 'playground' ? <Playground /> : null}
-      {view === 'readout' ? <Readout /> : null}
-      {view === 'gates' ? <Gates /> : null}
-      {view === 'architectures' ? <Architectures /> : null}
-      {view === 'checks' ? <Checks /> : null}
+      <Suspense fallback={<Solving what="loading the view" />}>
+        {view === 'phase' ? <PhaseSpace /> : null}
+        {view === 'rates' ? <FlipRates /> : null}
+        {view === 'transmon' ? <Transmon /> : null}
+        {view === 'qubit' ? <Qubit /> : null}
+        {view === 'pulse' ? <PulseOptimizer /> : null}
+        {view === 'qec' ? <ErrorCorrection /> : null}
+        {view === 'compare' ? <CatVsTransmon /> : null}
+        {view === 'playground' ? <Playground /> : null}
+        {view === 'readout' ? <Readout /> : null}
+        {view === 'gates' ? <Gates /> : null}
+        {view === 'architectures' ? <Architectures /> : null}
+        {view === 'checks' ? <Checks /> : null}
+      </Suspense>
       <footer className="footer small muted">
         Open-source simulator for learning superconducting qubits. Every equation is cited and checked against the
         simulation. Built on Dynamiqs, scqubits, Stim, PyMatching and JAX.

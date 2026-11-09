@@ -2,24 +2,15 @@
 // bias-preserving CNOT between two dissipative cats. Simulation from Dynamiqs; dashed lines and
 // markers are the papers' formulas.
 
-import { useEffect, useState } from 'react'
 import { type GatesParams, useGates } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
 import { CopyPython, ErrorBanner, FormulaCard, Segmented, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useShared } from '../lib/share'
+import { useDebounced } from '../lib/useDebounced'
 import { useExplorer } from '../store'
 
 const DEFAULTS: GatesParams = { g_mhz: 10, alpha_mhz: -300, n: 4, log_kappa_ratio: -3 }
-
-function useDebounced<T>(value: T, ms: number): T {
-  const [v, setV] = useState(value)
-  useEffect(() => {
-    const id = window.setTimeout(() => setV(value), ms)
-    return () => window.clearTimeout(id)
-  }, [value, ms])
-  return v
-}
 
 export function Gates() {
   const theme = useExplorer((s) => s.theme)

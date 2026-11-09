@@ -2,7 +2,6 @@
 // step, and the noise bias between them. The cat curve comes from the Liouvillian (simulation,
 // rates in units of kappa_2); every device number is a cited fact.
 
-import { useEffect, useState } from "react";
 import {
   type CompareDevice,
   useCompare,
@@ -13,20 +12,12 @@ import {
 import { CONFIG, Plot, SERIES, layout } from "../components/Plot";
 import { CopyPython, ErrorBanner, FormulaCard, PaperSettings, shortCite, Slider, Solving } from "../components/ui";
 import { fmt } from "../lib/colormap";
+import { useDebounced } from "../lib/useDebounced";
 import { useExplorer } from "../store";
 import { useShared } from "../lib/share";
 
 const SIZES = [1, 2, 3, 4, 5, 6, 7];
 const WILLOW_GATE_NS = 25; // willow2025, Supplement Sec. I; also a fact in qubitlab.facts
-
-function useDebounced<T>(value: T, ms: number): T {
-  const [v, setV] = useState(value);
-  useEffect(() => {
-    const id = window.setTimeout(() => setV(value), ms);
-    return () => window.clearTimeout(id);
-  }, [value, ms]);
-  return v;
-}
 
 /** Phase-flip over bit-flip probability. The API returns it; this only picks the device. */
 const bias = (d: CompareDevice | undefined) => d?.theory.bias ?? null;
