@@ -23,6 +23,7 @@ dependencies = [
     "optax>=0.2.8",
     "pydantic>=2.14.1",
     "pymatching>=2.4.0",
+    "scipy>=1.18.1",
     "scqubits>=4.1.0",
     "slowapi>=0.1.10",
     "stim>=1.16.0",
@@ -64,7 +65,7 @@ plugins = ["pydantic.mypy"]
 files = ["src/qubitlab"]
 
 [[tool.mypy.overrides]]
-module = ["dynamiqs.*", "sympy.*", "jax.*"]
+module = ["dynamiqs.*", "sympy.*", "jax.*", "scipy.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

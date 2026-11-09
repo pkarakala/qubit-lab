@@ -14,13 +14,15 @@ Nothing here uses a closed-form result. `qubitlab.checks` compares these numbers
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Literal
 
 import dynamiqs as dq
 import jax.numpy as jnp
 import numpy as np
+import scipy.sparse.linalg as spla
 from numpy.typing import NDArray
+from scipy import sparse
 
 dq.set_precision("double")
 dq.set_progress_meter(False)
@@ -49,7 +51,8 @@ class CatParams:
         if self.dim is not None:
             return self.dim
         n = self.alpha_sq
-        # Converged to <2% in the bit-flip rate up to alpha_sq = 7 (see tests/test_sim_cat.py).
+        # Converged to <2% in the bit-flip rate up to alpha_sq = 7
+        # (tests/test_sim.py::test_bit_flip_rate_is_converged_in_fock_space).
         return int(min(80, max(20, math.ceil(n + 8 * math.sqrt(n) + 20))))
 
 
@@ -193,24 +196,46 @@ class Rates:
 RATE_FLOOR = 1e-10
 
 
+# Eigenvalues come from shift-invert about this point, nearest first. Every eigenvalue of a
+# Lindbladian has Re <= 0, so a positive shift is never one of them. Much closer to zero, the
+# steady state's eigenvalue swamps the others (measured at 1e-9: the phase-flip rate drifts by
+# up to 1.6e-5 relative); at 1e-3 kappa_2 every rate matches a dense solve.
+SHIFT = 1e-3
+
+
+def _liouvillian(params: CatParams) -> sparse.csc_array:
+    """The Lindbladian of `params` as a SciPy sparse matrix, without a dense n^2 x n^2 copy.
+
+    Dynamiqs builds it in its sparse diagonal layout, whose storage follows SciPy's DIA
+    convention: diags[k, j] = L[j - offsets[k], j].
+    """
+    H, jumps = operators(params)
+    L = dq.slindbladian(H, jumps).assparsedia().data
+    return sparse.dia_array((np.asarray(L.diags), L.offsets), shape=L.shape).tocsc()
+
+
+def _near_zero(
+    A: sparse.csc_array, k: int
+) -> tuple[NDArray[np.complex128], NDArray[np.complex128]]:
+    """The k eigenvalues of A nearest zero and their eigenvectors (ARPACK, shift-invert)."""
+    v0 = np.random.default_rng(0).standard_normal(A.shape[0])  # fixed start: same answer each run
+    return spla.eigs(A, k=k, sigma=SHIFT, v0=v0)  # type: ignore[no-any-return]
+
+
 def liouvillian_rates(params: CatParams) -> Rates:
     n = params.n_fock
-    H, jumps = operators(params)
-    L = np.asarray(dq.slindbladian(H, jumps).to_jax())
+    L = _liouvillian(params)
     idx = np.arange(n)
     odd = ((idx[:, None] + idx[None, :]) % 2 == 1).reshape(-1)
-    ev_odd = np.sort(-np.linalg.eigvals(L[np.ix_(odd, odd)]).real)
-    ev_even = np.sort(-np.linalg.eigvals(L[np.ix_(~odd, ~odd)]).real)
+    # The slowest modes are the eigenvalues nearest zero; three per block leaves a margin.
+    ev_odd = np.sort(-_near_zero(L[odd][:, odd], 3)[0].real)
+    ev_even = np.sort(-_near_zero(L[~odd][:, ~odd], 3)[0].real)
     # The even block holds the steady state (eigenvalue 0); skip it.
     return Rates(z_decay=float(ev_odd[0]), x_decay=float(ev_even[1]), n_fock=n)
 
 
 def sweep_rates(base: CatParams, alpha_sq_values: list[float]) -> list[Rates]:
-    out = []
-    for value in alpha_sq_values:
-        fields = {**base.__dict__, "alpha_sq": value}
-        out.append(liouvillian_rates(CatParams(**fields)))
-    return out
+    return [liouvillian_rates(replace(base, alpha_sq=value)) for value in alpha_sq_values]
 
 
 def steady_state(params: CatParams) -> dq.QArray:
@@ -218,10 +243,7 @@ def steady_state(params: CatParams) -> dq.QArray:
     if params.kappa_1 <= 0:
         raise ValueError("the steady state is unique only with kappa_1 > 0")
     n = params.n_fock
-    H, jumps = operators(params)
-    L = np.asarray(dq.slindbladian(H, jumps).to_jax())
-    w, v = np.linalg.eig(L)
-    vec = v[:, np.argmin(np.abs(w))]
-    rho = np.asarray(dq.unvectorize(jnp.asarray(vec[:, None])).to_jax()).reshape(n, n)
+    _, v = _near_zero(_liouvillian(params), 1)
+    rho = np.asarray(dq.unvectorize(jnp.asarray(v)).to_jax()).reshape(n, n)
     rho = rho / np.trace(rho)
     return dq.asqarray(jnp.asarray((rho + rho.conj().T) / 2))

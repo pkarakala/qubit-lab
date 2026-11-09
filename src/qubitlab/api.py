@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import functools
 import json
 import math
 import os
@@ -22,7 +23,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 
-from qubitlab import __version__, snippets
+from qubitlab import __version__, snapshot, snippets
 from qubitlab.architectures import scenes as architecture_scenes
 from qubitlab.cache import CACHE_DIR, disk_cached
 from qubitlab.facts import DEVICES, FACT, FACTS
@@ -240,9 +241,38 @@ def _checks() -> list[dict[str, Any]]:
 
 def _checks_fast() -> list[dict[str, Any]]:
     """The shipped results when they match this code (qubitlab.snapshot), else a live run."""
-    from qubitlab import snapshot
-
     return snapshot.load() or _checks()
+
+
+# The slowest solves the explorer asks for ship with the package: the cat CNOT at every Gates
+# slider position and the QEC curves. scripts/make_snapshots.py writes them with the code's
+# fingerprint (qubitlab.snapshot); once the code changes they are ignored and run live.
+SHIPPED = snapshot.PACKAGE / "data" / "solves.json"
+CNOT_GRID = tuple((n, -4 + 0.25 * k) for n in (2, 4) for k in range(9))  # n x loss slider
+QEC_CURVES: tuple[tuple[qec_sim.Code, int], ...] = tuple(
+    (code, d) for code in ("surface", "repetition") for d in (3, 5, 7)
+)
+QEC_SHOTS = 100_000
+
+
+@functools.cache
+def _shipped() -> dict[str, dict[str, Any]]:
+    return {row["key"]: row["result"] for row in snapshot.load(SHIPPED) or []}
+
+
+def solve_key(*args: object) -> str:
+    """A shipped solve's key: the function's name, then its arguments (floats to 12 digits)."""
+    return "|".join(f"{a:.12g}" if isinstance(a, float) else str(a) for a in args)
+
+
+def _cat_cnot(n: int, kappa_1: float, T: float) -> tq_sim.CatCNOT:
+    hit = _shipped().get(solve_key("cat_cnot", n, kappa_1, T))
+    return tq_sim.CatCNOT(**hit) if hit else tq_sim.cat_cnot(float(n), kappa_1, T)
+
+
+def _memory(code: qec_sim.Code, d: int, p: float, shots: int) -> qec_sim.Memory:
+    hit = _shipped().get(solve_key("memory", code, d, p, shots))
+    return qec_sim.Memory(**hit) if hit else qec_sim.memory(code, d, p, shots)
 
 
 @app.get("/api/health")
@@ -519,21 +549,18 @@ P_GRID = [0.001, 0.0015, 0.002, 0.003, 0.005, 0.007, 0.01, 0.015]
 @disk_cached
 def _qec_curves(shots: int) -> dict[str, Any]:
     curves = []
-    for code in ("surface", "repetition"):
-        for d in (3, 5, 7):
-            runs = [qec_sim.memory(code, d, p, shots) for p in P_GRID]
-            curves.append(
-                {
-                    "code": code,
-                    "d": d,
-                    "qubits": qec_sim.physical_qubits(code, d),
-                    # Under 10 failures the estimate is mostly sampling noise: not reported.
-                    "per_round": [
-                        r.per_round if r.failures >= MIN_FAILURES else None for r in runs
-                    ],
-                    "failures": [r.failures for r in runs],
-                }
-            )
+    for code, d in QEC_CURVES:
+        runs = [_memory(code, d, p, shots) for p in P_GRID]
+        curves.append(
+            {
+                "code": code,
+                "d": d,
+                "qubits": qec_sim.physical_qubits(code, d),
+                # Under 10 failures the estimate is mostly sampling noise: not reported.
+                "per_round": [r.per_round if r.failures >= MIN_FAILURES else None for r in runs],
+                "failures": [r.failures for r in runs],
+            }
+        )
     fowler = {
         str(d): [
             float(qec_th.surface_code_logical_error(p=p, p_th=0.0057, d=float(d))) for p in P_GRID
@@ -557,7 +584,7 @@ def _qec_curves(shots: int) -> dict[str, Any]:
 @app.get("/api/qec/curves")
 def qec_curves() -> dict[str, Any]:
     """Logical error per round vs physical error, Stim + PyMatching, d = 3, 5, 7."""
-    return _qec_curves(100_000)
+    return _qec_curves(QEC_SHOTS)
 
 
 class CatCodeRequest(BaseModel):
@@ -848,15 +875,20 @@ def _cz(g_mhz: float, alpha_mhz: float) -> dict[str, Any]:
     }
 
 
+def cnot_times(n: int, log_kappa_ratio: float) -> tuple[float, float, list[float]]:
+    """kappa_1, the optimal gate time, and the three gate times the Gates view simulates."""
+    k1 = 10**log_kappa_ratio
+    t_opt = 1 / (2 * n * math.sqrt(math.pi * k1))  # docs/hand_calcs/two_qubit_gates.py step 3
+    return k1, t_opt, [0.5 * t_opt, t_opt, 3 * t_opt]
+
+
 @disk_cached
 def _cnot(n: int, log_kappa_ratio: float) -> dict[str, Any]:
-    k1 = 10**log_kappa_ratio
+    k1, t_opt, sim_T = cnot_times(n, log_kappa_ratio)
     T = np.logspace(-1, 1.5, 81)
     z1 = np.asarray(gate_th.cnot_z1(n=float(n), kappa_1=k1, kappa_2=1.0, T=T))
     z2 = np.asarray(gate_th.cnot_z2(n=float(n), kappa_1=k1, T=T))
-    t_opt = 1 / (2 * n * math.sqrt(math.pi * k1))  # docs/hand_calcs/two_qubit_gates.py step 3
-    sim_T = [0.5 * t_opt, t_opt, 3 * t_opt]
-    runs = [tq_sim.cat_cnot(float(n), k1, t) for t in sim_T]
+    runs = [_cat_cnot(n, k1, t) for t in sim_T]
     return {
         "sim": {
             "T": sim_T,
