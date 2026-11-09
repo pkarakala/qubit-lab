@@ -18,8 +18,15 @@ def test_bigger_code_helps_below_threshold() -> None:
 
 
 def test_per_round_inverts_the_total() -> None:
+    # An odd number of flips in 3 rounds: P = [1 - (1 - 2 eps)^3] / 2 (willow2025, Sec. IV).
     m = qec.Memory("surface", 3, 0.01, rounds=3, shots=1000, failures=271)
-    assert 1 - (1 - m.per_round) ** 3 == pytest.approx(0.271)
+    assert (1 - (1 - 2 * m.per_round) ** 3) / 2 == pytest.approx(0.271)
+
+
+def test_a_random_logical_qubit_errs_half_the_time_per_round() -> None:
+    # Above threshold P can sample above 1/2; (1 - 2P)^(1/r) would then be complex.
+    m = qec.Memory("repetition", 13, 0.05, rounds=13, shots=1000, failures=512)
+    assert m.per_round == 0.5
 
 
 def test_shot_matches_every_fired_detector() -> None:

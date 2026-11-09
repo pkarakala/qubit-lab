@@ -62,8 +62,14 @@ class Memory:
 
     @property
     def per_round(self) -> float:
-        """Logical error per round, from (1 - P_round)^rounds = 1 - P_total."""
-        return float(1 - (1 - self.logical_error) ** (1 / self.rounds))
+        """Logical error per round, eps, from the error after all rounds, P.
+
+        Each round flips the logical qubit with probability eps, and two flips cancel, so the
+        qubit ends up wrong when the number of flips is odd: P = [1 - (1 - 2 eps)^rounds] / 2.
+        Inverted as in willow2025 (arXiv v1, Sec. IV, unnumbered display):
+        eps = [1 - (1 - 2P)^(1/rounds)] / 2. At P >= 1/2 the qubit is random and eps is 1/2.
+        """
+        return float((1 - max(0.0, 1 - 2 * self.logical_error) ** (1 / self.rounds)) / 2)
 
 
 def memory(code: Code, distance: int, p: float, shots: int = 100_000, seed: int = 0) -> Memory:
