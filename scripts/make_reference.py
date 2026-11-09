@@ -2,6 +2,8 @@
 
 uv run python scripts/make_reference.py            # formulas and checks (about 2 minutes)
 uv run python scripts/make_reference.py --formulas # formulas only
+
+It exits non-zero when a check's verdict differs from its prediction, so the release stops there.
 """
 
 from __future__ import annotations
@@ -66,6 +68,10 @@ def main() -> None:
         results = run_all()
         (OUT / "checks.md").write_text(checks_md(results), encoding="utf-8")
         snapshot.write([r.describe() for r in results])  # the Checks page loads this
+        surprises = [r.key for r in results if not r.as_expected]
+        if surprises:
+            n = f"{len(surprises)} of {len(results)}"
+            raise SystemExit(f"{n} checks surprised: {', '.join(surprises)}")
 
 
 if __name__ == "__main__":

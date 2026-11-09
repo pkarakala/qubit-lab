@@ -4,7 +4,7 @@ To read a qubit without touching it, ask a resonator.
 
 **The idea.** Couple the qubit to a microwave resonator, detuned by Δ, far more than the coupling g. They cannot swap energy, but each shifts the other's frequency. The resonator sits at f_r − χ when the qubit is in |g⟩ and at f_r + χ when it is in |e⟩. Drive the resonator and the reflected wave carries a phase that depends on the qubit.
 
-**How big is χ?** For a two-level qubit, χ = g²/Δ. A transmon's third level pulls the other way, and Koch et al. give χ = g₀₁²/Δ − g₁₂²/(2(Δ + α)). The two terms nearly cancel, so χ is several times smaller than g²/Δ. A common shortcut sets g₁₂ = √2 g₀₁. The exact transmon has g₁₂/g₀₁ ≈ 1.39 even at E_J/E_C = 200, and our checks show the shortcut missing χ by 6 to 64%.
+**How big is χ?** For a two-level qubit, χ = g²/Δ. A transmon's third level pulls the other way, and Koch et al. give χ = g₀₁²/Δ − g₁₂²/(2(Δ + α)). The two terms nearly cancel, so χ is several times smaller than g²/Δ. A common shortcut sets g₁₂ = √2 g₀₁. The exact transmon has g₁₂/g₀₁ ≈ 1.39 even at E_J/E_C = 200, and our checks show the shortcut missing χ by 21 to 26%.
 
 **Pointer states.** With the qubit in |g⟩ or |e⟩, the resonator settles into one of two coherent states. Their separation in the IQ plane is the signal. For a fixed photon number, the signal-to-noise ratio peaks at 2χ = κ.
 
