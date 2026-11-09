@@ -59,9 +59,7 @@ FACTS: tuple[Fact, ...] = (
     Fact(
         "reglade2024.tz_2.5", "Phase-flip time", 2.7e-6, "s", 2.5, "reglade2024", PR, "Fig. 3 text"
     ),
-    Fact(
-        "reglade2024.tz_11.3", "Phase-flip time", 490e-9, "s", 11.3, "reglade2024", PR, "abstract"
-    ),
+    Fact("reglade2024.tz_11.3", "Phase-flip time", 490e-9, "s", 11.3, "reglade2024", PR, "Fig. 3c"),
     Fact(
         "willow2025.t1",
         "T1, mean of 105 qubits",

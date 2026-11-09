@@ -3,7 +3,7 @@
 Findings from the first runs, kept as regimes:
 - The first prediction was AGREE within 5% for chi with g_12 = sqrt(2) g_01. It missed by 21%
   at E_J/E_C = 50, f_r = 7 GHz. scqubits gives g_12/g_01 = 1.38 there, not 1.41, and the two
-  terms of chi nearly cancel. With the true g_12 (Koch Eqs. 27-28) it agrees to 2%.
+  terms of chi nearly cancel. With the true g_12 (Koch Eqs. 3.9-3.10) it agrees to 2%.
 - At large |Delta| the remaining gap is the counter-rotating terms: dropping them from the
   simulation brings it to 0.5%. So that regime DIVERGEs, by the formula's own assumptions.
 - The weak-chi dephasing rate was predicted to be 2x high at chi = kappa/2. It is 4x: the

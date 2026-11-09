@@ -1,6 +1,8 @@
 """Hand calc: cat size when single-photon loss competes with two-photon dissipation.
 
-Start: d(rho)/dt = kappa_2 D[a^2 - alpha^2] rho + kappa_1 D[a] rho   (lescanne2020, Eq. (1)).
+Start: d(rho)/dt = kappa_2 D[a^2 - alpha^2] rho + kappa_1 D[a] rho. The first term is the
+two-photon loss operator of lescanne2020 Eq. (1), sqrt(kappa_2) (a^2 - alpha^2); the second is
+single-photon loss at rate kappa_1, the main decay channel (mirrahimi2014 Sec. 2.1).
 
 For any jump operator L, d<a>/dt = sum_L < L^dag [a, L] + [L^dag, a] L > / 2.
 - L = sqrt(kappa_1) a:              contributes -kappa_1 <a> / 2.

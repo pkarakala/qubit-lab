@@ -110,7 +110,7 @@ export function Readout() {
               <td />
             </tr>
             <tr>
-              <td>Koch Eqs. 27 and 28</td>
+              <td>Koch Eqs. 3.9 and 3.10</td>
               <td className="mono">{fmt(d?.theory.chi_mhz.transmon)} MHz</td>
               <td className="small muted">{err(d?.theory.chi_mhz.transmon)}</td>
             </tr>

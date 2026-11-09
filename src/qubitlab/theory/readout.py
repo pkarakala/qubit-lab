@@ -49,7 +49,7 @@ chi_transmon = Formula(
         Source(
             "koch2007",
             Kind.PEER_REVIEWED,
-            "Eqs. (27), (28)",
+            "Eqs. (3.9), (3.10)",
             "chi = chi_01 - chi_12/2, chi_ij = g_ij^2/(omega_ij - omega_r).",
         ),
     ),
@@ -66,7 +66,7 @@ chi_transmon_harmonic = Formula(
     expr=g**2 * alpha / (Delta * (Delta + alpha)),
     args=(g, Delta, alpha),
     sources=(
-        Source("koch2007", Kind.PEER_REVIEWED, "Eqs. (22), (27), (28)"),
+        Source("koch2007", Kind.PEER_REVIEWED, "Eqs. (3.4), (3.9), (3.10)"),
         Source("blais2021", Kind.PEER_REVIEWED, "Eq. (43), arXiv v1", "alpha = -E_C there."),
         hand("Step 1: chi_01 - chi_12/2 with g_12 = sqrt(2) g."),
     ),
@@ -87,7 +87,7 @@ pointer_photons = Formula(
         Source(
             "gambetta2006",
             Kind.PEER_REVIEWED,
-            "Eq. (28)",
+            "Eq. (5.21)",
             "Pass chi with its sign: +chi for the excited state, -chi for the ground state.",
         ),
     ),
@@ -101,8 +101,8 @@ dephasing_rate = Formula(
     expr=2 * kappa * chi**2 * eps**2 / (kappa**2 / 4 + chi**2) ** 2,
     args=(kappa, chi, eps),
     sources=(
-        Source("gambetta2006", Kind.PEER_REVIEWED, "Eqs. (27), (28)"),
-        hand("Step 3: Eq. (27) at Delta_r = 0."),
+        Source("gambetta2006", Kind.PEER_REVIEWED, "Eqs. (5.20), (5.21)"),
+        hand("Step 3: Eq. (5.20) at Delta_r = 0."),
     ),
     valid_when="Steady state of the linear dispersive model, any chi / kappa.",
 )
@@ -117,7 +117,7 @@ dephasing_rate_weak = Formula(
         Source(
             "gambetta2006",
             Kind.PEER_REVIEWED,
-            "Sec. V.1, Eq. (16) and the rate after Eq. (17)",
+            "Sec. V.A, text after Eq. (5.9)",
             "2 kappa n theta_0^2 with theta_0 = 2 chi / kappa and n = 4 eps^2 / kappa^2.",
         ),
         Source("blais2004", Kind.PEER_REVIEWED, "Eq. (26)"),

@@ -79,7 +79,7 @@ cnot_z2 = Formula(
     expr=n * kappa_1 * T / 2,
     args=(n, kappa_1, T),
     sources=(
-        Source("guillaud2019", Kind.PEER_REVIEWED, "Sec. VI, Eq. (3)"),
+        Source("guillaud2019", Kind.PEER_REVIEWED, "Sec. VI, unnumbered"),
         Source("chamberland2022", Kind.PEER_REVIEWED, "Eq. (27)"),
     ),
     valid_when="Photon loss only. Loss on the target during the gate spreads to the control.",

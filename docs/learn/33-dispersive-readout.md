@@ -14,4 +14,4 @@ To read a qubit without touching it, ask a resonator.
 
 **Try it.** In *Readout*, raise E_J/E_C and watch the √2 shortcut drift from the exact χ. Then set κ near 2|χ| and see the pointer states separate furthest.
 
-Sources: koch2007 (Eqs. 22, 27, 28), blais2004 (Eq. 12, Sec. VI.1), gambetta2006 (Eqs. 27, 28), blais2021 (Eqs. 43, 117), qubitlab_hand_calcs.
+Sources: koch2007 (Eqs. 3.4, 3.9, 3.10), blais2004 (Eq. 12, Sec. VI.B), gambetta2006 (Eqs. 5.20, 5.21), blais2021 (Eqs. 43, 117), qubitlab_hand_calcs.

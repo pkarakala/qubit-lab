@@ -152,7 +152,7 @@ d = readout.dressed_chi({ratio!r} * E_C, E_C, f_r={f_r!r}, g_n={g_n!r})
 delta = d.f01 - {f_r!r}
 koch = theory.chi_transmon(g=d.g01, g_12=d.g12, Delta=delta, alpha=d.alpha)
 print(f"chi, dressed spectrum: {{d.chi * 1e3:.4f}} MHz")
-print(f"chi, Koch Eqs. 27-28:  {{float(koch) * 1e3:.4f}} MHz")
+print(f"chi, Koch Eqs. 3.9-3.10: {{float(koch) * 1e3:.4f}} MHz")
 
 kappa = 2 * math.pi * {kappa_mhz!r}  # rad/us
 chi = 2 * math.pi * d.chi * 1e3
