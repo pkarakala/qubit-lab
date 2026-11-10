@@ -72,7 +72,7 @@ enlarged = true
 material = "junction"
 explode = [0, 0, 3000]
 dims_class = "SCHEMATIC"
-dims_source = "grimm2020, Fig. 1f caption: one small junction (7.27 nH) and three large ones (0.8 nH each). Loop size not stated, drawn schematically."
+dims_source = "grimm2020, Supplement VI.A: one small junction (7.27 nH) and three large ones (0.8 nH each). Loop size not stated, drawn schematically."
 
 [[part]]
 id = "cavity_upper"

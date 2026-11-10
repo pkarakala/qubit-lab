@@ -47,7 +47,7 @@ surface_code_logical_error = Formula(
     sources=(
         fowler(
             "Eq. (11); p_th = 0.57% in Sec. VII",
-            "Empirical fit to Fowler's own noise model. Whether P_L is per round is unverified.",
+            "Empirical fit to Fowler's own noise model. P_L is per surface code cycle (Sec. VII).",
         ),
     ),
     valid_when="p below threshold, Fowler's noise model. The prefactor is model dependent.",

@@ -110,7 +110,8 @@ stabilized_photon_number = Formula(
             "qubitlab_hand_calcs",
             Kind.DERIVED,
             "docs/hand_calcs/cat_steady_state.py",
-            "Mean-field steady state of d<a>/dt, starting from lescanne2020 Eq. (1).",
+            "Mean-field steady state of d<a>/dt under the two-photon loss of lescanne2020 Eq. (1) "
+            "plus single-photon loss (mirrahimi2014 Sec. 2.1).",
         ),
     ),
     valid_when="Semiclassical. kappa_1 << kappa_2 |alpha|^2.",
@@ -126,7 +127,7 @@ parity_decay_rate = Formula(
         Source(
             "mirrahimi2014",
             Kind.PEER_REVIEWED,
-            "Sec. 2, unnumbered text after Eq. (1)",
+            "Sec. 2.1, text after Eq. (3)",
             "Gives the flip rate kappa_1 |alpha|^2; <P> decays at twice that.",
         ),
     ),
@@ -143,7 +144,7 @@ phase_flip_rate = Formula(
         Source(
             "mirrahimi2014",
             Kind.PEER_REVIEWED,
-            "Sec. 2, unnumbered text after Eq. (1)",
+            "Sec. 2.1, text after Eq. (3)",
             "That paper swaps the basis names and calls this error a bit-flip.",
         ),
         Source("guillaud2019", Kind.PEER_REVIEWED, "Sec. II, unnumbered", "Linear in |alpha|^2."),
@@ -190,7 +191,7 @@ bit_flip_rate_dephasing = Formula(
         Source(
             "mirrahimi2014",
             Kind.PEER_REVIEWED,
-            "Sec. 2, unnumbered display",
+            "Sec. 2.1, unnumbered display after Eq. (3)",
             "Called a phase-flip there, because that paper swaps the basis names.",
         ),
     ),

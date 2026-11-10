@@ -14,4 +14,4 @@ A qubit can fail two ways. A cat qubit trades one for the other on purpose.
 
 **Try it.** In the explorer's *Flip rates* view, drag |α|² and watch the two curves cross.
 
-Sources: guillaud2019 (Sec. II), mirrahimi2014 (Sec. 2), lescanne2020 (Fig. 3), reglade2024 (abstract).
+Sources: guillaud2019 (Sec. II), mirrahimi2014 (Sec. 2.1), lescanne2020 (Fig. 3), reglade2024 (abstract).

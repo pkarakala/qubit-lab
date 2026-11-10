@@ -16,4 +16,4 @@ where D is the Lindblad dissipator and κ₂ the two-photon rate. In hardware κ
 
 **Try it.** In *Phase space*, pick the lesson *Grow a cat* and watch vacuum become an even cat. Then add photon loss.
 
-Sources: lescanne2020 (Eq. 1), mirrahimi2014 (Eq. 1), grimm2020 (Eq. 1), hand calcs in `docs/hand_calcs/`.
+Sources: lescanne2020 (Eq. 1), mirrahimi2014 (Eq. 1; Sec. 2.1 for single-photon loss), grimm2020 (Eq. 1), hand calcs in `docs/hand_calcs/`.
