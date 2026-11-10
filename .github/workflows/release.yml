@@ -26,6 +26,8 @@ jobs:
         run: npm ci --legacy-peer-deps && npm run build:package
       - name: Fresh check results, shipped so the Checks page opens at once
         run: uv run python scripts/make_reference.py
+      - name: Fresh slow solves (Gates cat CNOT, QEC curves), shipped the same way
+        run: uv run python scripts/make_snapshots.py
       - run: uv build
       - name: Smoke test the wheel
         run: ./scripts/smoke_wheel.sh

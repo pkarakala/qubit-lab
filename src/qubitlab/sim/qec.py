@@ -95,26 +95,6 @@ def slope(
     return float(np.log(hi.per_round / lo.per_round) / np.log(p_hi / p_lo))
 
 
-def threshold(
-    code: Code, d_small: int, d_large: int, p_lo: float, p_hi: float, shots: int
-) -> float:
-    """Noise strength where the two distances give the same logical error (bisection)."""
-
-    def gap(p: float) -> float:
-        return memory(code, d_large, p, shots).per_round - memory(code, d_small, p, shots).per_round
-
-    lo, hi = p_lo, p_hi
-    if gap(lo) >= 0 or gap(hi) <= 0:
-        raise ValueError("threshold is not bracketed")
-    for _ in range(12):
-        mid = (lo * hi) ** 0.5
-        if gap(mid) < 0:
-            lo = mid
-        else:
-            hi = mid
-    return float((lo * hi) ** 0.5)
-
-
 @dataclass(frozen=True)
 class Shot:
     """One sampled run of the surface code, as a space-time picture of the decoding."""

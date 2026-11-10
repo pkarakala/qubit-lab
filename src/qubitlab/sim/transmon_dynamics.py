@@ -230,25 +230,27 @@ def _x_pi(levels: int) -> dq.QArray:
 def _echo(
     q: TransmonQubit, delta_ghz: float, rho0: dq.QArray, t: NDArray[np.float64]
 ) -> Trajectory:
-    """Hahn echo: for each total time t, evolve t/2, apply X_pi, evolve t/2."""
+    """Hahn echo: for each total time t, evolve t/2, apply X_pi, evolve t/2.
+
+    The generator is constant, so Dynamiqs' Expm method propagates exactly, and one batched
+    solve takes every flipped state through the second half: the point at t_k is the k-th
+    state's value at t_k / 2.
+    """
     deltas, weights = _detunings(q, delta_ghz)
     obs = _observables(q.levels)
     xpi = _x_pi(q.levels)
     half = jnp.asarray(t / 2)
+    k = np.arange(len(t))
+    expm = dq.method.Expm()
     total = np.zeros((len(obs), len(t)))
     for d, w in zip(deltas, weights, strict=True):
         H = _static_h(q, float(d))
-        first = dq.mesolve(H, _jumps(q), rho0, half).states  # [time, n, n]
+        first = dq.mesolve(H, _jumps(q), rho0, half, method=expm).states  # [time, n, n]
         flipped = xpi @ first @ xpi.dag()
-        out = np.zeros((len(obs), len(t)))
-        for k in range(len(t)):
-            tk = float(half[k])
-            if tk == 0:
-                rho = flipped[k]
-            else:
-                rho = dq.mesolve(H, _jumps(q), flipped[k], jnp.asarray([0.0, tk])).states[-1]
-            out[:, k] = [float(dq.expect(o, rho).real) for o in obs]
-        total += w * out
+        second = dq.mesolve(
+            H, _jumps(q), flipped, half, exp_ops=obs, method=expm, save_states=False
+        )
+        total += w * np.asarray(second.expects).real[k, :, k].T  # [state, obs, time] -> [obs, k]
     zeros = np.zeros_like(t)
     return Trajectory(t, total[:3].T, total[3:].T, zeros, zeros)
 

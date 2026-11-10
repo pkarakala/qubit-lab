@@ -1,0 +1,911 @@
+{
+ "fingerprint": "08bd8d721808f3fc",
+ "results": [
+  {
+   "key": "cat_cnot|2|0.0001|7.05236979435",
+   "result": {
+    "control_flip": 0.019369714971550545,
+    "target_flip": 0.0013545217730514536
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.0001|14.1047395887",
+   "result": {
+    "control_flip": 0.012970610324739063,
+    "target_flip": 0.0027105613763830916
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.0001|42.3142187661",
+   "result": {
+    "control_flip": 0.015193664302990795,
+    "target_flip": 0.00809165689545882
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.000177827941004|5.28853127085",
+   "result": {
+    "control_flip": 0.025406468193826803,
+    "target_flip": 0.001802449079228774
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.000177827941004|10.5770625417",
+   "result": {
+    "control_flip": 0.017154861234669083,
+    "target_flip": 0.003609046557065454
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.000177827941004|31.7311876251",
+   "result": {
+    "control_flip": 0.02015606348601212,
+    "target_flip": 0.010758935328452957
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.000316227766017|3.96583897589",
+   "result": {
+    "control_flip": 0.033167262452367396,
+    "target_flip": 0.0023966852746400424
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.000316227766017|7.93167795177",
+   "result": {
+    "control_flip": 0.02262992222042981,
+    "target_flip": 0.004802053847466958
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.000316227766017|23.7950338553",
+   "result": {
+    "control_flip": 0.026693081308151345,
+    "target_flip": 0.01429092262122944
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.00056234132519|2.97395968316",
+   "result": {
+    "control_flip": 0.04301936619704044,
+    "target_flip": 0.0031845705709776517
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.00056234132519|5.94791936632",
+   "result": {
+    "control_flip": 0.029756777530079326,
+    "target_flip": 0.0063833692156477495
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.00056234132519|17.843758099",
+   "result": {
+    "control_flip": 0.035269196718601736,
+    "target_flip": 0.01895618314875208
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.001|2.23015514519",
+   "result": {
+    "control_flip": 0.05529238204563336,
+    "target_flip": 0.004229247139039716
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.001|4.46031029038",
+   "result": {
+    "control_flip": 0.0389702118972764,
+    "target_flip": 0.008475160751120814
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.001|13.3809308711",
+   "result": {
+    "control_flip": 0.04645957768932446,
+    "target_flip": 0.02509696469055328
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.00177827941004|1.67238042929",
+   "result": {
+    "control_flip": 0.07017850744394355,
+    "target_flip": 0.005614834070982955
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.00177827941004|3.34476085858",
+   "result": {
+    "control_flip": 0.0507623193312462,
+    "target_flip": 0.011236669678261924
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.00177827941004|10.0342825758",
+   "result": {
+    "control_flip": 0.06095688897837154,
+    "target_flip": 0.03314121829181399
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.00316227766017|1.25410839973",
+   "result": {
+    "control_flip": 0.08761202431546261,
+    "target_flip": 0.007452553179441657
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.00316227766017|2.50821679945",
+   "result": {
+    "control_flip": 0.06563178180074125,
+    "target_flip": 0.01487562665047304
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.00316227766017|7.52465039836",
+   "result": {
+    "control_flip": 0.07956178847337664,
+    "target_flip": 0.043609528748812465
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.0056234132519|0.94044862683",
+   "result": {
+    "control_flip": 0.10718818252409223,
+    "target_flip": 0.009888177025070943
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.0056234132519|1.88089725366",
+   "result": {
+    "control_flip": 0.08398790822700658,
+    "target_flip": 0.019661554255258562
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.0056234132519|5.64269176098",
+   "result": {
+    "control_flip": 0.10314016382789437,
+    "target_flip": 0.05711060780194083
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.01|0.705236979435",
+   "result": {
+    "control_flip": 0.12819039295423418,
+    "target_flip": 0.01311176337152542
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.01|1.41047395887",
+   "result": {
+    "control_flip": 0.10601429911921445,
+    "target_flip": 0.025938723430263433
+   }
+  },
+  {
+   "key": "cat_cnot|2|0.01|4.23142187661",
+   "result": {
+    "control_flip": 0.13251782801779005,
+    "target_flip": 0.07431666978739243
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.0001|3.52618489717",
+   "result": {
+    "control_flip": 0.01583344693082811,
+    "target_flip": 0.0014068754264101035
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.0001|7.05236979435",
+   "result": {
+    "control_flip": 0.011600656313069668,
+    "target_flip": 0.0028106382351371084
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.0001|21.157109383",
+   "result": {
+    "control_flip": 0.01642891585827866,
+    "target_flip": 0.008385386268741468
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.000177827941004|2.64426563543",
+   "result": {
+    "control_flip": 0.02068480160829278,
+    "target_flip": 0.0018746662149952686
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.000177827941004|5.28853127085",
+   "result": {
+    "control_flip": 0.015051752403409835,
+    "target_flip": 0.003744165934375543
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.000177827941004|15.8655938126",
+   "result": {
+    "control_flip": 0.020855265414484625,
+    "target_flip": 0.011150413271845627
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.000316227766017|1.98291948794",
+   "result": {
+    "control_flip": 0.02700923106332609,
+    "target_flip": 0.00249720213060306
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.000316227766017|3.96583897589",
+   "result": {
+    "control_flip": 0.019662439107622665,
+    "target_flip": 0.004985857400052696
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.000316227766017|11.8975169277",
+   "result": {
+    "control_flip": 0.026923736577475987,
+    "target_flip": 0.014813076675696368
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.00056234132519|1.48697984158",
+   "result": {
+    "control_flip": 0.03516518045320094,
+    "target_flip": 0.0033250884346110454
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.00056234132519|2.97395968316",
+   "result": {
+    "control_flip": 0.02574892928992739,
+    "target_flip": 0.006635844632510768
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.00056234132519|8.92187904948",
+   "result": {
+    "control_flip": 0.03506441387263903,
+    "target_flip": 0.01965378507359844
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.001|1.1150775726",
+   "result": {
+    "control_flip": 0.04554768400945297,
+    "target_flip": 0.004425207962601152
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.001|2.23015514519",
+   "result": {
+    "control_flip": 0.03370511244467245,
+    "target_flip": 0.008825512556642379
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.001|6.69046543557",
+   "result": {
+    "control_flip": 0.04582394873066936,
+    "target_flip": 0.026031920430388655
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.00177827941004|0.836190214646",
+   "result": {
+    "control_flip": 0.05854276539893527,
+    "target_flip": 0.005885879739888189
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.00177827941004|1.67238042929",
+   "result": {
+    "control_flip": 0.044005017628769016,
+    "target_flip": 0.011726378582657515
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.00177827941004|5.01714128788",
+   "result": {
+    "control_flip": 0.05987155194873822,
+    "target_flip": 0.03440120210666875
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.00316227766017|0.627054199863",
+   "result": {
+    "control_flip": 0.07443857032472356,
+    "target_flip": 0.007823488748637197
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.00316227766017|1.25410839973",
+   "result": {
+    "control_flip": 0.057189230739311314,
+    "target_flip": 0.015561037157145852
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.00316227766017|3.76232519918",
+   "result": {
+    "control_flip": 0.07798952550476612,
+    "target_flip": 0.04532222219935267
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.0056234132519|0.470224313415",
+   "result": {
+    "control_flip": 0.09327276623843572,
+    "target_flip": 0.010390894259067196
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.0056234132519|0.94044862683",
+   "result": {
+    "control_flip": 0.07382283779541471,
+    "target_flip": 0.020616250851991702
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.0056234132519|2.82134588049",
+   "result": {
+    "control_flip": 0.10103349051544375,
+    "target_flip": 0.05946605706170627
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.01|0.352618489717",
+   "result": {
+    "control_flip": 0.11466145440075276,
+    "target_flip": 0.013788119658073528
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.01|0.705236979435",
+   "result": {
+    "control_flip": 0.09441106779929798,
+    "target_flip": 0.027257569777562385
+   }
+  },
+  {
+   "key": "cat_cnot|4|0.01|2.1157109383",
+   "result": {
+    "control_flip": 0.12983991706519932,
+    "target_flip": 0.07759856298759799
+   }
+  },
+  {
+   "key": "memory|surface|3|0.001|100000",
+   "result": {
+    "code": "surface",
+    "distance": 3,
+    "p": 0.001,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 74
+   }
+  },
+  {
+   "key": "memory|surface|3|0.0015|100000",
+   "result": {
+    "code": "surface",
+    "distance": 3,
+    "p": 0.0015,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 154
+   }
+  },
+  {
+   "key": "memory|surface|3|0.002|100000",
+   "result": {
+    "code": "surface",
+    "distance": 3,
+    "p": 0.002,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 292
+   }
+  },
+  {
+   "key": "memory|surface|3|0.003|100000",
+   "result": {
+    "code": "surface",
+    "distance": 3,
+    "p": 0.003,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 674
+   }
+  },
+  {
+   "key": "memory|surface|3|0.005|100000",
+   "result": {
+    "code": "surface",
+    "distance": 3,
+    "p": 0.005,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 1750
+   }
+  },
+  {
+   "key": "memory|surface|3|0.007|100000",
+   "result": {
+    "code": "surface",
+    "distance": 3,
+    "p": 0.007,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 3194
+   }
+  },
+  {
+   "key": "memory|surface|3|0.01|100000",
+   "result": {
+    "code": "surface",
+    "distance": 3,
+    "p": 0.01,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 5932
+   }
+  },
+  {
+   "key": "memory|surface|3|0.015|100000",
+   "result": {
+    "code": "surface",
+    "distance": 3,
+    "p": 0.015,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 11533
+   }
+  },
+  {
+   "key": "memory|surface|5|0.001|100000",
+   "result": {
+    "code": "surface",
+    "distance": 5,
+    "p": 0.001,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 19
+   }
+  },
+  {
+   "key": "memory|surface|5|0.0015|100000",
+   "result": {
+    "code": "surface",
+    "distance": 5,
+    "p": 0.0015,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 45
+   }
+  },
+  {
+   "key": "memory|surface|5|0.002|100000",
+   "result": {
+    "code": "surface",
+    "distance": 5,
+    "p": 0.002,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 87
+   }
+  },
+  {
+   "key": "memory|surface|5|0.003|100000",
+   "result": {
+    "code": "surface",
+    "distance": 5,
+    "p": 0.003,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 333
+   }
+  },
+  {
+   "key": "memory|surface|5|0.005|100000",
+   "result": {
+    "code": "surface",
+    "distance": 5,
+    "p": 0.005,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 1454
+   }
+  },
+  {
+   "key": "memory|surface|5|0.007|100000",
+   "result": {
+    "code": "surface",
+    "distance": 5,
+    "p": 0.007,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 3402
+   }
+  },
+  {
+   "key": "memory|surface|5|0.01|100000",
+   "result": {
+    "code": "surface",
+    "distance": 5,
+    "p": 0.01,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 8352
+   }
+  },
+  {
+   "key": "memory|surface|5|0.015|100000",
+   "result": {
+    "code": "surface",
+    "distance": 5,
+    "p": 0.015,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 19476
+   }
+  },
+  {
+   "key": "memory|surface|7|0.001|100000",
+   "result": {
+    "code": "surface",
+    "distance": 7,
+    "p": 0.001,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 3
+   }
+  },
+  {
+   "key": "memory|surface|7|0.0015|100000",
+   "result": {
+    "code": "surface",
+    "distance": 7,
+    "p": 0.0015,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 5
+   }
+  },
+  {
+   "key": "memory|surface|7|0.002|100000",
+   "result": {
+    "code": "surface",
+    "distance": 7,
+    "p": 0.002,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 39
+   }
+  },
+  {
+   "key": "memory|surface|7|0.003|100000",
+   "result": {
+    "code": "surface",
+    "distance": 7,
+    "p": 0.003,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 125
+   }
+  },
+  {
+   "key": "memory|surface|7|0.005|100000",
+   "result": {
+    "code": "surface",
+    "distance": 7,
+    "p": 0.005,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 968
+   }
+  },
+  {
+   "key": "memory|surface|7|0.007|100000",
+   "result": {
+    "code": "surface",
+    "distance": 7,
+    "p": 0.007,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 3354
+   }
+  },
+  {
+   "key": "memory|surface|7|0.01|100000",
+   "result": {
+    "code": "surface",
+    "distance": 7,
+    "p": 0.01,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 10359
+   }
+  },
+  {
+   "key": "memory|surface|7|0.015|100000",
+   "result": {
+    "code": "surface",
+    "distance": 7,
+    "p": 0.015,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 27066
+   }
+  },
+  {
+   "key": "memory|repetition|3|0.001|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 3,
+    "p": 0.001,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 4
+   }
+  },
+  {
+   "key": "memory|repetition|3|0.0015|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 3,
+    "p": 0.0015,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 24
+   }
+  },
+  {
+   "key": "memory|repetition|3|0.002|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 3,
+    "p": 0.002,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 30
+   }
+  },
+  {
+   "key": "memory|repetition|3|0.003|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 3,
+    "p": 0.003,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 65
+   }
+  },
+  {
+   "key": "memory|repetition|3|0.005|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 3,
+    "p": 0.005,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 194
+   }
+  },
+  {
+   "key": "memory|repetition|3|0.007|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 3,
+    "p": 0.007,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 352
+   }
+  },
+  {
+   "key": "memory|repetition|3|0.01|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 3,
+    "p": 0.01,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 715
+   }
+  },
+  {
+   "key": "memory|repetition|3|0.015|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 3,
+    "p": 0.015,
+    "rounds": 3,
+    "shots": 100000,
+    "failures": 1610
+   }
+  },
+  {
+   "key": "memory|repetition|5|0.001|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 5,
+    "p": 0.001,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 0
+   }
+  },
+  {
+   "key": "memory|repetition|5|0.0015|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 5,
+    "p": 0.0015,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 1
+   }
+  },
+  {
+   "key": "memory|repetition|5|0.002|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 5,
+    "p": 0.002,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 2
+   }
+  },
+  {
+   "key": "memory|repetition|5|0.003|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 5,
+    "p": 0.003,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 3
+   }
+  },
+  {
+   "key": "memory|repetition|5|0.005|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 5,
+    "p": 0.005,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 19
+   }
+  },
+  {
+   "key": "memory|repetition|5|0.007|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 5,
+    "p": 0.007,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 47
+   }
+  },
+  {
+   "key": "memory|repetition|5|0.01|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 5,
+    "p": 0.01,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 157
+   }
+  },
+  {
+   "key": "memory|repetition|5|0.015|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 5,
+    "p": 0.015,
+    "rounds": 5,
+    "shots": 100000,
+    "failures": 517
+   }
+  },
+  {
+   "key": "memory|repetition|7|0.001|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 7,
+    "p": 0.001,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 0
+   }
+  },
+  {
+   "key": "memory|repetition|7|0.0015|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 7,
+    "p": 0.0015,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 0
+   }
+  },
+  {
+   "key": "memory|repetition|7|0.002|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 7,
+    "p": 0.002,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 0
+   }
+  },
+  {
+   "key": "memory|repetition|7|0.003|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 7,
+    "p": 0.003,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 0
+   }
+  },
+  {
+   "key": "memory|repetition|7|0.005|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 7,
+    "p": 0.005,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 2
+   }
+  },
+  {
+   "key": "memory|repetition|7|0.007|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 7,
+    "p": 0.007,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 11
+   }
+  },
+  {
+   "key": "memory|repetition|7|0.01|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 7,
+    "p": 0.01,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 29
+   }
+  },
+  {
+   "key": "memory|repetition|7|0.015|100000",
+   "result": {
+    "code": "repetition",
+    "distance": 7,
+    "p": 0.015,
+    "rounds": 7,
+    "shots": 100000,
+    "failures": 154
+   }
+  }
+ ]
+}

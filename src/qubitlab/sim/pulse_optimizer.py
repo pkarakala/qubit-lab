@@ -16,6 +16,7 @@ scores the pulse with noise on, like any other pulse.
 
 from __future__ import annotations
 
+import functools
 import math
 from dataclasses import dataclass
 
@@ -75,6 +76,34 @@ class Optimized:
     leakage: float
 
 
+def _cost(u: jax.Array, q: TransmonQubit, edges: jax.Array, omega_max: jax.Array) -> jax.Array:
+    """1 - F for the pulse with amplitudes omega_max tanh(u)."""
+    ox, oy = omega_max * jnp.tanh(u)
+    m = jnp.asarray(X_GATE.conj().T) @ block(q, edges, ox, oy)
+    return 1 - subspace_fidelity(m)
+
+
+@functools.partial(jax.jit, static_argnums=0)
+def _step(
+    levels: int,
+    u: jax.Array,
+    state: optax.OptState,
+    alpha_ghz: jax.Array,
+    edges: jax.Array,
+    omega_max: jax.Array,
+    learning_rate: jax.Array,
+) -> tuple[jax.Array, optax.OptState, jax.Array]:
+    """One Adam step on 1 - F.
+
+    Everything but the level count is an argument, not a constant, so JAX compiles this once
+    per level count and slice count, and its disk cache keeps that across restarts.
+    """
+    q = TransmonQubit(alpha_ghz=alpha_ghz, levels=levels)  # type: ignore[arg-type]
+    value, grad = jax.value_and_grad(_cost)(u, q, edges, omega_max)
+    updates, state = optax.adam(learning_rate).update(grad, state)
+    return optax.apply_updates(u, updates), state, value
+
+
 def optimize(
     q: TransmonQubit,
     duration_ns: float,
@@ -86,31 +115,15 @@ def optimize(
 ) -> Optimized:
     """Start from the DRAG pulse and follow the gradient of 1 - F."""
     edges, ox0, oy0 = drag_slices(q, duration_ns, slices)
-    edges_j = jnp.asarray(edges)
-
-    def amplitudes(u: jax.Array) -> jax.Array:
-        return omega_max_ghz * jnp.tanh(u)
-
-    def cost(u: jax.Array) -> jax.Array:
-        ox, oy = amplitudes(u)
-        m = jnp.asarray(X_GATE.conj().T) @ block(q, edges_j, ox, oy)
-        return 1 - subspace_fidelity(m)
-
     start = np.clip(np.stack([ox0, oy0]) / omega_max_ghz, -0.99, 0.99)
     u = jnp.arctanh(jnp.asarray(start))
-    opt = optax.adam(learning_rate)
-    state = opt.init(u)
-
-    @jax.jit
-    def step(u: jax.Array, state: optax.OptState) -> tuple[jax.Array, optax.OptState, jax.Array]:
-        value, grad = jax.value_and_grad(cost)(u)
-        updates, state = opt.update(grad, state)
-        return optax.apply_updates(u, updates), state, value
-
+    state = optax.adam(learning_rate).init(u)
+    args = (jnp.asarray(q.alpha_ghz), jnp.asarray(edges), jnp.asarray(omega_max_ghz))
+    lr = jnp.asarray(learning_rate)
     history = np.empty(steps)
     for k in range(steps):
-        u, state, value = step(u, state)
+        u, state, value = _step(q.levels, u, state, *args, lr)
         history[k] = float(value)
-    ox, oy = (np.asarray(v) for v in amplitudes(u))
+    ox, oy = (np.asarray(v) for v in omega_max_ghz * jnp.tanh(u))
     error, leakage = gate_error(q, edges, ox, oy)
     return Optimized(edges, ox, oy, history, error, leakage)
