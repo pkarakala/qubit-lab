@@ -14,13 +14,14 @@ from typing import Any
 
 PACKAGE = Path(__file__).resolve().parent
 SNAPSHOT = PACKAGE / "data" / "checks.json"
-SOURCES = ("theory", "sim", "checks")
+SOURCES = ("theory/*.py", "sim/*.py", "checks/*.py")
 
 
-def fingerprint() -> str:
+def fingerprint(patterns: tuple[str, ...] = SOURCES) -> str:
+    """Hash of the package files matching `patterns` (globs relative to the package)."""
     h = hashlib.sha256()
-    for folder in SOURCES:
-        for path in sorted((PACKAGE / folder).glob("*.py")):
+    for pattern in patterns:
+        for path in sorted(PACKAGE.glob(pattern)):
             h.update(path.name.encode())
             h.update(path.read_bytes())
     return h.hexdigest()[:16]
