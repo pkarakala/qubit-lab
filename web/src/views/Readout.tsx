@@ -2,24 +2,15 @@
 // resonator ends up in a different spot of the IQ plane for |g> and |e>. chi comes from the
 // dressed spectrum (scqubits + NumPy), the fields from Dynamiqs, the curves from the papers.
 
-import { useEffect, useState } from 'react'
 import { type ReadoutParams, useReadout } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
 import { CopyPython, ErrorBanner, FormulaCard, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useShared } from '../lib/share'
+import { useDebounced } from '../lib/useDebounced'
 import { useExplorer } from '../store'
 
 const DEFAULTS: ReadoutParams = { ratio: 50, E_C: 0.3, f_r: 7.0, g_n: 0.05, kappa_mhz: 1.0, n_bar: 1.0, delta_r_mhz: 0 }
-
-function useDebounced<T>(value: T, ms: number): T {
-  const [v, setV] = useState(value)
-  useEffect(() => {
-    const id = window.setTimeout(() => setV(value), ms)
-    return () => window.clearTimeout(id)
-  }, [value, ms])
-  return v
-}
 
 export function Readout() {
   const theme = useExplorer((s) => s.theme)

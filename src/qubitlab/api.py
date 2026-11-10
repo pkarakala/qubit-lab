@@ -15,6 +15,7 @@ import jax
 import numpy as np
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field, ValidationError
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -90,6 +91,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# A Phase space answer is up to 3 MB of JSON and gzips about sevenfold. Streamed answers (the
+# flip rates) still arrive row by row: Starlette 1.5 and later flush after every chunk.
+app.add_middleware(GZipMiddleware)
 
 
 def add_rate_limit(target: FastAPI) -> None:

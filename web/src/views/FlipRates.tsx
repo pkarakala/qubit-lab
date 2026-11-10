@@ -1,24 +1,15 @@
 // Flip rates vs cat size: the bias that makes cat qubits worth building. Rates come from the
 // Liouvillian spectrum (simulation), theory lines from the closed forms, experiments as facts.
 
-import { useEffect, useState } from 'react'
 import { type CatParams, useFacts, useRates, useReferences } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
 import { CopyPython, ErrorBanner, FormulaCard, PaperSettings, shortCite, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
+import { useDebounced } from '../lib/useDebounced'
 import { useExplorer } from '../store'
 import { useShared } from '../lib/share'
 
 const SIZES = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7]
-
-function useDebounced<T>(value: T, ms: number): T {
-  const [v, setV] = useState(value)
-  useEffect(() => {
-    const id = window.setTimeout(() => setV(value), ms)
-    return () => window.clearTimeout(id)
-  }, [value, ms])
-  return v
-}
 
 export function FlipRates() {
   const theme = useExplorer((s) => s.theme)

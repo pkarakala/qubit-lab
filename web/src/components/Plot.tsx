@@ -3,7 +3,7 @@
 
 export const THEORY_DASH = 'dash'
 
-import Plotly from 'plotly.js-dist-min'
+import Plotly from 'plotly.js-basic-dist-min' // scatter and bar: all the views draw
 import createPlotlyComponent from 'react-plotly.js/factory'
 import type { Theme } from '../store'
 
