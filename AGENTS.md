@@ -37,18 +37,21 @@ src/qubitlab/sim/               cat.py (Lindblad, Wigner, Liouvillian rates), tr
                                 pulse_optimizer.py (GRAPE through Dynamiqs + optax),
                                 spectra.py (gallery spectra), custom.py (Playground models)
 src/qubitlab/checks/            base.py, then one file per topic: cat, transmon, qubit, readout, gate, qec
-src/qubitlab/data/              presets.json (published settings), checks.json (shipped check results),
+src/qubitlab/data/              references.bib (every Source), presets.json (published settings),
+                                checks.json and solves.json (shipped check results and slow solves),
                                 architectures/ (gallery designs)
 src/qubitlab/api.py             FastAPI for the explorer
 src/qubitlab/serve.py, cli.py   `qubitlab serve` (API and built explorer on one port), `qubitlab checks`
 src/qubitlab/cache.py, warm.py  disk cache for slow solves; warm-up of what the explorer opens with
-src/qubitlab/snapshot.py        loads checks.json while the theory, sim and checks code still matches it
+src/qubitlab/snapshot.py        loads checks.json and solves.json while the theory, sim and checks code matches
 src/qubitlab/snippets.py        Copy as Python scripts
 src/qubitlab/facts.py           measured hardware numbers with their sources
 src/qubitlab/architectures.py   gallery scenes from data/architectures/
 docs/learn/                   human layer, one screen per page
 docs/reference/               generated: formulas, checks (scripts/make_reference.py)
 docs/hand_calcs/              derivations behind DERIVED sources
+scripts/                      make_reference.py (docs/reference/, checks.json), make_snapshots.py (solves.json),
+                              smoke_wheel.sh (installed-wheel check), dev.sh
 web/                          React + three.js explorer
 ```
 
@@ -59,5 +62,6 @@ uv sync --all-groups
 uv run ruff format . && uv run ruff check . && uv run mypy && uv run pytest -q
 uv run pytest -q -m "not slow"                 # quick loop, under a minute
 uv run python scripts/make_reference.py        # after changing a formula or check
+uv run python scripts/make_snapshots.py        # after changing sim/; about half an hour
 cd web && npm run typecheck && npm run test:unit && npm run e2e
 ```
