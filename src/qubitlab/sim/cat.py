@@ -28,6 +28,11 @@ dq.set_progress_meter(False)
 Scheme = Literal["dissipative", "kerr", "none"]
 Initial = Literal["vacuum", "coherent_plus", "coherent_minus", "even_cat", "odd_cat"]
 
+# Dynamiqs' Tsit5 stops after 100,000 steps by default. The longest solve the explorer can ask
+# for takes ten times that (measured: a Kerr cat at |alpha|^2 = 9 for K t = 200 without noise,
+# 1.03e6 steps; noise lowers the count), so `evolve` allows twice that.
+MAX_STEPS = 2_000_000
+
 
 @dataclass(frozen=True)
 class CatParams:
@@ -123,7 +128,7 @@ def evolve(
     H, jumps = operators(params)
     rho0 = dq.todm(initial_state(initial, params.alpha_sq, n))
     ext = extent if extent is not None else max(3.0, math.sqrt(params.alpha_sq) + 2.5)
-    return evolve_operators(H, jumps, rho0, t_final, n_frames, grid, ext)
+    return evolve_operators(H, jumps, rho0, t_final, n_frames, grid, ext, max_steps=MAX_STEPS)
 
 
 def evolve_operators(
@@ -134,13 +139,19 @@ def evolve_operators(
     n_frames: int,
     grid: int,
     extent: float,
+    max_steps: int = 100_000,
 ) -> Evolution:
-    """Solve the Lindblad equation for any H and jumps on one mode: Wigner frames, observables."""
+    """Solve the Lindblad equation for any H and jumps on one mode: Wigner frames, observables.
+
+    The solver raises RuntimeError after `max_steps` steps. The default is Dynamiqs' own, which
+    the playground keeps so that a runaway typed model fails in seconds.
+    """
     n = rho0.shape[-1]
     tsave = jnp.linspace(0.0, t_final, n_frames)
     edge = dq.proj(dq.basis(n, n - 1)) + dq.proj(dq.basis(n, n - 2))
     exp_ops = [dq.number(n), dq.parity(n), sign_x(n), edge]
-    result = dq.mesolve(H, jumps, rho0, tsave, exp_ops=exp_ops)
+    method = dq.method.Tsit5(max_steps=max_steps)
+    result = dq.mesolve(H, jumps, rho0, tsave, exp_ops=exp_ops, method=method)
     states = result.states
     purity = np.asarray(dq.purity(states)).real
     xvec, _, w = dq.wigner(states, xmax=extent, ymax=extent, npixels=grid)

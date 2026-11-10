@@ -1,9 +1,12 @@
 import json
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
 
+from qubitlab import cache
 from qubitlab.api import app
+from qubitlab.sim import cat as cat_sim
 
 client = TestClient(app)
 
@@ -47,6 +50,27 @@ def test_transmon_bands() -> None:
 
 def test_bad_input_is_rejected() -> None:
     assert client.post("/api/cat/evolve", json={"alpha_sq": -1}).status_code == 422
+
+
+def test_a_solve_out_of_steps_is_a_422(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    # Dynamiqs raises RuntimeError at its step limit; that used to answer 500.
+    monkeypatch.setattr(cache, "CACHE_DIR", tmp_path)  # solve; do not read a cached answer
+    monkeypatch.setattr(cat_sim, "MAX_STEPS", 10)
+    body = {"alpha_sq": 2.0, "t_final": 2.0, "n_frames": 2, "grid": 21}
+    r = client.post("/api/cat/evolve", json=body)
+    assert r.status_code == 422
+    assert "solver gave up" in r.json()["detail"]
+    # A driven transmon over 1e5 ns needs more steps than Dynamiqs allows.
+    body = {"experiment": "rabi", "omega_ghz": 0.02, "t_max_ns": 1e5, "n_points": 11}
+    r = client.post("/api/qubit/run", json=body)
+    assert r.status_code == 422
+    assert "solver gave up" in r.json()["detail"]
+
+
+def test_qec_shot_seed_must_fit_stim() -> None:
+    for seed in (-1, 2**64):
+        assert client.get("/api/qec/shot", params={"d": 3, "seed": seed}).status_code == 422
+    assert client.get("/api/qec/shot", params={"d": 3, "seed": 2**64 - 1}).status_code == 200
 
 
 def test_qubit_t1_run_has_theory_curve() -> None:
