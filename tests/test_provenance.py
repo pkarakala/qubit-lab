@@ -1,6 +1,15 @@
+from pathlib import Path
+
+import qubitlab
 from qubitlab.checks.base import REGISTRY, run_all
-from qubitlab.provenance import bib_entries
+from qubitlab.provenance import BIB_PATH, bib_entries
 from qubitlab.theory import FORMULAS
+
+
+def test_the_bib_ships_inside_the_package() -> None:
+    # A wheel only carries files under src/qubitlab/; outside it, /api/references fails.
+    assert BIB_PATH.is_relative_to(Path(qubitlab.__file__).resolve().parent)
+    assert BIB_PATH.is_file()
 
 
 def test_every_formula_source_is_in_the_bib() -> None:
