@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test'
 
 // Runs against the dev servers: `../scripts/dev.sh` (API :8000, explorer :5173).
-// QUBITLAB_URL=http://localhost:7860 runs it against a container or a deployed Space instead.
+// QUBITLAB_URL=http://localhost:7860 runs it against a container or any deployed copy instead.
 const target = process.env.QUBITLAB_URL
 
 export default defineConfig({

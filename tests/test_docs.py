@@ -1,10 +1,16 @@
 """The human layer stays short and sourced; the reference stays generated."""
 
 import re
+import sys
 from pathlib import Path
 
+import pytest
+
+import qubitlab.checks
+from qubitlab import snapshot
+from qubitlab.checks.base import CheckResult, Verdict
 from qubitlab.provenance import bib_entries
-from scripts.make_reference import formulas_md
+from scripts import make_reference
 
 ROOT = Path(__file__).resolve().parents[1]
 LEARN = ROOT / "docs" / "learn"
@@ -32,4 +38,17 @@ def test_no_em_dashes_in_human_docs() -> None:
 
 def test_formula_reference_is_up_to_date() -> None:
     current = (ROOT / "docs" / "reference" / "formulas.md").read_text(encoding="utf-8")
-    assert current == formulas_md(), "run: uv run python scripts/make_reference.py"
+    assert current == make_reference.formulas_md(), "run: uv run python scripts/make_reference.py"
+
+
+def test_make_reference_fails_on_a_surprise(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # The release workflow runs it and no tests, so a surprise must stop it here.
+    wrong = CheckResult("demo", "cat.wigner_even_cat", "demo", 1.0, 2.0, 0.1, Verdict.AGREE)
+    monkeypatch.setattr(qubitlab.checks, "run_all", lambda: [wrong])
+    monkeypatch.setattr(make_reference, "OUT", tmp_path)
+    monkeypatch.setattr(snapshot, "write", lambda results: None)
+    monkeypatch.setattr(sys, "argv", ["make_reference.py"])
+    with pytest.raises(SystemExit, match="1 of 1 checks surprised: demo"):
+        make_reference.main()

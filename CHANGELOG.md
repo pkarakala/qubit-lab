@@ -22,4 +22,4 @@ The first public release: an interactive course in superconducting qubits where 
 
 **Speed.** Every view's defaults and 73 settings from published experiments are solved in the background on start; JAX compilations are cached on disk; flip rates stream in point by point; the check results ship with the code; slow views show a live timer.
 
-**Running it.** `pipx run qubitlab serve` (once on PyPI), a Docker image, or a Hugging Face Space (docs/deploy.md).
+**Running it.** `pipx run qubitlab serve` (once on PyPI) or a Docker image (docs/deploy.md).

@@ -10,7 +10,7 @@ H = 4E_C (n − n_g)² − E_J cos φ
 
 **Anharmonicity.** Level 1→2 sits about E_C lower than 0→1. That gap is what keeps a microwave pulse from leaking out of the qubit. Our exact diagonalization finds it 10 to 15% larger in magnitude than E_C at E_J/E_C = 50 to 100.
 
-**Why "transmon".** The offset charge n_g wanders in real chips. The energies wiggle with n_g by an amount that shrinks as e^(−√(8E_J/E_C)). Raising E_J/E_C from 1 to 50 flattens the bands by six orders of magnitude, at the cost of less anharmonicity.
+**Why "transmon".** The offset charge n_g wanders in real chips. The energies wiggle with n_g by an amount that shrinks as e^(−√(8E_J/E_C)). Raising E_J/E_C from 1 to 50 flattens the bands by five to six orders of magnitude, at the cost of less anharmonicity.
 
 **Try it.** In the explorer's *Transmon* view, drag E_J/E_C and watch the bands flatten.
 

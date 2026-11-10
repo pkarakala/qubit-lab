@@ -1,5 +1,5 @@
 # Qubit Lab in one container: `qubitlab serve`'s app (API + built explorer) behind uvicorn.
-# Hugging Face Spaces runs it as user 1000 on port 7860; see docs/deploy.md.
+# It runs as an unprivileged user on port 7860; see docs/deploy.md.
 
 FROM node:22.22.0-slim AS web
 WORKDIR /web

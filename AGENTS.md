@@ -27,13 +27,25 @@ Rules for coding agents (and people) working in this repo. Humans start at [READ
 
 ```
 src/qubitlab/provenance.py      Source, Kind, bib parser
-src/qubitlab/theory/            cat.py, transmon.py, qubit.py (control and decoherence), qec.py (codes), registry.py
+src/qubitlab/theory/            cat.py, transmon.py, qubit.py (control and decoherence), readout.py (dispersive
+                                readout), gates.py (transmon CZ, cat CNOT), qec.py (codes), registry.py (Formula)
 src/qubitlab/sim/               cat.py (Lindblad, Wigner, Liouvillian rates), transmon.py (scqubits spectrum),
                                 transmon_dynamics.py (pulses, T1/T2, Ramsey, echo; 4 levels),
+                                readout.py (dressed chi, measurement dephasing, pointer states),
+                                two_qubit.py (transmon CZ, cat CNOT),
                                 qec.py (Stim + PyMatching memory experiments),
-                                pulse_optimizer.py (GRAPE through Dynamiqs + optax)
-src/qubitlab/checks/            base.py, cat_checks.py, transmon_checks.py, qubit_checks.py, qec_checks.py
+                                pulse_optimizer.py (GRAPE through Dynamiqs + optax),
+                                spectra.py (gallery spectra), custom.py (Playground models)
+src/qubitlab/checks/            base.py, then one file per topic: cat, transmon, qubit, readout, gate, qec
+src/qubitlab/data/              presets.json (published settings), checks.json (shipped check results),
+                                architectures/ (gallery designs)
 src/qubitlab/api.py             FastAPI for the explorer
+src/qubitlab/serve.py, cli.py   `qubitlab serve` (API and built explorer on one port), `qubitlab checks`
+src/qubitlab/cache.py, warm.py  disk cache for slow solves; warm-up of what the explorer opens with
+src/qubitlab/snapshot.py        loads checks.json while the theory, sim and checks code still matches it
+src/qubitlab/snippets.py        Copy as Python scripts
+src/qubitlab/facts.py           measured hardware numbers with their sources
+src/qubitlab/architectures.py   gallery scenes from data/architectures/
 docs/learn/                   human layer, one screen per page
 docs/reference/               generated: formulas, checks (scripts/make_reference.py)
 docs/hand_calcs/              derivations behind DERIVED sources
