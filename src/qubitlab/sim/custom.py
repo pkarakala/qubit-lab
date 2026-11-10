@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import ast
 import cmath
+import keyword
 import math
 from dataclasses import dataclass
 
@@ -25,7 +26,10 @@ MAX_CHARS = 300
 MAX_NODES = 200
 MAX_POWER = 8
 OPERATORS = {"a": "a", "ad": "ad", "n": "n", "I": "eye"}
-RESERVED = set(OPERATORS) | {"sqrt", "dq", "jnp", "N"}
+# Every name the script from `python_script` defines or calls. A parameter cannot take one, or
+# the script would overwrite it; tests/test_playground.py checks this list against the script.
+SCRIPT_NAMES = set("dq jnp N alpha0 a ad n eye H jumps rho0 tsave result print float".split())
+RESERVED = set(OPERATORS) | SCRIPT_NAMES | {"sqrt"}
 
 
 class ModelError(ValueError):
@@ -158,9 +162,14 @@ class Model:
     def __post_init__(self) -> None:
         if not 4 <= self.dim <= 60:
             raise ModelError("keep the Fock space between 4 and 60 states")
-        bad = [p for p in self.params if not p.isidentifier() or p in RESERVED or p[0] == "_"]
+        bad = [
+            p
+            for p in self.params
+            if not p.isidentifier() or keyword.iskeyword(p) or p in RESERVED or p[0] == "_"
+        ]
         if bad:
-            raise ModelError(f"parameter names {bad} are not allowed")
+            taken = "Python keywords, operators and the generated script's own names are taken"
+            raise ModelError(f"parameter names {bad} are not allowed: {taken}")
         if len(self.params) > 12 or not all(math.isfinite(v) for v in self.params.values()):
             raise ModelError("at most 12 parameters, each a finite number")
         if len(self.jumps) > 6:
@@ -214,10 +223,10 @@ def evolve(
 
 _INITIAL_CODE = {
     "vacuum": "dq.vacuum(N)",
-    "coherent_plus": "dq.coherent(N, alpha)",
-    "coherent_minus": "dq.coherent(N, -alpha)",
-    "even_cat": "dq.unit(dq.coherent(N, alpha) + dq.coherent(N, -alpha))",
-    "odd_cat": "dq.unit(dq.coherent(N, alpha) - dq.coherent(N, -alpha))",
+    "coherent_plus": "dq.coherent(N, alpha0)",
+    "coherent_minus": "dq.coherent(N, -alpha0)",
+    "even_cat": "dq.unit(dq.coherent(N, alpha0) + dq.coherent(N, -alpha0))",
+    "odd_cat": "dq.unit(dq.coherent(N, alpha0) - dq.coherent(N, -alpha0))",
 }
 
 
@@ -234,7 +243,7 @@ import jax.numpy as jnp
 
 N = {model.dim}  # Fock states kept
 {params}
-alpha = {math.sqrt(alpha_sq)!r}  # initial state amplitude
+alpha0 = {math.sqrt(alpha_sq)!r}  # initial state amplitude
 
 a = dq.destroy(N)
 ad = a.dag()

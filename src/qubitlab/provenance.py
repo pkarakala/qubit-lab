@@ -2,6 +2,7 @@
 
 Each formula in `qubitlab.theory` carries one or more `Source` objects. A test checks that
 every `Source.key` exists in `references.bib`, so nothing in the theory layer is unsourced.
+The bib lives in the package (data/), so a pip install can serve the citations too.
 """
 
 from __future__ import annotations
@@ -12,7 +13,7 @@ from enum import StrEnum
 from functools import cache
 from pathlib import Path
 
-BIB_PATH = Path(__file__).resolve().parents[2] / "references.bib"
+BIB_PATH = Path(__file__).resolve().parent / "data" / "references.bib"
 
 
 class Kind(StrEnum):

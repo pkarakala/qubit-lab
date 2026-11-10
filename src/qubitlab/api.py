@@ -7,7 +7,7 @@ import math
 import os
 import threading
 from collections.abc import AsyncIterator, Iterator
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, contextmanager
 from typing import Any, Literal
 
 import anyio
@@ -136,6 +136,22 @@ class RatesRequest(CatRequest):
         default_factory=lambda: [0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0],
         max_length=20,
     )
+
+
+SOLVER_GAVE_UP = "the solver gave up: the model is too fast or too stiff for this duration"
+
+
+@contextmanager
+def _unprocessable() -> Iterator[None]:
+    """Answer 422, not 500, when a solve rejects its inputs or Dynamiqs hits its step limit."""
+    try:
+        yield
+    except ValueError as e:
+        raise HTTPException(422, str(e)) from e
+    except RuntimeError as e:  # Dynamiqs (diffrax) raises this when it runs out of steps
+        if "maximum number of solver steps" not in str(e):
+            raise
+        raise HTTPException(422, SOLVER_GAVE_UP) from e
 
 
 def _round(a: Any, digits: int = 5) -> Any:
@@ -267,10 +283,8 @@ def facts() -> list[dict[str, object]]:
 
 @app.post("/api/cat/evolve")
 def cat_evolve(req: EvolveRequest) -> dict[str, Any]:
-    try:
+    with _unprocessable():
         return _evolve(req.model_dump())
-    except ValueError as e:
-        raise HTTPException(422, str(e)) from e
 
 
 @app.post("/api/cat/rates")
@@ -449,10 +463,8 @@ def _qubit(body: dict[str, Any]) -> dict[str, Any]:
 @app.post("/api/qubit/run")
 def qubit_run(req: QubitRequest) -> dict[str, Any]:
     """One lab experiment on a transmon kept to 4 levels: Bloch path, populations, theory."""
-    try:
+    with _unprocessable():
         return _qubit(req.model_dump())
-    except ValueError as e:
-        raise HTTPException(422, str(e)) from e
 
 
 class PulseRequest(BaseModel):
@@ -506,10 +518,8 @@ def _pulse(body: dict[str, Any]) -> dict[str, Any]:
 @app.post("/api/pulse/optimize")
 def pulse_optimize(req: PulseRequest) -> dict[str, Any]:
     """An X gate on a 4-level transmon: the DRAG pulse vs a pulse found by gradient descent."""
-    try:
+    with _unprocessable():
         return _pulse(req.model_dump())
-    except ValueError as e:
-        raise HTTPException(422, str(e)) from e
 
 
 MIN_FAILURES = 10
@@ -606,8 +616,8 @@ def qec_cat(req: CatCodeRequest) -> dict[str, Any]:
 @app.get("/api/qec/shot")
 def qec_shot(d: int = 5, p: float = 0.005, seed: int = 0) -> dict[str, Any]:
     """One surface code run: detection events in space-time and the decoder's matching."""
-    if d not in (3, 5, 7) or not 0 < p <= 0.05:
-        raise HTTPException(422, "d must be 3, 5 or 7 and 0 < p <= 0.05")
+    if d not in (3, 5, 7) or not 0 < p <= 0.05 or not 0 <= seed < 2**64:  # Stim: 64-bit seed
+        raise HTTPException(422, "d must be 3, 5 or 7, 0 < p <= 0.05 and 0 <= seed < 2^64")
     s = qec_sim.sample_shot(d, p, seed)
     return {
         "sim": {
@@ -719,13 +729,8 @@ def _playground(body: dict[str, Any]) -> dict[str, Any]:
 @app.post("/api/playground")
 def playground(req: PlaygroundRequest) -> dict[str, Any]:
     """Any one-mode Lindblad model the user types, solved with Dynamiqs. No theory layer."""
-    try:
+    with _unprocessable():  # a model it cannot build raises custom_sim.ModelError, a ValueError
         return _playground(req.model_dump())
-    except custom_sim.ModelError as e:
-        raise HTTPException(422, str(e)) from e
-    except RuntimeError as e:  # Dynamiqs hit its step limit
-        msg = "the solver gave up: the model is too fast or too stiff for this duration"
-        raise HTTPException(422, msg) from e
 
 
 class TransmonInputs(BaseModel):

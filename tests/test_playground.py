@@ -1,5 +1,6 @@
 """The playground: a typed one-mode model must match the built-in solver and simple hand calcs."""
 
+import ast
 import math
 
 import numpy as np
@@ -8,7 +9,7 @@ from fastapi.testclient import TestClient
 
 from qubitlab.api import app
 from qubitlab.sim import cat as cat_sim
-from qubitlab.sim.custom import Jump, Model, ModelError, build, evolve, python_script
+from qubitlab.sim.custom import RESERVED, Jump, Model, ModelError, build, evolve, python_script
 
 client = TestClient(app)
 
@@ -67,9 +68,30 @@ def test_parser_rejects(text: str) -> None:
         build(Model(text, (), {"k": 2.0}, dim=8))
 
 
-def test_reserved_parameter_names_are_rejected() -> None:
+@pytest.mark.parametrize("name", ["a", "eye", "alpha0", "H", "result", "print", "lambda", "None"])
+def test_reserved_parameter_names_are_rejected(name: str) -> None:
+    # Operators, Python keywords and the script's own names would break the generated script.
     with pytest.raises(ModelError):
-        Model("0", (), {"a": 1.0})
+        Model("0", (), {name: 1.0})
+
+
+def test_reserved_names_cover_the_script() -> None:
+    m = Model("p*n", (Jump("a", "p"),), {"p": 1.0}, dim=8)
+    tree = ast.parse(python_script(m, "even_cat", 1.0, 1.0, 2))
+    names = {x.id for x in ast.walk(tree) if isinstance(x, ast.Name)}
+    assert names - {"p"} <= RESERVED
+
+
+def test_python_script_keeps_a_parameter_named_alpha() -> None:
+    # The script once set alpha to the initial amplitude after the parameters, so a parameter
+    # called alpha silently took that value.
+    m = Model("0", (Jump("a", "alpha"),), {"alpha": 0.5}, dim=12)
+    ev = evolve(m, "coherent_plus", 1.0, t_final=1.0, n_frames=2, grid=21, extent=3.0)
+    scope: dict[str, object] = {}
+    exec(python_script(m, "coherent_plus", 1.0, 1.0, 2), scope)  # our own generated code
+    result = scope["result"]
+    assert float(result.expects[0, -1].real) == pytest.approx(ev.photon_number[-1], rel=1e-8)  # type: ignore[attr-defined]
+    assert ev.photon_number[-1] == pytest.approx(math.exp(-0.5), rel=1e-6)  # <n> = e^(-kappa t)
 
 
 def test_python_script_reproduces_the_run() -> None:

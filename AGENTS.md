@@ -14,7 +14,7 @@ Rules for coding agents (and people) working in this repo. Humans start at [READ
 
 ## Rules
 
-1. **No unsourced physics.** A `Formula` needs at least one `Source` with a key in `references.bib` and a locator (equation, section or figure). A derivation of our own is `Kind.DERIVED` and points at a script in `docs/hand_calcs/`.
+1. **No unsourced physics.** A `Formula` needs at least one `Source` with a key in `src/qubitlab/data/references.bib` and a locator (equation, section or figure). A derivation of our own is `Kind.DERIVED` and points at a script in `docs/hand_calcs/`.
 2. **Never cite from memory.** Read the paper before you write a locator. If a detail was not checked, say so in the bib entry's `unverified` field.
 3. **Predict before you run.** Each check regime states `AGREE` or `DIVERGE` from the formula's `valid_when`, before you see the numbers. If the result surprises you, that is a finding: report it, do not tune the tolerance to hide it.
 4. **Expected test values come from hand calcs or papers,** never from running the code.
