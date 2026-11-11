@@ -16,6 +16,8 @@ from qubitlab.theory.registry import Formula
 g, g_12, Delta, alpha, kappa, chi, eps, delta_r = sp.symbols(
     "g g_12 Delta alpha kappa chi epsilon delta_r", real=True
 )
+eta, tau, snr_t, tau_f = sp.symbols("eta tau SNR_tau tau_f", positive=True)
+sep = sp.Symbol("D", positive=True)  # |alpha_e - alpha_g|
 
 
 def hand(step: str) -> Source:
@@ -126,6 +128,82 @@ dephasing_rate_weak = Formula(
     valid_when="chi << kappa. At chi = kappa/2 it is 4x too high: 2x in the rate, 2x in n.",
 )
 
+pointer_separation = Formula(
+    key="readout.pointer_separation",
+    title="Distance between the two pointer states in steady state",
+    lhs=r"|\alpha_e - \alpha_g|",
+    expr=2
+    * eps
+    * chi
+    / sp.sqrt((kappa**2 / 4 + (delta_r + chi) ** 2) * (kappa**2 / 4 + (delta_r - chi) ** 2)),
+    args=(eps, chi, kappa, delta_r),
+    sources=(
+        Source(
+            "gambetta2006",
+            Kind.PEER_REVIEWED,
+            "Eq. (5.21)",
+            "Gives |alpha|^2 for each state; the separation needs the phases too.",
+        ),
+        hand(
+            "Step 4: steady state of d alpha/dt = -i(delta_r +- chi) alpha - kappa alpha/2 - i eps."
+        ),
+    ),
+    valid_when="Steady state (tau >> 1/kappa), linear dispersive model, chi > 0.",
+)
+
+heterodyne_snr = Formula(
+    key="readout.heterodyne_snr",
+    title="Signal-to-noise of a box-car heterodyne readout, in Gambetta's convention",
+    lhs=r"\mathrm{SNR}\,\tau_f",
+    expr=eta * kappa * tau * sep**2 / 2,
+    args=(eta, kappa, tau, sep),
+    sources=(
+        Source(
+            "gambetta2007",
+            Kind.PEER_REVIEWED,
+            "Eqs. (2.1)-(2.3)",
+            "Signal +-1 per unit time, noise variance tau_f / SNR. Here D = |alpha_e - alpha_g|.",
+        ),
+        hand("Step 5: each heterodyne arm records sqrt(2 eta kappa) <a> dt plus unit white noise."),
+    ),
+    valid_when="Steady-state fields over the whole window: tau >> 1/kappa.",
+)
+
+fidelity = Formula(
+    key="readout.fidelity",
+    title="Readout fidelity 1 - P(e|g) - P(g|e) with no relaxation",
+    lhs=r"F",
+    expr=sp.erf(sp.sqrt(snr_t / 2)),
+    args=(snr_t,),
+    sources=(
+        Source(
+            "gambetta2007",
+            Kind.PEER_REVIEWED,
+            "Eqs. (2.5), (2.6)",
+            "SNR_tau is the product tau_f SNR there: Gaussian clouds, threshold halfway.",
+        ),
+    ),
+    valid_when="No qubit relaxation during the window (tau << T1).",
+)
+
+fidelity_t1 = Formula(
+    key="readout.fidelity_t1",
+    title="Readout fidelity when the qubit can relax during the window",
+    lhs=r"F_0",
+    expr=sp.exp(-tau_f / 2) * sp.erf(sp.sqrt(snr_t / 2)),
+    args=(tau_f, snr_t),
+    sources=(
+        Source(
+            "gambetta2007",
+            Kind.PEER_REVIEWED,
+            "Eq. (3.8)",
+            "Box-car filter, threshold at zero, tau_f = tau / T1. A decay in the first half of the "
+            "window lands on the wrong side.",
+        ),
+    ),
+    valid_when="Large SNR, so the clouds do not overlap and only decays cause errors.",
+)
+
 ALL = (
     chi_two_level,
     chi_transmon,
@@ -133,4 +211,8 @@ ALL = (
     pointer_photons,
     dephasing_rate,
     dephasing_rate_weak,
+    pointer_separation,
+    heterodyne_snr,
+    fidelity,
+    fidelity_t1,
 )

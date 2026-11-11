@@ -12,6 +12,8 @@ To read a qubit without touching it, ask a resonator.
 
 **Too many photons.** The dispersive picture holds only for photon numbers well below the critical number Δ²/4g². Beyond it, the approximation breaks down.
 
+**How sure is one shot?** Integrate for a time τ: clouds separate as τ, widen as √τ. Gambetta et al. give the fidelity erf(√(τ SNR/2)), times e^(−τ/2T₁) when the qubit can relax mid-shot. Simulated shots match both to 3%.
+
 **Try it.** In *Readout*, raise E_J/E_C and watch the √2 shortcut drift from the exact χ. Then set κ near 2|χ| and see the pointer states separate furthest.
 
-Sources: koch2007 (Eqs. 3.4, 3.9, 3.10), blais2004 (Eq. 12, Sec. VI.B), gambetta2006 (Eqs. 5.20, 5.21), blais2021 (Eqs. 43, 117), qubitlab_hand_calcs.
+Sources: koch2007 (Eqs. 3.4, 3.9, 3.10), blais2004 (Eq. 12, Sec. VI.B), gambetta2006 (Eqs. 5.20, 5.21), gambetta2007 (Eqs. 2.6, 3.8), blais2021 (Eqs. 43, 117), qubitlab_hand_calcs.

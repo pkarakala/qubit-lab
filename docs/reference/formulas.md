@@ -450,6 +450,56 @@ Valid when: chi << kappa. At chi = kappa/2 it is 4x too high: 2x in the rate, 2x
 - [blais2004](https://doi.org/10.1103/PhysRevA.69.062320), Eq. (26) (peer_reviewed).
 - qubitlab_hand_calcs, docs/hand_calcs/readout.py (derived). Step 3: leading order in chi.
 
+## Distance between the two pointer states in steady state
+
+`readout.pointer_separation`
+
+```latex
+|\alpha_e - \alpha_g| = \frac{2 \chi \epsilon}{\sqrt{\left(\chi + \delta_{r}\right)^{2} + \frac{\kappa^{2}}{4}} \sqrt{\left(\delta_{r} - \chi\right)^{2} + \frac{\kappa^{2}}{4}}}
+```
+
+Valid when: Steady state (tau >> 1/kappa), linear dispersive model, chi > 0.
+
+- [gambetta2006](https://doi.org/10.1103/PhysRevA.74.042318), Eq. (5.21) (peer_reviewed). Gives |alpha|^2 for each state; the separation needs the phases too.
+- qubitlab_hand_calcs, docs/hand_calcs/readout.py (derived). Step 4: steady state of d alpha/dt = -i(delta_r +- chi) alpha - kappa alpha/2 - i eps.
+
+## Signal-to-noise of a box-car heterodyne readout, in Gambetta's convention
+
+`readout.heterodyne_snr`
+
+```latex
+\mathrm{SNR}\,\tau_f = \frac{\kappa \eta \tau D^{2}}{2}
+```
+
+Valid when: Steady-state fields over the whole window: tau >> 1/kappa.
+
+- [gambetta2007](https://doi.org/10.1103/PhysRevA.76.012325), Eqs. (2.1)-(2.3) (peer_reviewed). Signal +-1 per unit time, noise variance tau_f / SNR. Here D = |alpha_e - alpha_g|.
+- qubitlab_hand_calcs, docs/hand_calcs/readout.py (derived). Step 5: each heterodyne arm records sqrt(2 eta kappa) <a> dt plus unit white noise.
+
+## Readout fidelity 1 - P(e|g) - P(g|e) with no relaxation
+
+`readout.fidelity`
+
+```latex
+F = \operatorname{erf}{\left(\frac{\sqrt{2} \sqrt{SNR_{\tau}}}{2} \right)}
+```
+
+Valid when: No qubit relaxation during the window (tau << T1).
+
+- [gambetta2007](https://doi.org/10.1103/PhysRevA.76.012325), Eqs. (2.5), (2.6) (peer_reviewed). SNR_tau is the product tau_f SNR there: Gaussian clouds, threshold halfway.
+
+## Readout fidelity when the qubit can relax during the window
+
+`readout.fidelity_t1`
+
+```latex
+F_0 = \operatorname{erf}{\left(\frac{\sqrt{2} \sqrt{SNR_{\tau}}}{2} \right)} e^{- \frac{\tau_{f}}{2}}
+```
+
+Valid when: Large SNR, so the clouds do not overlap and only decays cause errors.
+
+- [gambetta2007](https://doi.org/10.1103/PhysRevA.76.012325), Eq. (3.8) (peer_reviewed). Box-car filter, threshold at zero, tau_f = tau / T1. A decay in the first half of the window lands on the wrong side.
+
 ## Josephson plasma energy
 
 `transmon.plasma_frequency`

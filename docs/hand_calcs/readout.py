@@ -19,8 +19,24 @@ resonator frequency, alpha = anharmonicity (negative for a transmon), kappa = ph
        Gamma_m = 2 kappa chi^2 eps^2 / (kappa^2/4 + chi^2)^2.
    For chi << kappa this is 32 chi^2 eps^2 / kappa^3 = 8 chi^2 n / kappa with n = 4 eps^2/kappa^2,
    gambetta2006 Sec. V.A (Gamma = 2 kappa n theta_0^2, theta_0 = 2 chi / kappa).
+4. Pointer separation. The resonator field obeys
+   d alpha/dt = -i (delta_r +- chi) alpha - (kappa/2) alpha - i eps (H of sim.readout, damping
+   sqrt(kappa) a), so in steady state alpha_+- = -i eps / (kappa/2 + i (delta_r +- chi)), whose
+   |alpha|^2 is gambetta2006 Eq. (5.21). Their difference is -2 eps chi over the product of the
+   denominators:
+       |alpha_e - alpha_g| = 2 eps chi / sqrt(n_+ n_-),
+   n_+- = kappa^2/4 + (delta_r +- chi)^2.
+5. Heterodyne SNR in gambetta2007's convention. Splitting the output into two arms measured
+   through sqrt(kappa/2) a and -i sqrt(kappa/2) a, each record is dY = sqrt(eta) <L + L+> dt + dW,
+   so I + iQ gains sqrt(2 eta kappa) alpha dt with unit-variance noise per quadrature. Along the
+   line joining the two clouds the signal is +-r/2 per unit time, r = sqrt(2 eta kappa) D. Scaling
+   time so the signal is +-1 (gambetta2007 Eqs. 2.1-2.3) gives noise variance tau_f / SNR with
+       tau_f SNR = (r/2)^2 tau = eta kappa tau D^2 / 2.
+   Check: gambetta2007 Eq. (2.6), F = erf(sqrt(tau_f SNR / 2)), is then
+   erf(r sqrt(tau) / (2 sqrt 2)): two Gaussians a distance r tau apart, each of width
+   sqrt(tau), split halfway.
 
-Run this file to redo 1 and 3 with SymPy.
+Run this file to redo 1, 3 and 4 with SymPy.
 """
 
 import sympy as sp
@@ -40,3 +56,11 @@ n_pm = eps**2 / (k**2 / 4 + chi**2)
 gamma = 2 * n_pm * k * chi**2 / (k**2 / 4 + chi**2)
 print("Gamma_m =", sp.simplify(gamma))
 print("leading order in chi:", sp.series(gamma, chi, 0, 3).removeO())  # 32 chi^2 eps^2 / kappa^3
+
+# 4. Pointer separation.
+dr = sp.symbols("delta_r", real=True)
+a_p = -sp.I * eps / (k / 2 + sp.I * (dr + chi))
+a_m = -sp.I * eps / (k / 2 + sp.I * (dr - chi))
+sep = 2 * eps * chi / sp.sqrt((k**2 / 4 + (dr + chi) ** 2) * (k**2 / 4 + (dr - chi) ** 2))
+check = {eps: sp.Rational(3, 10), chi: sp.Rational(1, 2), k: 1, dr: sp.Rational(1, 5)}
+print("|a_e - a_g| - formula =", sp.N(sp.Abs(a_p - a_m).subs(check) - sep.subs(check)))  # 0

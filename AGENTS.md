@@ -31,7 +31,8 @@ src/qubitlab/theory/            cat.py, transmon.py, qubit.py (control and decoh
                                 readout), gates.py (transmon CZ, cat CNOT), qec.py (codes), registry.py (Formula)
 src/qubitlab/sim/               cat.py (Lindblad, Wigner, Liouvillian rates), transmon.py (scqubits spectrum),
                                 transmon_dynamics.py (pulses, T1/T2, Ramsey, echo; 4 levels),
-                                readout.py (dressed chi, measurement dephasing, pointer states),
+                                readout.py (dressed chi, measurement dephasing, pointer states,
+                                heterodyne records with T1 for readout fidelity and drift),
                                 two_qubit.py (transmon CZ, cat CNOT),
                                 qec.py (Stim + PyMatching memory experiments),
                                 pulse_optimizer.py (GRAPE through Dynamiqs + optax),
