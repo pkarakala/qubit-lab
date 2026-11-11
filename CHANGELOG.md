@@ -2,7 +2,7 @@
 
 Notable changes per release. Dates are when the tag was pushed.
 
-## 1.0.0
+## 1.0.0 (2026-11-10)
 
 The first public release: an interactive course in superconducting qubits where every equation is cited and checked against a simulation.
 
