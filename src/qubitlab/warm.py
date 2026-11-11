@@ -111,6 +111,7 @@ def warm() -> int:
         lambda: api.cat_rates(api.RatesRequest(**CAT, kappa_1=0.01, alpha_sq_values=COMPARE_SIZES)),
         lambda: api.qec_shot(d=5, p=0.005, seed=1),
         lambda: api.qec_cat(api.CatCodeRequest(p_phase=0.005, p_bit=0.005 / 1e4)),
+        lambda: api.qec_drift(d=5, p=0.003, factor=10.0),  # views/ErrorCorrection.tsx defaults
         lambda: api.pulse_optimize(api.PulseRequest()),
         api.qec_curves,
         *preset_steps(),

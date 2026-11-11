@@ -119,3 +119,112 @@ def sample_shot(distance: int, p: float, seed: int = 0) -> Shot:
     pairs = [(int(a), int(b)) for a, b in matcher.decode_to_edges_array(det[0])]
     wrong = bool(np.any(matcher.decode(det[0]) != obs[0]))
     return Shot(qubits, detectors, [int(i) for i in np.flatnonzero(det[0])], pairs, wrong)
+
+
+# Each Stim noise channel, the number of qubits it acts on, and its largest meaningful
+# probability: beyond it the channel stops adding randomness (DEPOLARIZE1 at 3/4, DEPOLARIZE2 at
+# 15/16, a bit or phase flip at 1/2).
+NOISE: dict[str, tuple[int, float]] = {
+    "DEPOLARIZE1": (1, 0.75),
+    "DEPOLARIZE2": (2, 15 / 16),
+    "X_ERROR": (1, 0.5),
+    "Z_ERROR": (1, 0.5),
+}
+
+
+def with_hot_qubit(c: stim.Circuit, qubit: int, factor: float) -> stim.Circuit:
+    """The same circuit with every noise channel that touches `qubit` made `factor` times likelier.
+
+    A defect that drifts onto one qubit (a two-level system, say) does this. Stim has no
+    transform for it, so this walks the flattened circuit and splits each noise instruction
+    into the targets it leaves alone and the ones it scales. Detectors and the observable are
+    untouched, so a decoder built for `c` still reads the shots of the result.
+    """
+    out = stim.Circuit()
+    for inst in c.flattened():
+        spec = NOISE.get(inst.name)
+        if spec is None:
+            out.append(inst)
+            continue
+        arity, cap = spec
+        (p,) = inst.gate_args_copy()
+        t = inst.targets_copy()
+        groups = [t[i : i + arity] for i in range(0, len(t), arity)]
+        hit = [any(x.value == qubit for x in g) for g in groups]
+        cold = [x for g, h in zip(groups, hit, strict=True) if not h for x in g]
+        hot = [x for g, h in zip(groups, hit, strict=True) if h for x in g]
+        if cold:
+            out.append(inst.name, cold, p)
+        if hot:
+            out.append(inst.name, hot, min(cap, p * factor))
+    return out
+
+
+def centre_data_qubit(c: stim.Circuit) -> int:
+    """The data qubit nearest the middle of the patch (data qubits sit at odd coordinates)."""
+    coords = c.get_final_qubit_coordinates()
+    data = [q for q, (x, y) in coords.items() if int(x) % 2 == 1 and int(y) % 2 == 1]
+    mx = float(np.mean([coords[q][0] for q in data]))
+    my = float(np.mean([coords[q][1] for q in data]))
+    return int(min(data, key=lambda q: (coords[q][0] - mx) ** 2 + (coords[q][1] - my) ** 2))
+
+
+@dataclass(frozen=True)
+class Drift:
+    """A surface code before and after one qubit got worse, and three decoders' luck with it.
+
+    `before` decodes calibration-time shots with the calibrated model. `stale` decodes the
+    drifted shots with that same, now wrong, model. `informed` decodes them with the true new
+    noise, the best a refit can do. Rates are logical error per shot over `shots` runs; `stale`
+    and `informed` read the same shots, so their difference is not sampling noise.
+    `rates` lists each measure qubit as (x, y, detection rate before, after).
+    """
+
+    distance: int
+    p: float
+    factor: float
+    hot: tuple[float, float]
+    shots: int
+    before: float
+    stale: float
+    informed: float
+    rates: list[tuple[float, float, float, float]]
+
+
+def drift(distance: int, p: float, factor: float, shots: int = 100_000, seed: int = 0) -> Drift:
+    good = circuit("surface", distance, p)
+    q = centre_data_qubit(good)
+    bad = with_hot_qubit(good, q, factor)
+
+    def matcher(c: stim.Circuit) -> pymatching.Matching:
+        dem = c.detector_error_model(decompose_errors=True)
+        return pymatching.Matching.from_detector_error_model(dem)
+
+    det0, obs0 = good.compile_detector_sampler(seed=seed).sample(shots, separate_observables=True)
+    det1, obs1 = bad.compile_detector_sampler(seed=seed + 1).sample(
+        shots, separate_observables=True
+    )
+
+    def wrong(m: pymatching.Matching, det: np.ndarray, obs: np.ndarray) -> float:
+        return float(np.mean(np.any(m.decode_batch(det) != obs, axis=1)))
+
+    # Average each measure qubit's detectors over rounds: detector coordinates are (x, y, round).
+    where = [tuple(v[:2]) for v in good.get_detector_coordinates().values()]
+    sites = sorted(set(where))
+    rates = []
+    for s in sites:
+        cols = [i for i, w in enumerate(where) if w == s]
+        rates.append((s[0], s[1], float(det0[:, cols].mean()), float(det1[:, cols].mean())))
+    x, y = good.get_final_qubit_coordinates()[q]
+    calibrated = matcher(good)
+    return Drift(
+        distance,
+        p,
+        factor,
+        (x, y),
+        shots,
+        before=wrong(calibrated, det0, obs0),
+        stale=wrong(calibrated, det1, obs1),
+        informed=wrong(matcher(bad), det1, obs1),
+        rates=rates,
+    )

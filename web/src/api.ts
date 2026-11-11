@@ -274,6 +274,17 @@ export interface QecShot {
   }
 }
 
+export interface QecDrift {
+  sim: {
+    hot: [number, number]
+    shots: number
+    before: number
+    stale: number
+    informed: number
+    rates: [number, number, number, number][] // x, y, detection rate before, after
+  }
+}
+
 export const useQecCurves = () => useQuery({ queryKey: ['qec-curves'], queryFn: () => get<QecCurves>('/api/qec/curves'), ...forever })
 
 export const useCatCode = (p_phase: number, p_bit: number) =>
@@ -288,6 +299,14 @@ export const useQecShot = (d: number, p: number, seed: number) =>
   useQuery({
     queryKey: ['qec-shot', d, p, seed],
     queryFn: () => get<QecShot>(`/api/qec/shot?d=${d}&p=${p}&seed=${seed}`),
+    placeholderData: keepPreviousData,
+    ...forever,
+  })
+
+export const useQecDrift = (d: number, p: number, factor: number) =>
+  useQuery({
+    queryKey: ['qec-drift', d, p, factor],
+    queryFn: () => get<QecDrift>(`/api/qec/drift?d=${d}&p=${p}&factor=${factor}`),
     placeholderData: keepPreviousData,
     ...forever,
   })

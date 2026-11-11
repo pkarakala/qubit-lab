@@ -27,6 +27,7 @@ A short course in five parts. Each page is one idea, about two minutes, and ends
 - 42 [Two designs, two bets](42-cat-vs-transmon.md)
 - 43 [Noise bias in numbers](43-noise-bias.md)
 - 44 [Error correction](44-error-correction.md)
+- 45 [Noise drift](45-noise-drift.md)
 
 **5. Hardware**
 

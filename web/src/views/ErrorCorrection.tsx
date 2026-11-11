@@ -1,7 +1,7 @@
 // Error correction: the surface code that transmons need, against the repetition code that a
 // biased cat qubit can get away with. Simulation: Stim + PyMatching. Theory: Fowler et al.
 
-import { useCatCode, useQecCurves, useQecShot } from '../api'
+import { useCatCode, useQecCurves, useQecDrift, useQecShot } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
 import { CopyPython, ErrorBanner, FormulaCard, PaperSettings, Segmented, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
@@ -22,6 +22,9 @@ export function ErrorCorrection() {
   const curves = useQecCurves()
   const shot = useQecShot(d, p, seed)
   const cat = useCatCode(pPhase, pPhase / bias)
+  const [factor, setFactor] = useShared('qec.drift', 10)
+  const drift = useQecDrift(d, 0.003, factor)
+  const dr = drift.data?.sim
   const s = shot.data?.sim
   const colors: Record<number, string> = { 3: c.b, 5: c.a, 7: c.c }
 
@@ -83,11 +86,51 @@ export function ErrorCorrection() {
           A transmon has η ≈ 1. Cats reach very large η because bit-flips fall exponentially with photon number (see
           Flip rates). The code fixes phase-flips; bit-flips get through, and more qubits let more through.
         </p>
+        <h3>When the chip drifts</h3>
+        <Slider label="one qubit gets worse by" tex="f" value={factor} min={1} max={30} step={1} format={(v) => `${v}x`} onChange={setFactor} testId="drift" />
+        {dr ? (
+          <>
+            <div style={{ height: 200 }}>
+              <Plot
+                data={[
+                  {
+                    x: dr.rates.map((r) => r[0]),
+                    y: dr.rates.map((r) => r[1]),
+                    mode: 'markers',
+                    type: 'scatter',
+                    name: 'measure qubits',
+                    marker: { size: 14, color: dr.rates.map((r) => r[3] / r[2]), colorscale: 'Reds', cmin: 1, showscale: true, colorbar: { title: { text: 'after / before' }, thickness: 8 } },
+                  },
+                  { x: [dr.hot[0]], y: [dr.hot[1]], mode: 'markers', type: 'scatter', name: 'the bad qubit', marker: { symbol: 'x', size: 12, color: c.c } },
+                ]}
+                layout={layout(theme, {
+                  xaxis: { visible: false },
+                  yaxis: { visible: false, scaleanchor: 'x' },
+                  showlegend: false,
+                  margin: { l: 4, r: 4, t: 4, b: 4 },
+                })}
+                config={CONFIG}
+                useResizeHandler
+                style={{ width: '100%', height: '100%' }}
+              />
+            </div>
+            <p className="small" data-testid="drift-result">
+              Logical error per run at d = {d}, p = 0.3%: {fmt(dr.before)} before. After, the old decoder gets {fmt(dr.stale)}; one that knows the new
+              noise gets {fmt(dr.informed)}.
+            </p>
+          </>
+        ) : (
+          <Solving what="Sampling the drifted chip" />
+        )}
+        <p className="small muted">
+          The neighbours of the bad qubit fire more often, which is how you find it. Refitting the decoder wins some of the loss back; only
+          recalibrating the qubit wins all of it.
+        </p>
         <CopyPython view='qec' inputs={{ p, p_phase: pPhase, p_bit: pPhase / bias }} />
       </aside>
 
       <main className="pane pane-center">
-        <ErrorBanner error={curves.error ?? shot.error ?? cat.error} />
+        <ErrorBanner error={curves.error ?? shot.error ?? cat.error ?? drift.error} />
         <div className="viewport">
           {s ? (
             <SpaceTimeScene qubits={s.qubits} detectors={s.detectors} fired={s.fired} matched={s.matched} theme={theme} />
