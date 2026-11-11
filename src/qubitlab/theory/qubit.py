@@ -16,8 +16,8 @@ import sympy as sp
 from qubitlab.provenance import Kind, Source
 from qubitlab.theory.registry import Formula
 
-t, Omega, Delta, T_1, T_2, T_phi, sigma, alpha, T = sp.symbols(
-    "t Omega Delta T_1 T_2 T_phi sigma alpha T", real=True
+t, Omega, Delta, T_1, T_2, T_phi, sigma, alpha, T, tau = sp.symbols(
+    "t Omega Delta T_1 T_2 T_phi sigma alpha T tau", real=True
 )
 Omega_dot = sp.Symbol("Omegadot_x", real=True)  # prints as \dot{\Omega}_x
 
@@ -144,6 +144,27 @@ flip_probability = Formula(
     valid_when="Exponential (Markovian) decay. Bit-flip counts X and Y errors, phase-flip Z and Y.",
 )
 
+detuned_pi_error = Formula(
+    key="qubit.detuned_pi_error",
+    title="Error of a pi pulse made for zero detuning, run at a small detuning",
+    lhs=r"1 - \bar F",
+    expr=sp.Mul(sp.Rational(2, 3), (sp.pi * Delta * tau) ** 2, evaluate=False),
+    args=(Delta, tau),
+    sources=(
+        Source("pedersen2007", Kind.PEER_REVIEWED, "Eq. (3)", "Gate fidelity, n = 2."),
+        hand(
+            "Step 8: first order in Delta in the frame of the ideal pulse. "
+            "tau = integral of sin(phi(t)) dt, phi the rotation so far; "
+            "tau = 2T/pi for a square pulse."
+        ),
+    ),
+    valid_when=(
+        "Two levels, symmetric pulse about x, pi Delta tau << 1. For one sign of Delta, the "
+        "pulse's own error e0 at Delta = 0 adds about ±2 sqrt(e0 / (1 - F)) relative; the mean "
+        "over ±Delta cancels it."
+    ),
+)
+
 ALL = (
     rabi_population,
     t1_decay,
@@ -153,4 +174,5 @@ ALL = (
     drag_quadrature,
     idle_fidelity,
     flip_probability,
+    detuned_pi_error,
 )
