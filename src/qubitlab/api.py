@@ -662,6 +662,29 @@ def qec_shot(d: int = 5, p: float = 0.005, seed: int = 0) -> dict[str, Any]:
 
 
 @disk_cached
+def _drift(d: int, p: float, factor: float) -> dict[str, Any]:
+    r = qec_sim.drift(d, p, factor, QEC_SHOTS)
+    return {
+        "sim": {
+            "hot": r.hot,
+            "shots": r.shots,
+            "before": r.before,
+            "stale": r.stale,
+            "informed": r.informed,
+            "rates": r.rates,
+        }
+    }
+
+
+@app.get("/api/qec/drift")
+def qec_drift(d: int = 5, p: float = 0.003, factor: float = 10.0) -> dict[str, Any]:
+    """One qubit drifts f times noisier: the old decoder against one that knows the new noise."""
+    if d not in (3, 5, 7) or not 0 < p <= 0.01 or not 1 <= factor <= 30:
+        raise HTTPException(422, "d must be 3, 5 or 7, 0 < p <= 0.01 and 1 <= factor <= 30")
+    return _drift(d, p, factor)
+
+
+@disk_cached
 def _compare(t_ns: float) -> dict[str, Any]:
     rows = []
     for d in DEVICES:

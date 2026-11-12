@@ -33,7 +33,7 @@ src/qubitlab/sim/               cat.py (Lindblad, Wigner, Liouvillian rates), tr
                                 transmon_dynamics.py (pulses, T1/T2, Ramsey, echo; 4 levels),
                                 readout.py (dressed chi, measurement dephasing, pointer states),
                                 two_qubit.py (transmon CZ, cat CNOT),
-                                qec.py (Stim + PyMatching memory experiments),
+                                qec.py (Stim + PyMatching memory experiments, one qubit drifting),
                                 pulse_optimizer.py (GRAPE through Dynamiqs + optax),
                                 spectra.py (gallery spectra), custom.py (Playground models)
 src/qubitlab/checks/            base.py, then one file per topic: cat, transmon, qubit, readout, gate, qec

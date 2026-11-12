@@ -73,6 +73,11 @@ def test_qec_shot_seed_must_fit_stim() -> None:
     assert client.get("/api/qec/shot", params={"d": 3, "seed": 2**64 - 1}).status_code == 200
 
 
+def test_qec_drift_bounds() -> None:
+    for params in ({"d": 9}, {"p": 0.02}, {"factor": 0.5}, {"factor": 31}):
+        assert client.get("/api/qec/drift", params=params).status_code == 422
+
+
 def test_qubit_t1_run_has_theory_curve() -> None:
     body = {"experiment": "t1", "t1_ns": 100.0, "t2_ns": 150.0, "t_max_ns": 100.0, "n_points": 11}
     data = client.post("/api/qubit/run", json=body).json()
