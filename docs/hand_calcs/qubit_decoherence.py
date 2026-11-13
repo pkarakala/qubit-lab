@@ -27,8 +27,24 @@ Model, the same one `qubitlab.sim.transmon_dynamics` solves with more levels kep
    Transmon: R_Z = g (T1), R_X = c (T2). Cat: R_Z = exp(-t/T_X), R_X = exp(-t/T_Z), the
    definitions of T_X and T_Z in reglade2024 (Fig. 3 caption). Then
        p_phase / p_bit -> T_bit / T_phase for t << T, the noise bias.
+8. Pi pulse at a small, unknown detuning. The pulse Omega_x(t) was made for Delta = 0 and
+   rotates the qubit about x by phi(t) = 2 pi int_0^t Omega_x, with phi(T) = pi. Write
+   Delta |1><1| = Delta (1 - sigma_z) / 2 and drop the identity (a global phase). In the frame
+   of the ideal pulse, sigma_z becomes cos(phi) sigma_z + sin(phi) sigma_y (up to signs), so to
+   first order in Delta the gate is X exp(-i v.sigma) with
+       v = pi Delta (int_0^T cos(phi) dt, int_0^T sin(phi) dt).
+   For U = X exp(-i v.sigma), Tr(X^dagger U) = 2 cos|v|, and pedersen2007 Eq. (3) with
+   Tr(M M^dagger) = 2 gives 1 - F = (2/3) sin^2|v| = (2/3)|v|^2 + O(|v|^4).
+   A symmetric envelope has phi(T - t) = pi - phi(t), so the cosine integral vanishes and
+       1 - F = (2/3) (pi Delta tau)^2,   tau = int_0^T sin(phi(t)) dt.
+   Square pulse of length T = 1/(2 Omega): tau = 2T/pi, so 1 - F = (2/3)(Delta/Omega)^2,
+   which the exact Rabi solution of step 1 confirms below.
+   A real pulse also has its own small error at Delta = 0, a vector v0. Then
+   1 - F = (2/3)|v0 + v|^2: the cross term (4/3) v0.v is odd in Delta, of relative size about
+   2 |v0| / |v| = 2 sqrt(e0 / (1 - F)) with e0 the error at Delta = 0. The mean of 1 - F over
+   +Delta and -Delta cancels it.
 
-Run this file to redo steps 1, 3, 4, 6 and 7 with SymPy.
+Run this file to redo steps 1, 3, 4, 6, 7 and 8 with SymPy.
 """
 
 import sympy as sp
@@ -83,3 +99,15 @@ R_Z = sp.expand((Z * pauli_channel(Z)).trace() / 2).subs(pI, 1 - pX - pY - pZ)
 R_X = sp.expand((X * pauli_channel(X)).trace() / 2).subs(pI, 1 - pX - pY - pZ)
 print("p_bit - (pX + pY) =", sp.simplify((1 - R_Z) / 2 - (pX + pY)))  # 0
 print("p_phase - (pZ + pY) =", sp.simplify((1 - R_X) / 2 - (pZ + pY)))  # 0
+
+# 8. Square pi pulse at detuning Delta = eps * Omega: exact 1 - F from pedersen2007 Eq. (3),
+# then its leading term in eps. U is the propagator of H from step 1 at t = 1/(2 Omega).
+eps = sp.symbols("epsilon", positive=True)
+U8 = U.subs({de: eps * om, t: 1 / (2 * om)})
+M8 = X * U8  # X^dagger U
+F8 = ((M8 * M8.H).trace() + sp.Abs(M8.trace()) ** 2) / 6
+err8 = sp.series(sp.simplify(1 - F8.subs(om, 1)), eps, 0, 4).removeO()
+print("square pulse 1 - F =", sp.simplify(err8))  # 2 eps^2 / 3
+# The general formula with tau = 2T/pi, T = 1/(2 Omega): (2/3)(pi Delta tau)^2 = (2/3) eps^2.
+tau8 = 2 * (1 / (2 * om)) / sp.pi
+print("formula / exact:", sp.simplify(2 * (sp.pi * eps * om * tau8) ** 2 / 3 / err8))  # 1

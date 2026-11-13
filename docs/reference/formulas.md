@@ -373,6 +373,19 @@ Valid when: Exponential (Markovian) decay. Bit-flip counts X and Y errors, phase
 - qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 7: Pauli twirl. Bit-flip: T = T1 (transmon) or T_X (cat). Phase-flip: T = T2 or T_Z.
 - [reglade2024](https://doi.org/10.1038/s41586-024-07294-3), Fig. 3 caption (peer_reviewed). T_X and T_Z are exponential decay times of <Z_alpha> and <X_alpha>.
 
+## Error of a pi pulse made for zero detuning, run at a small detuning
+
+`qubit.detuned_pi_error`
+
+```latex
+1 - \bar F = \frac{2 \pi^{2} \Delta^{2} \tau^{2}}{3}
+```
+
+Valid when: Two levels, symmetric pulse about x, pi Delta tau << 1. For one sign of Delta, the pulse's own error e0 at Delta = 0 adds about ±2 sqrt(e0 / (1 - F)) relative; the mean over ±Delta cancels it.
+
+- [pedersen2007](https://doi.org/10.1016/j.physleta.2007.02.069), Eq. (3) (peer_reviewed). Gate fidelity, n = 2.
+- qubitlab_hand_calcs, docs/hand_calcs/qubit_decoherence.py (derived). Step 8: first order in Delta in the frame of the ideal pulse. tau = integral of sin(phi(t)) dt, phi the rotation so far; tau = 2T/pi for a square pulse.
+
 ## Dispersive shift of a two-level qubit
 
 `readout.chi_two_level`

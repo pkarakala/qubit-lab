@@ -8,7 +8,10 @@ from __future__ import annotations
 
 import math
 
+import numpy as np
+
 from qubitlab.checks.base import CheckResult, Verdict, check
+from qubitlab.sim import pulse_optimizer as po
 from qubitlab.sim import transmon_dynamics as sim
 from qubitlab.theory import qubit as th
 
@@ -175,4 +178,44 @@ def flip_probability() -> list[CheckResult]:
                     expected=expected,
                 )
             )
+    return out
+
+
+@check("qubit.detuned_pi_error")
+def detuned_pi_error() -> list[CheckResult]:
+    out = []
+    # (pulse length T, alpha, Delta). Gaussian DRAG pi pulse made for Delta = 0, run at Delta.
+    # Hand estimate: sigma = T/4 gives tau ~ 2 sigma = T/2, and peak Omega ~ 21 MHz at T = 40 ns.
+    # Predicted before running:
+    # - 40 ns, alpha = -3 GHz, 3 MHz: pi Delta tau ~ 0.19, next order ~ 1%; the level-2 Stark
+    #   shift moves Delta by ~1.5%, so ~3% in the error. AGREE at 5%.
+    # - 40 ns, alpha = -3 GHz, 15 MHz: pi Delta tau ~ 0.94; sin^2 vs square differ by ~25%. DIVERGE.
+    # - 6 ns, alpha = -200 MHz, 3 MHz: the DRAG pulse alone has 8.7% error (docs/learn/32),
+    #   far above the ~1e-3 from detuning. DIVERGE.
+    # Finding (first run, at +Delta only): the first regime came out 5.1% low, a DIVERGE. At
+    # -Delta it is 3.1% high. The pulse's own error at Delta = 0 (7.5e-6, from level 2) adds a
+    # cross term odd in Delta, of relative size ~2 sqrt(7.5e-6 / 0.017) = 4% (hand calc step 8).
+    # The formula is the even part, so the sim number is now the mean over +Delta and -Delta.
+    # That mean was 1.0% low on the same run, so the first regime AGREEs after the change.
+    regimes = ((40.0, -3.0, 0.003, A), (40.0, -3.0, 0.015, D), (6.0, -0.2, 0.003, D))
+    for t_ns, alpha, delta, expected in regimes:
+        q = sim.TransmonQubit(alpha_ghz=alpha)
+        edges, ox, oy = po.drag_slices(q, t_ns, 4 * int(t_ns))
+        phi = np.concatenate([[0.0], np.cumsum(2 * math.pi * ox * np.diff(edges))])
+        tau = float(np.trapezoid(np.sin(phi), edges))
+        error = sum(po.gate_error(q, edges, ox, oy, d)[0] for d in (delta, -delta)) / 2
+        out.append(
+            CheckResult(
+                key=f"qubit.detuned_pi_error.{t_ns:g}.{alpha:g}.{delta:g}",
+                formula=th.detuned_pi_error.key,
+                regime=(
+                    f"Gaussian DRAG π pulse, T = {t_ns:g} ns, α = {alpha * 1e3:g} MHz, "
+                    f"Δ = ±{delta * 1e3:g} MHz, mean"
+                ),
+                theory=float(th.detuned_pi_error(Delta=delta, tau=tau)),
+                sim=error,
+                rel_tol=0.05,
+                expected=expected,
+            )
+        )
     return out
