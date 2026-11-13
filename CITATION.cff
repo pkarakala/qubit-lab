@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use qubitlab, please cite it as below."
 title: "Qubit Lab: an open-source simulator for learning superconducting qubits"
 version: 1.0.0
-date-released: "2026-11-10"
+date-released: "2026-11-13"
 authors:
   - family-names: Reddy
     given-names: Pranav
