@@ -2,7 +2,7 @@
 
 Notable changes per release. Dates are when the tag was pushed.
 
-## 1.0.0 (2026-11-10)
+## 1.0.0 (2026-11-13)
 
 The first public release: an interactive course in superconducting qubits where every equation is cited and checked against a simulation.
 
@@ -13,7 +13,7 @@ The first public release: an interactive course in superconducting qubits where 
 - Transmons: scqubits spectra against Koch et al. 2007, control on a 4-level transmon (Rabi, DRAG, T1, Ramsey, echo), GRAPE pulse design through Dynamiqs with optax.
 - Readout: χ from the dressed spectrum against three textbook formulas, pointer states in the IQ plane, measurement-induced dephasing against Gambetta et al. 2006.
 - Two-qubit gates: a transmon CZ through the 11-20 crossing, always-on ZZ, and a bias-preserving cat CNOT against Guillaud and Mirrahimi 2019 and Chamberland et al. 2022.
-- Error correction: surface and repetition code memories with Stim and PyMatching, and a repetition code of cats.
+- Error correction: surface and repetition code memories with Stim and PyMatching, a repetition code of cats, and what a drifting qubit does to a calibrated decoder.
 - Architecture gallery: six designs (Xmon, tantalum transmon, tunable coupler, fluxonium, dissipative cat, Kerr cat) as 3D chips that explode into layers, every size cited or marked schematic.
 
 **Checks.** 94 comparisons of a formula with a simulation, each with its verdict predicted before the run, all as predicted. Listed in the Checks view and docs/reference/checks.md.
