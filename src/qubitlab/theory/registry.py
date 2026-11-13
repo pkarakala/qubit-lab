@@ -19,7 +19,7 @@ from qubitlab.provenance import Source
 FORMULAS: dict[str, Formula] = {}
 
 # SymPy maps a few functions to the math module, which JAX cannot trace.
-_JAX_EXTRAS = {"gamma": jsp.gamma, "factorial": lambda n: jsp.gamma(n + 1)}
+_JAX_EXTRAS = {"gamma": jsp.gamma, "erf": jsp.erf, "factorial": lambda n: jsp.gamma(n + 1)}
 
 
 @dataclass(eq=False)

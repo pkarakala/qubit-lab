@@ -17,6 +17,7 @@ import math
 from dataclasses import dataclass
 
 import dynamiqs as dq
+import jax
 import jax.numpy as jnp
 import numpy as np
 import scqubits
@@ -117,3 +118,82 @@ def pointer_trajectories(
         e = np.asarray(res.expects)
         out[sign] = (e[0], e[1].real)
     return Pointers(np.asarray(t), out[-1][0], out[1][0], out[-1][1], out[1][1])
+
+
+@dataclass(frozen=True)
+class Readout:
+    """A dispersive readout, in any one frequency unit, with times in its inverse.
+
+    Drive at omega_r - delta_r with amplitude eps; the resonator sits at +chi with the qubit in
+    |e> and -chi in |g>. The output is split for heterodyne detection with efficiency eta.
+    """
+
+    chi: float
+    kappa: float
+    eps: float
+    tau: float  # integration time
+    delta_r: float = 0.0
+    eta: float = 1.0
+    t1: float = math.inf
+    photons: int = 10
+    dt: float = 0.01  # solver step, in 1 / kappa units of time; tau / bins a multiple of it
+
+    def __post_init__(self) -> None:
+        if not 0 < self.eta <= 1:
+            raise ValueError("eta must be in (0, 1]")
+        if self.kappa <= 0 or self.tau <= 0 or self.t1 <= 0:
+            raise ValueError("kappa, tau and T1 must be positive")
+
+
+def records(
+    r: Readout, excited: bool, shots: int, seed: int = 0, bins: int = 1
+) -> NDArray[np.complex128]:
+    """Heterodyne records I + iQ, one row per shot and one column per time bin.
+
+    Each entry is the record integrated over its bin: the signal sqrt(2 eta kappa) <a> dt plus
+    unit-variance white noise in each quadrature (the dY of `dq.dssesolve`). Summing a row
+    gives the box-car signal. The qubit starts in |e> or |g>, with the resonator empty.
+
+    Dynamiqs integrates the stochastic Schrodinger equation, with the qubit's T1 as a third
+    channel whose record is dropped. The resonator records do not depend on how that channel is
+    unravelled, so they have the statistics of the master equation. `measurements_sse_to_sme`
+    then adds the noise of an efficiency eta < 1.
+
+    The solver is Rouchon1 (Euler-Maruyama let about 1 trajectory in 400 blow up to NaN at
+    tau = 40 / kappa). It is first order in dt: the mean field comes out about 1% low at the
+    default dt = 0.01 / kappa and 5% low at 0.05 / kappa (tests/test_readout_records.py).
+    """
+    a = dq.tensor(dq.eye(2), dq.destroy(r.photons))
+    sz = dq.tensor(dq.sigmaz(), dq.eye(r.photons))  # +1 is |e> = basis 0 (dq.sigmam lowers it)
+    H = r.delta_r * a.dag() @ a + r.chi * sz @ a.dag() @ a + r.eps * (a + a.dag())
+    half = math.sqrt(r.kappa / 2)
+    jumps = [half * a, -1j * half * a]
+    if math.isfinite(r.t1):
+        jumps.append(math.sqrt(1 / r.t1) * dq.tensor(dq.sigmam(), dq.eye(r.photons)))
+    psi0 = dq.tensor(dq.basis(2, 0 if excited else 1), dq.basis(r.photons, 0))
+    tsave = jnp.linspace(0.0, r.tau, bins + 1)
+    keys = jax.random.split(jax.random.key(seed), shots + 1)
+    res = dq.dssesolve(
+        H, jumps, psi0, tsave, keys[:-1], method=dq.method.Rouchon1(dt=r.dt), save_states=False
+    )
+    m = res.measurements[:, :2]  # (shots, 2, bins): bin averages of dY / dt
+    if r.eta < 1:
+        m = dq.measurements_sse_to_sme(m, tsave, jnp.asarray([r.eta, r.eta]), keys[-1])
+    m = np.asarray(m) * (r.tau / bins)
+    if not np.isfinite(m).all():
+        raise FloatingPointError("a trajectory diverged; lower dt or raise photons")
+    return m[:, 0] + 1j * m[:, 1]
+
+
+def assignment_fidelity(g: NDArray[np.complex128], e: NDArray[np.complex128]) -> float:
+    """1 - P(e|g) - P(g|e) for box-car signals (rows summed), split halfway between the means.
+
+    The split is a line through the midpoint, normal to the line joining the two means: the
+    best linear split for two Gaussian clouds of equal, round width. Written here because
+    NumPy and SciPy have no two-class discriminator; it is three lines.
+    """
+    s_g, s_e = g.sum(axis=-1) if g.ndim > 1 else g, e.sum(axis=-1) if e.ndim > 1 else e
+    mid, axis = (s_g.mean() + s_e.mean()) / 2, s_e.mean() - s_g.mean()
+    p_e = np.mean(np.real((s_e - mid) * np.conj(axis)) > 0)  # P(e|e)
+    p_g = np.mean(np.real((s_g - mid) * np.conj(axis)) > 0)  # P(e|g)
+    return float(p_e - p_g)
