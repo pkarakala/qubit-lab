@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import jax
+import jax.numpy as jnp
 import jax.scipy.special as jsp
 import sympy as sp
 
@@ -18,8 +19,26 @@ from qubitlab.provenance import Source
 
 FORMULAS: dict[str, Formula] = {}
 
+
+def _elliptic_k(m: Any) -> Any:
+    """Complete elliptic integral K(m), m = k^2, as SymPy's elliptic_k defines it.
+
+    JAX has no ellipk, so this uses the arithmetic-geometric mean, K = pi / (2 AGM(1, sqrt(1-m))),
+    which converges quadratically: six steps reach double precision for m < 0.999.
+    """
+    a, b = jnp.ones_like(m), jnp.sqrt(1 - m)
+    for _ in range(6):
+        a, b = (a + b) / 2, jnp.sqrt(a * b)
+    return jnp.pi / (2 * a)
+
+
 # SymPy maps a few functions to the math module, which JAX cannot trace.
-_JAX_EXTRAS = {"gamma": jsp.gamma, "erf": jsp.erf, "factorial": lambda n: jsp.gamma(n + 1)}
+_JAX_EXTRAS = {
+    "gamma": jsp.gamma,
+    "erf": jsp.erf,
+    "factorial": lambda n: jsp.gamma(n + 1),
+    "elliptic_k": _elliptic_k,
+}
 
 
 @dataclass(eq=False)

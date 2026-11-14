@@ -46,6 +46,9 @@ requires = ["uv_build>=0.11.32,<0.12.0"]
 build-backend = "uv_build"
 
 [dependency-groups]
+chip = [
+    "gmsh>=4.15.2",
+]
 dev = [
     "httpx>=0.28.1",
     "hypothesis>=6.170.5",

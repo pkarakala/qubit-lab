@@ -28,7 +28,8 @@ Rules for coding agents (and people) working in this repo. Humans start at [READ
 ```
 src/qubitlab/provenance.py      Source, Kind, bib parser
 src/qubitlab/theory/            cat.py, transmon.py, qubit.py (control and decoherence), readout.py (dispersive
-                                readout), gates.py (transmon CZ, cat CNOT), qec.py (codes), registry.py (Formula)
+                                readout), gates.py (transmon CZ, cat CNOT), qec.py (codes), chip.py (capacitors,
+                                CPW resonators, coupling), registry.py (Formula)
 src/qubitlab/sim/               cat.py (Lindblad, Wigner, Liouvillian rates), transmon.py (scqubits spectrum),
                                 transmon_dynamics.py (pulses, T1/T2, Ramsey, echo; 4 levels),
                                 readout.py (dressed chi, measurement dephasing, pointer states,
@@ -36,11 +37,12 @@ src/qubitlab/sim/               cat.py (Lindblad, Wigner, Liouvillian rates), tr
                                 two_qubit.py (transmon CZ, cat CNOT),
                                 qec.py (Stim + PyMatching memory experiments, one qubit drifting),
                                 pulse_optimizer.py (GRAPE through Dynamiqs + optax),
-                                spectra.py (gallery spectra), custom.py (Playground models)
-src/qubitlab/checks/            base.py, then one file per topic: cat, transmon, qubit, readout, gate, qec
+                                spectra.py (gallery spectra), custom.py (Playground models),
+                                chip.py (reads the Palace results in data/chip.json)
+src/qubitlab/checks/            base.py, then one file per topic: cat, transmon, qubit, readout, gate, qec, chip
 src/qubitlab/data/              references.bib (every Source), presets.json (published settings),
                                 checks.json and solves.json (shipped check results and slow solves),
-                                architectures/ (gallery designs)
+                                architectures/ (gallery designs), chip.json (Palace results)
 src/qubitlab/api.py             FastAPI for the explorer
 src/qubitlab/serve.py, cli.py   `qubitlab serve` (API and built explorer on one port), `qubitlab checks`
 src/qubitlab/cache.py, warm.py  disk cache for slow solves; warm-up of what the explorer opens with
@@ -52,7 +54,8 @@ docs/learn/                   human layer, one screen per page
 docs/reference/               generated: formulas, checks (scripts/make_reference.py)
 docs/hand_calcs/              derivations behind DERIVED sources
 scripts/                      make_reference.py (docs/reference/, checks.json), make_snapshots.py (solves.json),
-                              smoke_wheel.sh (installed-wheel check), dev.sh
+                              smoke_wheel.sh (installed-wheel check), dev.sh,
+                              palace/ (Gmsh geometry and Palace runs behind chip.json; needs Palace)
 web/                          React + three.js explorer
 ```
 
@@ -64,5 +67,6 @@ uv run ruff format . && uv run ruff check . && uv run mypy && uv run pytest -q
 uv run pytest -q -m "not slow"                 # quick loop, under a minute
 uv run python scripts/make_reference.py        # after changing a formula or check
 uv run python scripts/make_snapshots.py        # after changing sim/; about half an hour
+uv run --group chip python scripts/palace/run.py   # Palace solves -> data/chip.json; hours, about 11 GB
 cd web && npm run typecheck && npm run test:unit && npm run e2e
 ```
