@@ -1,6 +1,6 @@
 [project]
 name = "qubitlab"
-version = "1.0.0"
+version = "1.1.0"
 description = "An open-source simulator for learning superconducting qubits: cited theory, checked against Dynamiqs, scqubits and Stim, in a 3D explorer"
 readme = "README.md"
 authors = [
