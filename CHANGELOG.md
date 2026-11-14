@@ -2,6 +2,14 @@
 
 Notable changes per release. Dates are when the tag was pushed.
 
+## 1.1.0 (2026-11-14)
+
+**Readout.** Single-shot readout records: heterodyne IQ shots for a qubit prepared in |g⟩ or |e⟩, simulated with Dynamiqs' diffusive stochastic Schrödinger equation, with finite measurement efficiency and T1 decay during the window. Assignment fidelity is checked against Gambetta et al. 2007, Eqs. (2.6) and (3.8). Changing χ, the resonator detuning, η or T1 between batches gives a drifting readout.
+
+**Pulses.** A pulse designed for one anharmonicity and frequency can be scored on the true model, and GRAPE can average over several models to make a pulse robust (Kobzar et al. 2004). The detuned-π error (2/3)(πΔτ)² is derived in the hand calcs and checked.
+
+**Checks.** 102 comparisons, all as predicted.
+
 ## 1.0.0 (2026-11-13)
 
 The first public release: an interactive course in superconducting qubits where every equation is cited and checked against a simulation.
