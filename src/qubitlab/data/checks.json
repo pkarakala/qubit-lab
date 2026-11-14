@@ -1,5 +1,5 @@
 {
- "fingerprint": "550c03efaeed8f40",
+ "fingerprint": "473bddebe25d9613",
  "results": [
   {
    "key": "cat.wigner.even_cat.origin.n1",
@@ -761,6 +761,39 @@
    "expected": "DIVERGE"
   },
   {
+   "key": "qubit.detuned_pi_error.40.-3.0.003",
+   "formula": "qubit.detuned_pi_error",
+   "regime": "Gaussian DRAG \u03c0 pulse, T = 40 ns, \u03b1 = -3000 MHz, \u0394 = \u00b13 MHz, mean",
+   "theory": 0.01669085932921275,
+   "sim": 0.016520892366699513,
+   "rel_error": 0.010183236175009635,
+   "rel_tol": 0.05,
+   "verdict": "AGREE",
+   "expected": "AGREE"
+  },
+  {
+   "key": "qubit.detuned_pi_error.40.-3.0.015",
+   "formula": "qubit.detuned_pi_error",
+   "regime": "Gaussian DRAG \u03c0 pulse, T = 40 ns, \u03b1 = -3000 MHz, \u0394 = \u00b115 MHz, mean",
+   "theory": 0.4172714832303188,
+   "sim": 0.3196606041503039,
+   "rel_error": 0.2339265514248843,
+   "rel_tol": 0.05,
+   "verdict": "DIVERGE",
+   "expected": "DIVERGE"
+  },
+  {
+   "key": "qubit.detuned_pi_error.6.-0.2.0.003",
+   "formula": "qubit.detuned_pi_error",
+   "regime": "Gaussian DRAG \u03c0 pulse, T = 6 ns, \u03b1 = -200 MHz, \u0394 = \u00b13 MHz, mean",
+   "theory": 0.00037426117312434854,
+   "sim": 0.08762831017986228,
+   "rel_error": 233.13679129025684,
+   "rel_tol": 0.05,
+   "verdict": "DIVERGE",
+   "expected": "DIVERGE"
+  },
+  {
    "key": "readout.chi_transmon.50.7",
    "formula": "readout.chi_transmon",
    "regime": "E_J/E_C = 50, f_q = 5.68 GHz, f_r = 7 GHz, g = 54 MHz",
@@ -913,6 +946,61 @@
    "rel_tol": 0.001,
    "verdict": "AGREE",
    "expected": "AGREE"
+  },
+  {
+   "key": "readout.fidelity.long",
+   "formula": "readout.fidelity",
+   "regime": "chi/kappa = 0.5, kappa tau = 60, eta = 1, T1/tau = inf, tau_f SNR = 1.07",
+   "theory": 0.6990545541974558,
+   "sim": 0.6798333333333333,
+   "rel_error": 0.027496024092410434,
+   "rel_tol": 0.05,
+   "verdict": "AGREE",
+   "expected": "AGREE"
+  },
+  {
+   "key": "readout.fidelity.eta",
+   "formula": "readout.fidelity",
+   "regime": "chi/kappa = 0.5, kappa tau = 60, eta = 0.5, T1/tau = inf, tau_f SNR = 1.07",
+   "theory": 0.699054554197456,
+   "sim": 0.6821666666666666,
+   "rel_error": 0.024158182547251134,
+   "rel_tol": 0.05,
+   "verdict": "AGREE",
+   "expected": "AGREE"
+  },
+  {
+   "key": "readout.fidelity.short",
+   "formula": "readout.fidelity",
+   "regime": "chi/kappa = 0.5, kappa tau = 2, eta = 1, T1/tau = inf, tau_f SNR = 1.07",
+   "theory": 0.6988638367665916,
+   "sim": 0.16899999999999998,
+   "rel_error": 0.7581789311321268,
+   "rel_tol": 0.05,
+   "verdict": "DIVERGE",
+   "expected": "DIVERGE"
+  },
+  {
+   "key": "readout.fidelity_t1.t1",
+   "formula": "readout.fidelity_t1",
+   "regime": "chi/kappa = 0.5, kappa tau = 40, eta = 1, T1/tau = 5, tau_f SNR = 20",
+   "theory": 0.9048304107791594,
+   "sim": 0.9131666666666667,
+   "rel_error": 0.009213058920432242,
+   "rel_tol": 0.03,
+   "verdict": "AGREE",
+   "expected": "AGREE"
+  },
+  {
+   "key": "readout.fidelity.t1",
+   "formula": "readout.fidelity",
+   "regime": "chi/kappa = 0.5, kappa tau = 40, eta = 1, T1/tau = 5, tau_f SNR = 20",
+   "theory": 0.999992255783569,
+   "sim": 0.9131666666666667,
+   "rel_error": 0.08682626151826339,
+   "rel_tol": 0.03,
+   "verdict": "DIVERGE",
+   "expected": "DIVERGE"
   },
   {
    "key": "transmon.qubit_frequency.100",
