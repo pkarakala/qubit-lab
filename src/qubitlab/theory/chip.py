@@ -131,6 +131,17 @@ coupling_g = Formula(
     valid_when="C_g much smaller than C_Sigma and C_r; E_J/E_C large; f_q near f_r.",
 )
 
+coupling_g_n = Formula(
+    key="chip.coupling_g_n",
+    title="Coupling to the charge operator, from the capacitances",
+    lhs=r"g_n/2\pi",
+    expr=2 * (C_g / C_S) * e * sp.sqrt(h * f_r / (2 * C_r)) / h,
+    args=(C_g, C_S, e, h, f_r, C_r),
+    sources=(koch("Eq. (3.1), the term 2 beta e V_rms n (a + a+)"),),
+    valid_when="C_g much smaller than C_Sigma and C_r. No E_J/E_C limit: the matrix elements of n "
+    "are left to the transmon spectrum.",
+)
+
 ALL = (
     parallel_plate,
     cpw_effective_permittivity,
@@ -141,4 +152,5 @@ ALL = (
     josephson_energy,
     harmonic_frequency,
     coupling_g,
+    coupling_g_n,
 )

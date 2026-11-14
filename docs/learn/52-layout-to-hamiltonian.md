@@ -12,6 +12,6 @@ A transmon's Hamiltonian has two numbers, E_C and E_J. The layout sets E_C, and 
 
 **Coupling.** Sweep L_J until the qubit meets the resonator. The two modes repel each other, and half the smallest gap is the coupling g. Koch et al. give g in terms of C_g, C_Σ and the resonator capacitance. The Checks view compares the two.
 
-**Try it.** In *Architectures*, open *Simulated transmon* and explode it. Its levels come from the Palace capacitance. Then open *Checks* and scroll to the chip rows.
+**Try it.** In *Readout*, pick the simulated layout: χ is only 52 kHz, because the big pad and the 4 GHz detuning both weaken it. Then explode *Simulated transmon* in *Architectures*.
 
 Sources: goeppl2008 (Eqs. 1, 3-5, 12), koch2007 (Eqs. 2.1, 2.11, 3.3, 3.4), palace2026, geuzaine2009, qubitlab_hand_calcs.

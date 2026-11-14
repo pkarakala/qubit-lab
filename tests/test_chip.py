@@ -64,3 +64,28 @@ def test_gallery_scene_uses_the_palace_capacitance() -> None:
     E_J = float(th.josephson_energy(h=K["h"], e=K["e"], L_J=sim.gallery_modes()[0])) / 1e9
     assert p["E_C"] == pytest.approx(E_C, rel=2e-3)
     assert p["E_J"] == pytest.approx(E_J, rel=2e-3)
+
+
+def test_presets_use_the_palace_numbers() -> None:
+    from qubitlab.warm import presets
+
+    caps, cross = sim.capacitances(), sim.crossing()
+    E_C = float(th.charging_energy(e=K["e"], C_Sigma=caps.C_sigma, h=K["h"])) / 1e9
+    E_J = float(th.josephson_energy(h=K["h"], e=K["e"], L_J=sim.gallery_modes()[0])) / 1e9
+    g_n = th.coupling_g_n(
+        C_g=caps.C_g, C_Sigma=caps.C_sigma, e=K["e"], h=K["h"], f_r=cross.f_r, C_r=caps.C_line / 2
+    )
+    palace = [p for p in presets() if "palace2026" in p["refs"]]
+    assert {p["view"] for p in palace} == {"transmon", "readout"}
+    for p in palace:
+        q = p["params"]
+        if p["view"] == "transmon":
+            assert (q["E_J"], q["E_C"]) == (
+                pytest.approx(E_J, rel=2e-3),
+                pytest.approx(E_C, rel=2e-3),
+            )
+        else:
+            assert q["ratio"] == pytest.approx(E_J / E_C, rel=2e-3)
+            assert q["E_C"] == pytest.approx(E_C, rel=2e-3)
+            assert q["f_r"] == pytest.approx(cross.f_r / 1e9, rel=2e-3)
+            assert q["g_n"] == pytest.approx(float(g_n) / 1e9, rel=2e-3)

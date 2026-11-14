@@ -1169,6 +1169,36 @@
    "refs": [
     "putterman2025"
    ]
+  },
+  {
+   "view": "transmon",
+   "name": "Simulated layout: 400 um pad, 12 nH (Palace)",
+   "params": {
+    "E_J": 13.62,
+    "E_C": 0.0976
+   },
+   "refs": [
+    "palace2026",
+    "koch2007"
+   ]
+  },
+  {
+   "view": "readout",
+   "name": "Simulated layout: 400 um pad, 12 nH, 8 mm resonator (Palace)",
+   "params": {
+    "ratio": 139.6,
+    "E_C": 0.0976,
+    "f_r": 7.38,
+    "g_n": 0.0466,
+    "kappa_mhz": 0.1,
+    "n_bar": 1.0,
+    "delta_r_mhz": 0.0
+   },
+   "refs": [
+    "palace2026",
+    "koch2007",
+    "goeppl2008"
+   ]
   }
  ]
 }

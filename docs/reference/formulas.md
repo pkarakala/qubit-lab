@@ -273,6 +273,18 @@ Valid when: C_g much smaller than C_Sigma and C_r; E_J/E_C large; f_q near f_r.
 - qubitlab_hand_calcs, docs/hand_calcs/chip.py (derived). step 5
 - [koch2007](https://doi.org/10.1103/PhysRevA.76.042319), Eqs. (3.1), (3.3), (3.4) (peer_reviewed).
 
+## Coupling to the charge operator, from the capacitances
+
+`chip.coupling_g_n`
+
+```latex
+g_n/2\pi = \frac{C_{g} e \sqrt{2} \sqrt{f_{r}}}{C_{\Sigma} \sqrt{C_{r}} \sqrt{h}}
+```
+
+Valid when: C_g much smaller than C_Sigma and C_r. No E_J/E_C limit: the matrix elements of n are left to the transmon spectrum.
+
+- [koch2007](https://doi.org/10.1103/PhysRevA.76.042319), Eq. (3.1), the term 2 beta e V_rms n (a + a+) (peer_reviewed).
+
 ## Always-on ZZ shift of two coupled transmons
 
 `gates.static_zz`
