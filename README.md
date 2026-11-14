@@ -1,6 +1,6 @@
 # Qubit Lab
 
-[![PyPI](https://img.shields.io/pypi/v/qubitlab)](https://pypi.org/project/qubitlab/) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24182766.svg)](https://doi.org/10.5281/zenodo.24182766)
+[![PyPI](https://img.shields.io/pypi/v/qubitlab)](https://pypi.org/project/qubitlab/) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24182765.svg)](https://doi.org/10.5281/zenodo.24182765)
 
 An open source simulator for learning superconducting qubits, from the equations in the papers to full open system simulation, in an interactive 3D explorer. For students, engineers and researchers.
 
