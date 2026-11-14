@@ -1,8 +1,8 @@
 """Shipped check results, so the Checks page opens at once instead of re-running every solve.
 
 `scripts/make_reference.py` writes data/checks.json with the results and a fingerprint of the
-code that produced them (every file in theory/, sim/ and checks/). The API serves the snapshot
-only when the fingerprint matches the code it runs; otherwise it computes the checks live.
+code that produced them (every file in theory/, sim/ and checks/, and the Palace results). The
+API serves the snapshot only when the fingerprint matches; otherwise it computes the checks live.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ from typing import Any
 
 PACKAGE = Path(__file__).resolve().parent
 SNAPSHOT = PACKAGE / "data" / "checks.json"
-SOURCES = ("theory/*.py", "sim/*.py", "checks/*.py")
+SOURCES = ("theory/*.py", "sim/*.py", "checks/*.py", "data/chip.json")
 
 
 def fingerprint(patterns: tuple[str, ...] = SOURCES) -> str:

@@ -19,15 +19,12 @@ What is built, what is next, and the decisions behind it. Update this file when 
 | Speed | Warm-up on start, JAX compile cache, 73 cited presets from published experiments, streamed flip rates, shipped check results, live timers |
 | Extras | Pulse optimizer (GRAPE through Dynamiqs), Playground for typed one-mode models, share links, Copy as Python |
 | Release tooling | `qubitlab serve` ships the explorer in the wheel; release workflow to PyPI; Docker image |
+| 8. Release v1.0 and v1.1 | On PyPI and Zenodo with a DOI |
+| 5. Chip layer (Palace) | Gmsh layouts solved with Palace: parallel plates and a CPW against closed forms, then a transmon pad and resonator. Capacitance matrix, E_C, eigenmodes, and g from the avoided crossing, all checked. Results ship as data |
 
 ## Next
 
-| # | Milestone | Scope | Estimate |
-| --- | --- | --- | --- |
-| 8 | Release v1.0 | The code is ready. One-time setup in [docs/deploy.md](docs/deploy.md#first-release): PyPI trusted publisher and Zenodo; then tag v1.0.0. | 1 hour of setup |
-| 5 | Chip layer (Palace) | Gmsh geometry of a transmon pad and readout resonator. Palace electrostatic solve gives the capacitance matrix and E_C; eigenmode solve gives frequencies and participation. Check against an analytic parallel-plate or CPW formula first. Results committed as data, so the explorer never needs Palace; they replace the gallery's schematic sizes. | 1 to 2 weeks |
-
-Later: a demo video and a written walk through the course, outreach to the Dynamiqs and scqubits communities, upstream a transmon example to Palace (open an issue first), a transmon mode in the Playground, a photonics bridge (microwave-to-optical).
+Nothing is scheduled. Candidates: a demo video and a written walk through the course, outreach to the Dynamiqs and scqubits communities, upstream a transmon example to Palace (open an issue first), a transmon mode in the Playground, a photonics bridge (microwave-to-optical).
 
 ## Decisions
 

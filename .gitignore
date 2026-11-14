@@ -10,3 +10,4 @@ web/playwright-report/
 web/*.tmp.mjs
 src/qubitlab/explorer/
 /dist/
+/runs/

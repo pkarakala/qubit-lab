@@ -30,7 +30,7 @@ Every equation carries its paper and equation number, and is checked against a s
 | Noise bias | Compare bit-flip and phase-flip chances for cats and transmons at measured, cited hardware numbers. |
 | Error correction | Run surface and repetition codes with Stim, decode with PyMatching, and see errors in space-time. |
 | Two-qubit gates | Run a transmon CZ through the 11-20 crossing and a bias-preserving cat CNOT, next to the papers' error formulas. |
-| Architectures | Explode six qubit designs, from the Xmon to the Kerr cat, into their layers, with every size cited or marked schematic. |
+| Architectures | Explode seven qubit designs, from the Xmon to the Kerr cat, into their layers, with every size cited or marked schematic. One of them takes its E_C from a Palace finite-element solve of its layout. |
 | Playground | Type your own Hamiltonian and losses, watch the Wigner function evolve, and copy the run as Python. |
 
 Every view has **Share**, a link that restores its inputs, and **Copy as Python**, a script that reruns the view's simulation next to its theory. CI runs every script, so they stay in step with the code.
@@ -73,7 +73,7 @@ Start with [docs/learn/](https://github.com/pkarakala/qubit-lab/tree/main/docs/l
 
 ## Limits
 
-The cat model is the standard effective one: a single mode with two-photon dissipation, no buffer mode. Chip geometry is schematic or taken from papers; computing it from a layout with Palace is next (see [ROADMAP.md](https://github.com/pkarakala/qubit-lab/blob/main/ROADMAP.md)). Rates are in units of κ₂, not hertz. Measured hardware numbers are cited to their papers and shown beside the simulation, never fitted to it. Not affiliated with any company or lab whose work is cited.
+The cat model is the standard effective one: a single mode with two-photon dissipation, no buffer mode. Gallery geometry is schematic or taken from papers, except one layout whose capacitances come from Palace. Those solves run offline (`scripts/palace/`) and ship as data, so the explorer never needs Palace. Rates are in units of κ₂, not hertz. Measured hardware numbers are cited to their papers and shown beside the simulation, never fitted to it. Not affiliated with any company or lab whose work is cited.
 
 Parts of this repo were written with AI coding assistants, directed and reviewed by me. Agent rules are in [AGENTS.md](https://github.com/pkarakala/qubit-lab/blob/main/AGENTS.md).
 

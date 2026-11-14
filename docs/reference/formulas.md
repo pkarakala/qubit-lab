@@ -162,6 +162,117 @@ Valid when: Two-photon dissipation dominates, so the state stays in the two-cat 
 
 - qubitlab_hand_calcs, docs/hand_calcs/cat_parity_decay.py (derived). Two-state jump picture: |C+> -> |C-> at kappa_1 n_+, back at kappa_1 n_-.
 
+## Parallel-plate capacitance
+
+`chip.parallel_plate`
+
+```latex
+C = \frac{A \epsilon_{0} \epsilon_{r}}{d}
+```
+
+Valid when: Gap d much smaller than the plate side; fringing fields add capacitance otherwise.
+
+- qubitlab_hand_calcs, docs/hand_calcs/chip.py (derived). step 1
+
+## Effective permittivity of a coplanar waveguide on a thick substrate
+
+`chip.cpw_effective_permittivity`
+
+```latex
+\epsilon_{\mathrm{eff}} = \frac{1}{2} + \frac{\epsilon_{r}}{2}
+```
+
+Valid when: Thin conductors on a substrate much thicker than w + 2s, vacuum above.
+
+- qubitlab_hand_calcs, docs/hand_calcs/chip.py (derived). step 2
+- [goeppl2008](https://doi.org/10.1063/1.3010859), Eq. (3), definition of epsilon_eff (peer_reviewed). Equation numbers from arXiv:0807.4094v1.
+
+## Capacitance per length of a coplanar waveguide
+
+`chip.cpw_capacitance_per_length`
+
+```latex
+C_\ell = \frac{4 \epsilon_{0} \epsilon_{eff} K\left(\frac{w^{2}}{\left(w + 2 s\right)^{2}}\right)}{K\left(1 - \frac{w^{2}}{\left(w + 2 s\right)^{2}}\right)}
+```
+
+Valid when: Quasi-static field; ground planes much wider than the gap s.
+
+- [goeppl2008](https://doi.org/10.1063/1.3010859), Eqs. (3)-(5) (peer_reviewed). Equation numbers from arXiv:0807.4094v1.
+
+## Fundamental frequency of a half-wave CPW resonator
+
+`chip.half_wave_frequency`
+
+```latex
+f_0 = \frac{c}{2 \sqrt{\epsilon_{eff}} l}
+```
+
+Valid when: Open ends with no load; the end fringing fields lengthen the line slightly.
+
+- [goeppl2008](https://doi.org/10.1063/1.3010859), Eq. (1) (peer_reviewed). Equation numbers from arXiv:0807.4094v1.
+
+## Lumped capacitance of a half-wave resonator near its fundamental
+
+`chip.half_wave_capacitance`
+
+```latex
+C_r = \frac{C_{l} l}{2}
+```
+
+Valid when: Near the fundamental mode, n = 1.
+
+- [goeppl2008](https://doi.org/10.1063/1.3010859), Eq. (12) (peer_reviewed). Equation numbers from arXiv:0807.4094v1.
+
+## Charging energy from the total capacitance
+
+`chip.charging_energy`
+
+```latex
+E_C/h = \frac{e^{2}}{2 C_{\Sigma} h}
+```
+
+Valid when: C_Sigma is everything the island sees: junction, shunt and couplers.
+
+- [koch2007](https://doi.org/10.1103/PhysRevA.76.042319), text after Eq. (2.1) (peer_reviewed).
+
+## Josephson energy from the junction inductance
+
+`chip.josephson_energy`
+
+```latex
+E_J/h = \frac{h}{16 \pi^{2} L_{J} e^{2}}
+```
+
+Valid when: Small phase across the junction, as in the transmon ground state.
+
+- qubitlab_hand_calcs, docs/hand_calcs/chip.py (derived). step 3
+
+## Harmonic frequency of the junction and its capacitance
+
+`chip.harmonic_frequency`
+
+```latex
+f_p = \frac{1}{2 \pi \sqrt{C_{\Sigma}} \sqrt{L_{J}}}
+```
+
+Valid when: Linear junction; the qubit's own transition sits about E_C lower.
+
+- qubitlab_hand_calcs, docs/hand_calcs/chip.py (derived). step 4
+- [koch2007](https://doi.org/10.1103/PhysRevA.76.042319), Eq. (2.11), leading term (peer_reviewed).
+
+## Qubit-resonator coupling through a capacitance
+
+`chip.coupling_g`
+
+```latex
+g/2\pi = \frac{C_{g} \sqrt{f_{q}} \sqrt{f_{r}}}{2 \sqrt{C_{\Sigma}} \sqrt{C_{r}}}
+```
+
+Valid when: C_g much smaller than C_Sigma and C_r; E_J/E_C large; f_q near f_r.
+
+- qubitlab_hand_calcs, docs/hand_calcs/chip.py (derived). step 5
+- [koch2007](https://doi.org/10.1103/PhysRevA.76.042319), Eqs. (3.1), (3.3), (3.4) (peer_reviewed).
+
 ## Always-on ZZ shift of two coupled transmons
 
 `gates.static_zz`

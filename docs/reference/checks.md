@@ -38,6 +38,13 @@ Expected is the verdict predicted from the formula's validity range before runni
 | `cat.bit_flip_dephasing.1` | \|α\|² = 1, κ_φ/κ₂ = 0.01, κ₁ = 0 | 0.0013786 | 0.00139016 | 0.0084 | 0.1 | AGREE | AGREE |
 | `cat.bit_flip_dephasing.2` | \|α\|² = 2, κ_φ/κ₂ = 0.01, κ₁ = 0 | 0.000366436 | 0.000376462 | 0.027 | 0.1 | AGREE | AGREE |
 | `cat.bit_flip_dephasing.4` | \|α\|² = 4, κ_φ/κ₂ = 0.01, κ₁ = 0 | 1.34185e-05 | 1.43594e-05 | 0.07 | 0.1 | AGREE | AGREE |
+| `chip.parallel_plate.100` | square plates, side/gap = 100 (1000 um, 10 um), vacuum | 8.85419e-13 | 9.14354e-13 | 0.033 | 0.08 | AGREE | AGREE |
+| `chip.parallel_plate.4` | square plates, side/gap = 4 (40 um, 10 um), vacuum | 1.41667e-15 | 1.96846e-15 | 0.39 | 0.08 | DIVERGE | DIVERGE |
+| `chip.cpw_capacitance_per_length.order2` | w = 10 um, s = 6 um on silicon, Palace elements of order 2 | 1.63498e-10 | 1.67544e-10 | 0.025 | 0.05 | AGREE | AGREE |
+| `chip.cpw_capacitance_per_length.order3` | w = 10 um, s = 6 um on silicon, Palace elements of order 3 | 1.63498e-10 | 1.65252e-10 | 0.011 | 0.05 | AGREE | AGREE |
+| `chip.half_wave_frequency.device` | l = 8 mm, qubit far detuned | 7.50985e+09 | 7.37834e+09 | 0.018 | 0.05 | AGREE | AGREE |
+| `chip.harmonic_frequency.device` | L_J = 12 nH, C_Sigma from the electrostatic solve | 3.26104e+09 | 3.22507e+09 | 0.011 | 0.02 | AGREE | AGREE |
+| `chip.coupling_g.device` | at resonance, f_r = 7.38 GHz, C_g = 10.1 fF | 1.01251e+08 | 1.01146e+08 | 0.001 | 0.1 | AGREE | AGREE |
 | `gates.static_zz.0.7` | Delta = 700 MHz, alpha = -300 MHz, g = 10 MHz | -0.0003 | -0.000299566 | 0.0014 | 0.05 | AGREE | AGREE |
 | `gates.static_zz.0.32` | Delta = 320 MHz, alpha = -300 MHz, g = 10 MHz | -0.00967742 | -0.00706368 | 0.27 | 0.05 | DIVERGE | DIVERGE |
 | `gates.cz_time.0.005` | g = 5 MHz, alpha = -300 MHz, phase at t_CZ | 3.14159 | 3.12303 | 0.0059 | 0.05 | AGREE | AGREE |

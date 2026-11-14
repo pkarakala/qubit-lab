@@ -32,6 +32,6 @@ A short course in five parts. Each page is one idea, about two minutes, and ends
 **5. Hardware**
 
 - 51 [Inside the chip](51-architectures.md)
-- 52 From layout to Hamiltonian (planned)
+- 52 [From layout to Hamiltonian](52-layout-to-hamiltonian.md)
 
 Every equation here is in [docs/reference/formulas.md](../reference/formulas.md) with its paper and equation number. Every claim that the simulation agrees is in [docs/reference/checks.md](../reference/checks.md). The plan for the parts still to come is in [docs/plan.md](../plan.md).

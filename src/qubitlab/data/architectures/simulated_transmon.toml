@@ -1,0 +1,86 @@
+# The layout simulated with Palace (scripts/palace/). Units: micrometres, x centred on the chip.
+
+[scene]
+id = "simulated_transmon"
+name = "Simulated transmon"
+family = "transmon"
+summary = "A grounded transmon pad next to an 8 mm CPW resonator, with E_C computed from the layout by a finite-element solve instead of taken from a paper."
+refs = ["palace2026", "geuzaine2009", "goeppl2008", "koch2007"]
+
+[physics]
+model = "transmon"
+E_C = 0.0976
+E_J = 13.62
+source = "E_C = e^2/2C_Sigma with C_Sigma = 198.5 fF from the Palace electrostatic solve (data/chip.json, koch2007 after Eq. 2.1). E_J from an assumed L_J = 12 nH, E_J = (hbar/2e)^2/L_J (docs/hand_calcs/chip.py, step 3)."
+kind = "derived"
+
+[[part]]
+id = "substrate"
+name = "Silicon substrate"
+role = "The crystal under the circuit, eps_r = 11.45. Most of the electric field of the pad and the resonator runs through it."
+size = [9071, 1060, 500]
+position = [0, 0, -250]
+material = "silicon"
+explode = [0, 0, -1200]
+dims_class = "SCHEMATIC"
+dims_source = "The simulated layout, scripts/palace/geometry.py (Device: substrate, margin). Not a fabricated chip."
+
+[[part]]
+id = "ground"
+name = "Ground plane"
+role = "A zero-thickness perfect conductor in the simulation, with openings for the pad and the resonator's trench."
+size = [9071, 1060, 0.2]
+position = [0, 0, 0.1]
+draw_size = [9071, 1060, 20]
+material = "aluminium_film"
+explode = [0, 0, 300]
+dims_class = "SCHEMATIC"
+dims_source = "The simulated layout, scripts/palace/geometry.py. Metal is zero thickness there; drawn 20 um thick."
+
+[[part]]
+id = "pad"
+name = "Qubit pad"
+role = "A 400 um square island 30 um from ground. Its capacitance to everything, C_Sigma = 198.5 fF, sets E_C."
+size = [400, 400, 0.2]
+position = [-4005.5, 0, 0.1]
+draw_size = [400, 400, 40]
+material = "aluminium"
+explode = [0, 0, 700]
+dims_class = "SCHEMATIC"
+dims_source = "The simulated layout, scripts/palace/geometry.py (Device.pad, pad_gap)."
+
+[[part]]
+id = "junction"
+name = "Junction (lumped inductor)"
+role = "Bridges the 30 um gap from pad to ground. Palace models it as a lumped inductor L_J; a real junction is a few hundred nanometres across."
+size = [30, 10, 0.2]
+position = [-4220.5, 0, 0.1]
+draw_size = [30, 10, 60]
+material = "junction"
+explode = [0, 0, 1100]
+dims_class = "SCHEMATIC"
+dims_source = "The lumped port of scripts/palace/geometry.py (Device.pad_gap, junction_width)."
+
+[[part]]
+id = "coupler"
+name = "Coupling bar"
+role = "The resonator's open end, widened into a 100 um bar 15 um from the pad. It gives C_g = 10.1 fF and so the coupling g."
+size = [20, 100, 0.2]
+position = [-3780.5, 0, 0.1]
+draw_size = [20, 100, 40]
+material = "aluminium"
+explode = [0, 0, 700]
+dims_class = "SCHEMATIC"
+dims_source = "The simulated layout, scripts/palace/geometry.py (Device.coupler_len, coupler_width, coupling_gap)."
+
+[[part]]
+id = "resonator"
+name = "Half-wave CPW resonator"
+role = "A 10 um strip in a 6 um trench, 8 mm long, open at both ends. Its fundamental is near c/(2 l sqrt(eps_eff))."
+size = [8000, 10, 0.2]
+position = [229.5, 0, 0.1]
+draw_size = [8000, 30, 40]
+material = "aluminium"
+explode = [0, 0, 500]
+dims_class = "SCHEMATIC"
+dims_source = "The simulated layout, scripts/palace/geometry.py (Device.w, s, length); w and s as in goeppl2008."

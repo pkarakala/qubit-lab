@@ -1,5 +1,5 @@
 {
- "fingerprint": "473bddebe25d9613",
+ "fingerprint": "8c03ef5c65a43c47",
  "results": [
   {
    "key": "cat.wigner.even_cat.origin.n1",
@@ -349,6 +349,83 @@
    "theory": 1.3418506626154463e-05,
    "sim": 1.4359361935767194e-05,
    "rel_error": 0.07011624585547235,
+   "rel_tol": 0.1,
+   "verdict": "AGREE",
+   "expected": "AGREE"
+  },
+  {
+   "key": "chip.parallel_plate.100",
+   "formula": "chip.parallel_plate",
+   "regime": "square plates, side/gap = 100 (1000 um, 10 um), vacuum",
+   "theory": 8.8541878188e-13,
+   "sim": 9.143537738306e-13,
+   "rel_error": 0.03267944225122795,
+   "rel_tol": 0.08,
+   "verdict": "AGREE",
+   "expected": "AGREE"
+  },
+  {
+   "key": "chip.parallel_plate.4",
+   "formula": "chip.parallel_plate",
+   "regime": "square plates, side/gap = 4 (40 um, 10 um), vacuum",
+   "theory": 1.4166700510079998e-15,
+   "sim": 1.968457521861e-15,
+   "rel_error": 0.3894961077636872,
+   "rel_tol": 0.08,
+   "verdict": "DIVERGE",
+   "expected": "DIVERGE"
+  },
+  {
+   "key": "chip.cpw_capacitance_per_length.order2",
+   "formula": "chip.cpw_capacitance_per_length",
+   "regime": "w = 10 um, s = 6 um on silicon, Palace elements of order 2",
+   "theory": 1.6349785558800422e-10,
+   "sim": 1.6754388992340003e-10,
+   "rel_error": 0.024746711942151414,
+   "rel_tol": 0.05,
+   "verdict": "AGREE",
+   "expected": "AGREE"
+  },
+  {
+   "key": "chip.cpw_capacitance_per_length.order3",
+   "formula": "chip.cpw_capacitance_per_length",
+   "regime": "w = 10 um, s = 6 um on silicon, Palace elements of order 3",
+   "theory": 1.6349785558800422e-10,
+   "sim": 1.6525199424770003e-10,
+   "rel_error": 0.010728817533338427,
+   "rel_tol": 0.05,
+   "verdict": "AGREE",
+   "expected": "AGREE"
+  },
+  {
+   "key": "chip.half_wave_frequency.device",
+   "formula": "chip.half_wave_frequency",
+   "regime": "l = 8 mm, qubit far detuned",
+   "theory": 7509846192.191462,
+   "sim": 7378335519.5529995,
+   "rel_error": 0.017511766456043184,
+   "rel_tol": 0.05,
+   "verdict": "AGREE",
+   "expected": "AGREE"
+  },
+  {
+   "key": "chip.harmonic_frequency.device",
+   "formula": "chip.harmonic_frequency",
+   "regime": "L_J = 12 nH, C_Sigma from the electrostatic solve",
+   "theory": 3261035322.0839667,
+   "sim": 3225070467.259,
+   "rel_error": 0.011028661536233697,
+   "rel_tol": 0.02,
+   "verdict": "AGREE",
+   "expected": "AGREE"
+  },
+  {
+   "key": "chip.coupling_g.device",
+   "formula": "chip.coupling_g",
+   "regime": "at resonance, f_r = 7.38 GHz, C_g = 10.1 fF",
+   "theory": 101251206.18250856,
+   "sim": 101145712.83946122,
+   "rel_error": 0.001041897148930558,
    "rel_tol": 0.1,
    "verdict": "AGREE",
    "expected": "AGREE"

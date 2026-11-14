@@ -2,7 +2,7 @@
 
 Approved by the maintainer on 2026-10-22. This file is the working plan; ROADMAP.md keeps the one-line status.
 
-**Status (2026-10-29):** items 1 to 4 are done and the code is ready for v1.0.0. Item 5 (Palace) is next.
+**Status (2026-11-14):** items 1 to 5 are done. v1.1.0 is released; the chip layer (item 5) is in the next release.
 
 ## Goal
 
