@@ -42,7 +42,7 @@ export function Transmon() {
           label="charging energy (GHz)"
           tex="E_C"
           value={E_C}
-          min={0.1}
+          min={0.05}
           max={0.5}
           step={0.01}
           onChange={(v) => useExplorer.setState({ E_C: v })}

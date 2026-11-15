@@ -4,7 +4,7 @@ Notable changes per release. Dates are when the tag was pushed.
 
 ## Unreleased
 
-**Chip layer.** Layouts meshed with Gmsh and solved with Palace, offline, with the results shipped in `data/chip.json`. Parallel plates and a coplanar waveguide test the solver against closed forms (Göppl et al. 2008). A transmon pad next to a half-wave resonator gives the capacitance matrix, E_C, the qubit and resonator modes, and the coupling g from the avoided crossing (Koch et al. 2007). A new gallery scene and learn page (52) follow the layout to its Hamiltonian.
+**Chip layer.** Layouts meshed with Gmsh and solved with Palace, offline, with the results shipped in `data/chip.json`. Parallel plates and a coplanar waveguide test the solver against closed forms (Göppl et al. 2008). A transmon pad next to a half-wave resonator gives the capacitance matrix, E_C, the qubit and resonator modes, and the coupling g from the avoided crossing (Koch et al. 2007). A new gallery scene and learn page (52) follow the layout to its Hamiltonian. The layout's E_C, E_J, g_n and f_r are presets in the Transmon and Readout views, with g_n from the capacitances (Koch et al. 2007, Eq. 3.1) checked against Palace's g.
 
 ## 1.1.0 (2026-11-14)
 

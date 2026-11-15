@@ -77,6 +77,8 @@ def preset_steps() -> list[Callable[[], object]]:
             step = partial(api.pulse_optimize, api.PulseRequest(**p))
         elif view == "qec_cat":
             step = partial(api.qec_cat, api.CatCodeRequest(**p))
+        elif view == "readout":
+            step = partial(api.readout, api.ReadoutRequest(**p))
         elif view == "compare":
             step = partial(api.compare, t_ns=float(p["t_ns"]))
         elif view in ("transmon", "qec"):  # those two answer in well under a second

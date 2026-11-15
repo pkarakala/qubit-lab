@@ -192,7 +192,7 @@ export const useReferences = () =>
   useQuery({ queryKey: ['references'], queryFn: () => get<Record<string, BibEntry>>('/api/references'), ...forever })
 export const useFacts = () => useQuery({ queryKey: ['facts'], queryFn: () => get<Fact[]>('/api/facts'), ...forever })
 /** A setting from a published experiment (qubitlab/data/presets.json). The server warms the cache with each one. */
-export type PresetView = 'phase' | 'rates' | 'transmon' | 'qubit' | 'pulse' | 'qec' | 'qec_cat' | 'compare'
+export type PresetView = 'phase' | 'rates' | 'transmon' | 'qubit' | 'pulse' | 'qec' | 'qec_cat' | 'compare' | 'readout'
 export interface Preset {
   view: PresetView
   name: string

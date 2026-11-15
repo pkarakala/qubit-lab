@@ -10,7 +10,7 @@ from qubitlab.api import app
 from qubitlab.provenance import bib_entries
 from qubitlab.warm import preset_steps, presets
 
-VIEWS = {"phase", "rates", "transmon", "qubit", "pulse", "qec", "qec_cat", "compare"}
+VIEWS = {"phase", "rates", "transmon", "qubit", "pulse", "qec", "qec_cat", "compare", "readout"}
 
 
 def test_presets_cite_papers_in_the_bib() -> None:

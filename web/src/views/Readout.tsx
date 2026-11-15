@@ -4,7 +4,7 @@
 
 import { type ReadoutParams, useReadout } from '../api'
 import { CONFIG, Plot, SERIES, layout } from '../components/Plot'
-import { CopyPython, ErrorBanner, FormulaCard, Slider, Solving } from '../components/ui'
+import { CopyPython, ErrorBanner, FormulaCard, PaperSettings, Slider, Solving } from '../components/ui'
 import { fmt } from '../lib/colormap'
 import { useShared } from '../lib/share'
 import { useDebounced } from '../lib/useDebounced'
@@ -25,9 +25,10 @@ export function Readout() {
   return (
     <div className="view">
       <aside className="pane pane-left">
+        <PaperSettings view="readout" title="From a layout" onPick={(p) => set(p as unknown as Partial<ReadoutParams>)} />
         <h3>Transmon</h3>
         <Slider label="E_J/E_C" value={draft.ratio} min={20} max={200} step={1} onChange={(ratio) => set({ ratio })} format={(v) => String(v)} />
-        <Slider label="charging energy" tex="E_C" value={draft.E_C} min={0.1} max={0.5} step={0.01} onChange={(E_C) => set({ E_C })} format={(v) => `${fmt(v)} GHz`} />
+        <Slider label="charging energy" tex="E_C" value={draft.E_C} min={0.05} max={0.5} step={0.005} onChange={(E_C) => set({ E_C })} format={(v) => `${fmt(v)} GHz`} />
         <h3>Resonator</h3>
         <Slider label="frequency" tex="f_r" value={draft.f_r} min={4} max={9} step={0.05} onChange={(f_r) => set({ f_r })} format={(v) => `${fmt(v)} GHz`} />
         <Slider label="coupling to n(a + a†)" tex="g_n" value={draft.g_n} min={0.005} max={0.15} step={0.005} onChange={(g_n) => set({ g_n })} format={(v) => `${fmt(v * 1e3)} MHz`} />

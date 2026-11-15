@@ -804,7 +804,7 @@ class CompareInputs(BaseModel):
 
 class ReadoutRequest(BaseModel):
     ratio: float = Field(50.0, ge=20.0, le=200.0, description="E_J / E_C")
-    E_C: float = Field(0.3, ge=0.1, le=0.5, description="charging energy, GHz")
+    E_C: float = Field(0.3, ge=0.05, le=0.5, description="charging energy, GHz")
     f_r: float = Field(7.0, ge=4.0, le=9.0, description="bare resonator frequency, GHz")
     g_n: float = Field(0.05, ge=0.005, le=0.15, description="coupling to n (a + a+), GHz")
     kappa_mhz: float = Field(1.0, ge=0.1, le=20.0, description="resonator linewidth / 2 pi")

@@ -11,12 +11,15 @@ Findings from the first runs:
   (2.5% then 1.1% above Goeppl) shows the convergence.
 - The qubit mode at 12 nH and the coupling g from the avoided crossing agreed to 1.1% and
   0.1%, inside the predicted 2% and 10%.
+- chip.coupling_g_n was added after those runs, with its number worked out (0.7%) while
+  choosing the readout preset, so its AGREE is not a blind prediction.
 """
 
 from __future__ import annotations
 
 from qubitlab.checks.base import CheckResult, Verdict, check
 from qubitlab.sim import chip as sim
+from qubitlab.sim import readout as ro_sim
 from qubitlab.theory import chip as th
 
 A, D = Verdict.AGREE, Verdict.DIVERGE
@@ -143,6 +146,35 @@ def coupling_g() -> list[CheckResult]:
             ),
             sim=cross.g,
             rel_tol=0.10,
+            expected=A,
+        )
+    ]
+
+
+@check("chip.coupling_g_n")
+def coupling_g_n() -> list[CheckResult]:
+    # Palace's g is g_n times the 0-1 charge matrix element (koch2007 Eq. 3.3), which scqubits
+    # gives at the crossing's junction and Palace's E_C. readout's dressed_chi returns
+    # g01 = g_n |<0|n|1>|, so a unit g_n reads the matrix element off.
+    caps, cross = sim.capacitances(), sim.crossing()
+    L_x = float(cross.L_J[(cross.f_upper - cross.f_lower).argmin()])
+    E_J = float(th.josephson_energy(h=K["h"], e=K["e"], L_J=L_x)) / 1e9
+    E_C = float(th.charging_energy(e=K["e"], C_Sigma=caps.C_sigma, h=K["h"])) / 1e9
+    n01 = float(ro_sim.dressed_chi(E_J, E_C, cross.f_r / 1e9, 1.0).g01)
+    C_r = caps.C_line / 2  # goeppl2008 Eq. (12), C_l l from Palace
+    return [
+        CheckResult(
+            key="chip.coupling_g_n.device",
+            formula=th.coupling_g_n.key,
+            regime=f"Palace g / <0|n|1> at E_J/E_C = {E_J / E_C:.0f}, "
+            f"f_r = {cross.f_r / 1e9:.2f} GHz",
+            theory=float(
+                th.coupling_g_n(
+                    C_g=caps.C_g, C_Sigma=caps.C_sigma, e=K["e"], h=K["h"], f_r=cross.f_r, C_r=C_r
+                )
+            ),
+            sim=cross.g / n01,
+            rel_tol=0.02,
             expected=A,
         )
     ]

@@ -1,5 +1,5 @@
 {
- "fingerprint": "8c03ef5c65a43c47",
+ "fingerprint": "015d8257a5215a5e",
  "results": [
   {
    "key": "cat.wigner.even_cat.origin.n1",
@@ -427,6 +427,17 @@
    "sim": 101145712.83946122,
    "rel_error": 0.001041897148930558,
    "rel_tol": 0.1,
+   "verdict": "AGREE",
+   "expected": "AGREE"
+  },
+  {
+   "key": "chip.coupling_g_n.device",
+   "formula": "chip.coupling_g_n",
+   "regime": "Palace g / <0|n|1> at E_J/E_C = 752, f_r = 7.38 GHz",
+   "theory": 46586206.79413079,
+   "sim": 46239467.749908164,
+   "rel_error": 0.00744295507369592,
+   "rel_tol": 0.02,
    "verdict": "AGREE",
    "expected": "AGREE"
   },
