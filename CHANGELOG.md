@@ -6,6 +6,8 @@ Notable changes per release. Dates are when the tag was pushed.
 
 **Chip layer.** Layouts meshed with Gmsh and solved with Palace, offline, with the results shipped in `data/chip.json`. Parallel plates and a coplanar waveguide test the solver against closed forms (Göppl et al. 2008). A transmon pad next to a half-wave resonator gives the capacitance matrix, E_C, the qubit and resonator modes, and the coupling g from the avoided crossing (Koch et al. 2007). A new gallery scene and learn page (52) follow the layout to its Hamiltonian. The layout's E_C, E_J, g_n and f_r are presets in the Transmon and Readout views, with g_n from the capacitances (Koch et al. 2007, Eq. 3.1) checked against Palace's g.
 
+The chip layer was rerun on Palace 0.20.0. Capacitances, mode frequencies and junction participations agree with the 0.19.0 run to a relative 1e-4 or better, so every check and preset is unchanged. 0.20.0 converged the three requested modes per solve where 0.19.0 also reported a fourth; nothing reads it.
+
 ## 1.1.0 (2026-11-14)
 
 **Readout.** Single-shot readout records: heterodyne IQ shots for a qubit prepared in |g⟩ or |e⟩, simulated with Dynamiqs' diffusive stochastic Schrödinger equation, with finite measurement efficiency and T1 decay during the window. Assignment fidelity is checked against Gambetta et al. 2007, Eqs. (2.6) and (3.8). Changing χ, the resonator detuning, η or T1 between batches gives a drifting readout.

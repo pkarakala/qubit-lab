@@ -1,5 +1,5 @@
 {
- "fingerprint": "015d8257a5215a5e",
+ "fingerprint": "a3156f2f872cad0d",
  "results": [
   {
    "key": "cat.wigner.even_cat.origin.n1",
@@ -402,8 +402,8 @@
    "formula": "chip.half_wave_frequency",
    "regime": "l = 8 mm, qubit far detuned",
    "theory": 7509846192.191462,
-   "sim": 7378335519.5529995,
-   "rel_error": 0.017511766456043184,
+   "sim": 7378335519.647,
+   "rel_error": 0.017511766443526172,
    "rel_tol": 0.05,
    "verdict": "AGREE",
    "expected": "AGREE"
@@ -412,9 +412,9 @@
    "key": "chip.harmonic_frequency.device",
    "formula": "chip.harmonic_frequency",
    "regime": "L_J = 12 nH, C_Sigma from the electrostatic solve",
-   "theory": 3261035322.0839667,
-   "sim": 3225070467.259,
-   "rel_error": 0.011028661536233697,
+   "theory": 3261035322.084295,
+   "sim": 3225070467.215,
+   "rel_error": 0.011028661549825736,
    "rel_tol": 0.02,
    "verdict": "AGREE",
    "expected": "AGREE"
@@ -423,9 +423,9 @@
    "key": "chip.coupling_g.device",
    "formula": "chip.coupling_g",
    "regime": "at resonance, f_r = 7.38 GHz, C_g = 10.1 fF",
-   "theory": 101251206.18250856,
-   "sim": 101145712.83946122,
-   "rel_error": 0.001041897148930558,
+   "theory": 101251203.32483147,
+   "sim": 101146067.39022358,
+   "rel_error": 0.0010383672603929345,
    "rel_tol": 0.1,
    "verdict": "AGREE",
    "expected": "AGREE"
@@ -434,9 +434,9 @@
    "key": "chip.coupling_g_n.device",
    "formula": "chip.coupling_g_n",
    "regime": "Palace g / <0|n|1> at E_J/E_C = 752, f_r = 7.38 GHz",
-   "theory": 46586206.79413079,
-   "sim": 46239467.749908164,
-   "rel_error": 0.00744295507369592,
+   "theory": 46586206.13672177,
+   "sim": 46239629.8349671,
+   "rel_error": 0.007439461817035111,
    "rel_tol": 0.02,
    "verdict": "AGREE",
    "expected": "AGREE"
