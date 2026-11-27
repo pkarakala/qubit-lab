@@ -45,7 +45,7 @@ Expected is the verdict predicted from the formula's validity range before runni
 | `chip.half_wave_frequency.device` | l = 8 mm, qubit far detuned | 7.50985e+09 | 7.37834e+09 | 0.018 | 0.05 | AGREE | AGREE |
 | `chip.harmonic_frequency.device` | L_J = 12 nH, C_Sigma from the electrostatic solve | 3.26104e+09 | 3.22507e+09 | 0.011 | 0.02 | AGREE | AGREE |
 | `chip.coupling_g.device` | at resonance, f_r = 7.38 GHz, C_g = 10.1 fF | 1.01251e+08 | 1.01146e+08 | 0.001 | 0.1 | AGREE | AGREE |
-| `chip.coupling_g_n.device` | Palace g / <0\|n\|1> at E_J/E_C = 752, f_r = 7.38 GHz | 4.65862e+07 | 4.62395e+07 | 0.0074 | 0.02 | AGREE | AGREE |
+| `chip.coupling_g_n.device` | Palace g / <0\|n\|1> at E_J/E_C = 752, f_r = 7.38 GHz | 4.65862e+07 | 4.62396e+07 | 0.0074 | 0.02 | AGREE | AGREE |
 | `gates.static_zz.0.7` | Delta = 700 MHz, alpha = -300 MHz, g = 10 MHz | -0.0003 | -0.000299566 | 0.0014 | 0.05 | AGREE | AGREE |
 | `gates.static_zz.0.32` | Delta = 320 MHz, alpha = -300 MHz, g = 10 MHz | -0.00967742 | -0.00706368 | 0.27 | 0.05 | DIVERGE | DIVERGE |
 | `gates.cz_time.0.005` | g = 5 MHz, alpha = -300 MHz, phase at t_CZ | 3.14159 | 3.12303 | 0.0059 | 0.05 | AGREE | AGREE |
